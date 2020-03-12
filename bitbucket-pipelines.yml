@@ -1,0 +1,17 @@
+image: maven:3.6.1
+
+pipelines:
+  pull-requests:
+    '**':
+      - step:
+          caches:
+            - maven
+          script:
+            - mvn -B clean verify
+  branches:
+    master:
+      - step:
+          caches:
+            - maven
+          script:
+            - mvn -B clean verify
