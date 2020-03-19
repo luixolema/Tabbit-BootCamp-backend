@@ -1,44 +1,36 @@
-*.class
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
 
 # Package Files #
 *.jar
 *.war
 *.ear
 
-# Eclipse #
-.settings
-.project
+### STS ###
+.apt_generated
 .classpath
-.studio
-target
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# Apple # 
-.DS_Store
-
-# Intellij #
+### IntelliJ IDEA ###
 .idea
+*.iws
 *.iml
-*.log
+*.ipr
 
-# VSCode
-.vscode
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
 
-# logback
-logback.out.xml
-
-backend/src/main/resources/public/
-backend/target
-frontend/dist/
-frontend/node/
-frontend/node_modules/
-frontend/npm-debug.log
-frontend/target
-frontend/test-output
-frontend/tests/e2e/reports
-frontend/tests/unit/coverage
-frontend/yarn-error.log
-frontend/yarn.lock
-security/target/
-selenium-debug.log
-
-!.mvn/wrapper/maven-wrapper.jar
+### VS Code ###
+.vscode/
