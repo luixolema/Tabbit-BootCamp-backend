@@ -8,8 +8,4 @@ public interface IGuestService {
     List<GuestDto> getGuests();
 
     GuestDto getGuest(Long guestId);
-
-    void addGuest(GuestDto guest);
-
-    void checkIn(GuestDto guest);
 }
