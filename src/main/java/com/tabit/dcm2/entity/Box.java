@@ -8,13 +8,23 @@ public class Box implements IEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne
-//  need to check the column name of the id of the guest
-//  @JoinColumn(name = "guest_id")
-    private Guest guest;
+    @OneToOne(mappedBy = "box")
+    private long guestId;
 
     @Override
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public long getGuestId() {
+        return guestId;
+    }
+
+    public void setGuestId(long guestId) {
+        this.guestId = guestId;
     }
 }
