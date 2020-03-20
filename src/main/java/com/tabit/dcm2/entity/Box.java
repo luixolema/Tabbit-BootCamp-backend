@@ -8,8 +8,9 @@ public class Box implements IEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(mappedBy = "box")
-    private long guestId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "box_id")
+    private Guest guest;
 
     @Override
     public long getId() {
@@ -20,11 +21,11 @@ public class Box implements IEntity {
         this.id = id;
     }
 
-    public long getGuestId() {
-        return guestId;
+    public Guest getGuest() {
+        return guest;
     }
 
-    public void setGuestId(long guestId) {
-        this.guestId = guestId;
+    public void setGuest(Guest guest) {
+        this.guest = guest;
     }
 }

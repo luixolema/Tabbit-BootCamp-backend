@@ -15,13 +15,23 @@ public class Guest implements IEntity {
     @Column(name = "second_name")
     private String lastName;
 
-    @OneToOne
-    @JoinColumn(name = "box_id")
+    @OneToOne(mappedBy = "guest", cascade = CascadeType.ALL)
     private Box box;
 
-    @Column(name = "check_in")
-    private boolean checkIn;
+    @Column(name = "checked_in")
+    private boolean checkedIn;
 
+    public Guest() {
+    }
+
+    public Guest(String firstName, String lastName, Box box, boolean checkedIn) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.box = box;
+        this.checkedIn = checkedIn;
+    }
+
+    @Override
     public long getId() {
         return id;
     }
@@ -54,11 +64,16 @@ public class Guest implements IEntity {
         this.box = box;
     }
 
+    public void addBox(Box box) {
+        box.setGuest(this);
+        this.box = box;
+    }
+
     public boolean isCheckIn() {
-        return checkIn;
+        return checkedIn;
     }
 
     public void setCheckIn(boolean checkIn) {
-        this.checkIn = checkIn;
+        this.checkedIn = checkIn;
     }
 }
