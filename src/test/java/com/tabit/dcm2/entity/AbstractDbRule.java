@@ -9,7 +9,8 @@ import java.util.List;
 import static java.lang.String.format;
 
 public abstract class AbstractDbRule<ENTITY extends IEntity> extends ExternalResource {
-    protected EntityManager entityManager;
+
+    private EntityManager entityManager;
 
     @Override
     protected void before() {
@@ -19,7 +20,6 @@ public abstract class AbstractDbRule<ENTITY extends IEntity> extends ExternalRes
     @Override
     protected void after() {
         entityManager.clear();
-        delete();
     }
 
     private void delete() {
@@ -35,6 +35,10 @@ public abstract class AbstractDbRule<ENTITY extends IEntity> extends ExternalRes
             entityManager.persist(entity);
         }
         transaction.commit();
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     protected abstract String getEntitySimpleName();

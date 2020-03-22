@@ -8,8 +8,7 @@ public class Box implements IEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "box_id")
+    @OneToOne(mappedBy = "box")
     private Guest guest;
 
     @Override

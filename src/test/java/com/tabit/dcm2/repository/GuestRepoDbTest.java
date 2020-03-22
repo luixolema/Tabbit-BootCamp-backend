@@ -1,54 +1,63 @@
 package com.tabit.dcm2.repository;
 
-import com.tabit.dcm2.entity.Box;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.tabit.dcm2.entity.Guest;
-import org.assertj.core.api.Assertions;
+import com.tabit.dcm2.entity.RandomGuest;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-@ActiveProfiles("mysql")
-@DataJpaTest
-public class GuestRepoDbTest {
-    @Autowired
-    private TestEntityManager entityManager;
+import static org.assertj.core.api.Assertions.assertThat;
 
+public class GuestRepoDbTest extends AbstractRepoDbTest {
     @Autowired
     private IGuestRepo guestRepo;
 
     @Test
-    public void whenFindAll_thenReturnAll() {
-        Box box1 = new Box();
-        Box box2 = new Box();
-        Guest guest1 = new Guest("Jack", "Black", box1, true);
-        Guest guest2 = new Guest("Walter", "White", box2, true);
-        entityManager.persist(guest1);
-        entityManager.persist(guest2);
-        entityManager.flush();
-        List<Guest> guests = guestRepo.findAll();
+    public void findByCheckedin_shall_return_the_guests() {
+        // given
+        Guest guestCheckedinTrue = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedinTrue.setCheckedin(true);
+        Guest guestCheckedinFalse = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedinFalse.setCheckedin(false);
+        Guest guestCheckedinFalse2 = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedinFalse2.setCheckedin(false);
 
-        Assertions.assertThat(guests).hasSize(2);
+        guestRule.persist(ImmutableList.of(guestCheckedinTrue, guestCheckedinFalse, guestCheckedinFalse2));
+
+        // when
+        List<Guest> guestsCheckinTrue = guestRepo.findByCheckedin(true);
+
+        // then
+        Guest actualGuestCheckinTrue = Iterables.getOnlyElement(guestsCheckinTrue);
+        assertThat(actualGuestCheckinTrue.getId()).isEqualTo(guestCheckedinTrue.getId());
+        assertThat(actualGuestCheckinTrue.getBox().getId()).isEqualTo(guestCheckedinTrue.getBox().getId());
+
+        // when
+        List<Guest> actualGuestsCheckinFalse = guestRepo.findByCheckedin(false);
+
+        // then
+        assertThat(actualGuestsCheckinFalse).hasSize(2);
     }
 
     @Test
-    public void whenFindByCheckedIn_thenReturnListOfGuests() {
-        Box box1 = new Box();
-        Box box2 = new Box();
-        Guest guest1 = new Guest("Jack", "Black", box1, true);
-        Guest guest2 = new Guest("Walter", "White", box2, false);
-        entityManager.persist(guest1);
-        entityManager.persist(guest2);
-        entityManager.flush();
-        List<Guest> guests = guestRepo.findByCheckedInTrue();
+    public void findByCheckedin_shall_return_the_guest_without_a_box() {
+        // given
+        Guest guestWithoutBox = RandomGuest.createRandomGuestWitoutId();
+        guestWithoutBox.setBox(null);
+        guestWithoutBox.setCheckedin(true);
 
-        Assertions.assertThat(guests.get(0)).isEqualTo(guest1);
+        guestRule.persist(ImmutableList.of(guestWithoutBox));
+
+        // when
+        List<Guest> guestsCheckinTrue = guestRepo.findByCheckedin(true);
+
+        // then
+        Guest actualGuestWitoutBox = Iterables.getOnlyElement(guestsCheckinTrue);
+        assertThat(actualGuestWitoutBox.getId()).isEqualTo(guestWithoutBox.getId());
+        assertThat(actualGuestWitoutBox.getBox()).isNull();
     }
 
 }

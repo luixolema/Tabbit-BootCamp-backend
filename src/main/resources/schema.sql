@@ -1,6 +1,8 @@
+DROP TABLE IF EXISTS `guest`;
+DROP TABLE IF EXISTS `box`;
+
 CREATE TABLE `box` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `guest_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
@@ -11,5 +13,5 @@ CREATE TABLE `guest` (
   `box_id` bigint(20) DEFAULT NULL,
   `checked_in` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  CONSTRAINT `guest_fk` FOREIGN KEY (`id`) REFERENCES `box` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `guest_fk` FOREIGN KEY (`box_id`) REFERENCES `box` (`id`)
 );
