@@ -6,6 +6,7 @@ import com.tabit.dcm2.mapper.GuestToGuestDtoMapper;
 import com.tabit.dcm2.mapper.IMapperFactory;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.service.GuestDto;
+import com.tabit.dcm2.service.GuestsDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,22 +55,22 @@ public class GuestServiceTest {
 
     @Test
     public void getGuests_shall_return_all_guests_for_null_input_param() {
-        List<GuestDto> guestDtos = guestService.getGuests(null);
+        GuestsDto guestsDto = guestService.getGuests(null);
 
-        assertEquals(guestDtos.size(), 3);
+        assertEquals(guestsDto.getTotal(), 3);
     }
 
     @Test
     public void getGuests_shall_return_checkedin_guests() {
-        List<GuestDto> guestDtos = guestService.getGuests(true);
+        GuestsDto guestsDto = guestService.getGuests(true);
 
-        assertEquals(guestDtos.size(), 1);
+        assertEquals(guestsDto.getTotal(), 1);
     }
 
     @Test
     public void getGuests_shall_return_not_checkedin_guests() {
-        List<GuestDto> guestDtos = guestService.getGuests(false);
+        GuestsDto guestsDto = guestService.getGuests(false);
 
-        assertEquals(guestDtos.size(), 2);
+        assertEquals(guestsDto.getTotal(), 2);
     }
 }

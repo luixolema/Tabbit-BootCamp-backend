@@ -11,10 +11,12 @@ public class GuestDtoToGuestMapper implements IMapper<GuestDto, Guest> {
     @Override
     public Guest map(GuestDto source) {
         Guest guest = new Guest();
-        Box box = new Box();
-        box.setId(source.getBoxId());
-        guest.setBox(box);
-        box.setGuest(guest);
+        if(source.getBoxId() != 0) {
+            Box box = new Box();
+            box.setId(source.getBoxId());
+            guest.setBox(box);
+            box.setGuest(guest);
+        }
         guest.setFirstName(source.getFirstName());
         guest.setLastName(source.getLastName());
         guest.setCheckedin(source.isCheckedin());
