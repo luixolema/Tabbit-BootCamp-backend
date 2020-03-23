@@ -1,10 +1,11 @@
-package com.tabit.dcm2.entity;
+package com.tabit.dcm2.service;
 
 public class GuestDto {
     private long id;
     private String firstName;
     private String lastName;
     private long boxId;
+    private boolean checkedin;
 
     public long getId() {
         return id;
@@ -36,5 +37,13 @@ public class GuestDto {
 
     public void setBoxId(long boxId) {
         this.boxId = boxId;
+    }
+
+    public boolean isCheckedin() {
+        return checkedin;
+    }
+
+    public void setCheckedin(boolean checkedin) {
+        this.checkedin = checkedin;
     }
 }

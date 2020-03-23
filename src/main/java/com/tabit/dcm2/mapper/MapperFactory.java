@@ -1,7 +1,7 @@
 package com.tabit.dcm2.mapper;
 
 import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.GuestDto;
+import com.tabit.dcm2.service.GuestDto;
 import org.springframework.stereotype.Component;
 
 @Component

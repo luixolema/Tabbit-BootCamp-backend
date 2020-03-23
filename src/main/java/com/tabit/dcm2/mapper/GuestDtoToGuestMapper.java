@@ -2,7 +2,7 @@ package com.tabit.dcm2.mapper;
 
 import com.tabit.dcm2.entity.Box;
 import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.GuestDto;
+import com.tabit.dcm2.service.GuestDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,11 +17,12 @@ public class GuestDtoToGuestMapper implements IMapper<GuestDto, Guest> {
         box.setGuest(guest);
         guest.setFirstName(source.getFirstName());
         guest.setLastName(source.getLastName());
+        guest.setCheckedin(source.isCheckedin());
         return guest;
     }
 
     @Override
     public List<Guest> map(List<GuestDto> source) {
-        return source.stream().map(s -> this.map(s)).collect(Collectors.toList());
+        return source.stream().map(this::map).collect(Collectors.toList());
     }
 }

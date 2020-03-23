@@ -1,27 +1,28 @@
 package com.tabit.dcm2.mapper;
 
 import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.GuestDto;
 import com.tabit.dcm2.entity.RandomGuest;
+import com.tabit.dcm2.service.GuestDto;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class GuestToGuestDtoMapperTest {
 
-    GuestToGuestDtoMapper mapper = new GuestToGuestDtoMapper();
+    private GuestToGuestDtoMapper mapper = new GuestToGuestDtoMapper();
 
     @Test
     public void map() {
         Guest guest = RandomGuest.createRandomGuest();
 
         GuestDto guestDto = mapper.map(guest);
-        assertTrue(guestDto.getFirstName().equals(guest.getFirstName()));
-        assertTrue(guestDto.getLastName().equals(guest.getLastName()));
-        assertTrue(guestDto.getBoxId()==guest.getBox().getId());
+        assertEquals(guestDto.getFirstName(), guest.getFirstName());
+        assertEquals(guestDto.getLastName(), guest.getLastName());
+        assertEquals(guestDto.getBoxId(), guest.getBox().getId());
+        assertEquals(guestDto.isCheckedin(), guest.isCheckedin());
     }
 
     @Test
@@ -34,12 +35,14 @@ public class GuestToGuestDtoMapperTest {
         guests.add(guest2);
 
         List<GuestDto> guestDtos = mapper.map(guests);
-        assertTrue(guests.size() == guestDtos.size());
-        assertTrue(guestDtos.get(0).getFirstName().equals(guest1.getFirstName()));
-        assertTrue(guestDtos.get(0).getLastName().equals(guest1.getLastName()));
-        assertTrue(guestDtos.get(0).getBoxId()==guest1.getBox().getId());
-        assertTrue(guestDtos.get(1).getFirstName().equals(guest2.getFirstName()));
-        assertTrue(guestDtos.get(1).getLastName().equals(guest2.getLastName()));
-        assertTrue(guestDtos.get(1).getBoxId()==guest2.getBox().getId());
+        assertEquals(guests.size(), guestDtos.size());
+        assertEquals(guestDtos.get(0).getFirstName(), guest1.getFirstName());
+        assertEquals(guestDtos.get(0).getLastName(), guest1.getLastName());
+        assertEquals(guestDtos.get(0).isCheckedin(), guest1.isCheckedin());
+        assertEquals(guestDtos.get(0).getBoxId(), guest1.getBox().getId());
+        assertEquals(guestDtos.get(1).getFirstName(), guest2.getFirstName());
+        assertEquals(guestDtos.get(1).getLastName(), guest2.getLastName());
+        assertEquals(guestDtos.get(1).isCheckedin(), guest2.isCheckedin());
+        assertEquals(guestDtos.get(1).getBoxId(), guest2.getBox().getId());
     }
 }

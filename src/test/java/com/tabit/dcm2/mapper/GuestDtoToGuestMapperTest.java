@@ -1,53 +1,47 @@
 package com.tabit.dcm2.mapper;
 
 import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.GuestDto;
+import com.tabit.dcm2.service.GuestDto;
+import com.tabit.dcm2.service.RandomGuestDto;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class GuestDtoToGuestMapperTest {
-    GuestDtoToGuestMapper mapper = new GuestDtoToGuestMapper();
+    private GuestDtoToGuestMapper mapper = new GuestDtoToGuestMapper();
 
     @Test
     public void map() {
-        GuestDto guestDto = new GuestDto();
-        guestDto.setBoxId(1);
-        guestDto.setFirstName("FirstName");
-        guestDto.setLastName("LastName");
+        GuestDto guestDto = RandomGuestDto.createRandomGuestDto();
 
         Guest guest = mapper.map(guestDto);
-        assertTrue(guest.getFirstName().equals(guestDto.getFirstName()));
-        assertTrue(guest.getLastName().equals(guestDto.getLastName()));
-        assertTrue(guest.getBox().getId()==guestDto.getBoxId());
+        assertEquals(guest.getFirstName(), guestDto.getFirstName());
+        assertEquals(guest.getLastName(), guestDto.getLastName());
+        assertEquals(guest.getBox().getId(), guestDto.getBoxId());
+        assertEquals(guest.isCheckedin(), guestDto.isCheckedin());
     }
 
     @Test
     public void testMap() {
-        GuestDto guestDto1 = new GuestDto();
-        guestDto1.setBoxId(1);
-        guestDto1.setFirstName("FirstName1");
-        guestDto1.setLastName("LastName1");
-
-        GuestDto guestDto2 = new GuestDto();
-        guestDto2.setBoxId(2);
-        guestDto2.setFirstName("FirstName2");
-        guestDto2.setLastName("LastName2");
+        GuestDto guestDto1 = RandomGuestDto.createRandomGuestDto();
+        GuestDto guestDto2 = RandomGuestDto.createRandomGuestDto();
 
         List<GuestDto> guestDtos = new ArrayList<>();
         guestDtos.add(guestDto1);
         guestDtos.add(guestDto2);
 
         List<Guest> guests = mapper.map(guestDtos);
-        assertTrue(guests.size() == guests.size());
-        assertTrue(guests.get(0).getFirstName().equals(guestDto1.getFirstName()));
-        assertTrue(guests.get(0).getLastName().equals(guestDto1.getLastName()));
-        assertTrue(guests.get(0).getBox().getId()==guestDto1.getBoxId());
-        assertTrue(guests.get(1).getFirstName().equals(guestDto2.getFirstName()));
-        assertTrue(guests.get(1).getLastName().equals(guestDto2.getLastName()));
-        assertTrue(guests.get(1).getBox().getId()==guestDto2.getBoxId());
+        assertEquals(guests.size(), guests.size());
+        assertEquals(guests.get(0).getFirstName(), guestDto1.getFirstName());
+        assertEquals(guests.get(0).getLastName(), guestDto1.getLastName());
+        assertEquals(guests.get(0).getBox().getId(), guestDto1.getBoxId());
+        assertEquals(guests.get(0).isCheckedin(), guestDto1.isCheckedin());
+        assertEquals(guests.get(1).getFirstName(), guestDto2.getFirstName());
+        assertEquals(guests.get(1).getLastName(), guestDto2.getLastName());
+        assertEquals(guests.get(1).getBox().getId(), guestDto2.getBoxId());
+        assertEquals(guests.get(1).isCheckedin(), guestDto2.isCheckedin());
     }
 }
