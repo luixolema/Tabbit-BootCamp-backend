@@ -16,7 +16,7 @@ import javax.persistence.EntityManagerFactory;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
-public class AbstractRepoDbTest {
+public abstract class AbstractRepoDbTest {
     private static EntityManager entityManager;
 
     protected BoxRule boxRule = new BoxRule();
