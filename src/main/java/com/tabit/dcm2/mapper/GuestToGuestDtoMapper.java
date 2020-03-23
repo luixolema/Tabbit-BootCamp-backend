@@ -1,0 +1,23 @@
+package com.tabit.dcm2.mapper;
+
+import com.tabit.dcm2.entity.Guest;
+import com.tabit.dcm2.entity.GuestDto;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class GuestToGuestDtoMapper implements IMapper<Guest, GuestDto> {
+    @Override
+    public GuestDto map(Guest source) {
+        GuestDto guestDto = new GuestDto();
+        guestDto.setBoxId(source.getBox().getId());
+        guestDto.setFirstName(source.getFirstName());
+        guestDto.setLastName(source.getLastName());
+        return guestDto;
+    }
+
+    @Override
+    public List<GuestDto> map(List<Guest> source) {
+        return source.stream().map(s -> this.map(s)).collect(Collectors.toList());
+    }
+}
