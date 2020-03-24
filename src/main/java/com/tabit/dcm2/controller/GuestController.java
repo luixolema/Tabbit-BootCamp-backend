@@ -14,7 +14,7 @@ public class GuestController {
     private IGuestService guestService;
 
     @RequestMapping(path="/api/guests")
-    public GuestsDto getGuests(@RequestParam(required = false) int checkIn) {
+    public GuestsDto getGuests(@RequestParam(required = false, defaultValue = "2") int checkIn) {
         GuestFilterType guestFilterType;
         switch (checkIn) {
             case 0:
