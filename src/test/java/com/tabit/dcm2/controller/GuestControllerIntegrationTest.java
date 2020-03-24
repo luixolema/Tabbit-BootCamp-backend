@@ -38,21 +38,21 @@ public class GuestControllerIntegrationTest extends AbstractRepoDbTest {
 
     @Test
     public void getGuests_shall_return_all_guests_for_null_input_param() {
-        GuestsDto guestsDto = guestController.getGuests(null);
+        GuestsDto guestsDto = guestController.getGuests(2);
 
         assertEquals(guestsDto.getTotal(), 3);
     }
 
     @Test
     public void getGuests_shall_return_checkedin_guests() {
-        GuestsDto guestsDto = guestController.getGuests(true);
+        GuestsDto guestsDto = guestController.getGuests(1);
 
         assertEquals(guestsDto.getTotal(), 1);
     }
 
     @Test
     public void getGuests_shall_return_not_checkedin_guests() {
-        GuestsDto guestsDto = guestController.getGuests(false);
+        GuestsDto guestsDto = guestController.getGuests(0);
 
         assertEquals(guestsDto.getTotal(), 2);
     }
