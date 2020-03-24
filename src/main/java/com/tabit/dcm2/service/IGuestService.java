@@ -1,5 +1,5 @@
 package com.tabit.dcm2.service;
 
 public interface IGuestService {
-    GuestsDto getGuests(Boolean checkedIn);
+    GuestsDto getGuests(GuestFilterType guestFilterType);
 }

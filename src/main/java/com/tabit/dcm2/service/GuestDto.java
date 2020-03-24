@@ -1,17 +1,17 @@
 package com.tabit.dcm2.service;
 
 public class GuestDto {
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
-    private long boxId;
+    private Long boxId;
     private boolean checkedin;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -31,11 +31,11 @@ public class GuestDto {
         this.lastName = lastName;
     }
 
-    public long getBoxId() {
+    public Long getBoxId() {
         return boxId;
     }
 
-    public void setBoxId(long boxId) {
+    public void setBoxId(Long boxId) {
         this.boxId = boxId;
     }
 

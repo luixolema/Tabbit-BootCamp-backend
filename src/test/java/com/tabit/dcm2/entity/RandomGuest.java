@@ -21,7 +21,7 @@ public class RandomGuest {
 
     public static Guest createRandomGuestWitoutId() {
         Guest guest = createRandomGuest();
-        guest.setId(0);
+        guest.setId(null);
 
         return guest;
     }
