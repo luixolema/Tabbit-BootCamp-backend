@@ -9,18 +9,17 @@ public class Guest implements IEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "box_id")
-    private Box box;
 
     @Column(name = "checked_in")
     private boolean checkedin;
+
+    @Column(name = "box_id")
+    private Long boxId;
 
     @Override
     public Long getId() {
@@ -47,24 +46,19 @@ public class Guest implements IEntity {
         this.lastName = lastName;
     }
 
-    public Box getBox() {
-        return box;
-    }
-
-    public void setBox(Box box) {
-        this.box = box;
-    }
-
-    public void addBox(Box box) {
-        box.setGuest(this);
-        this.box = box;
-    }
-
     public boolean isCheckedin() {
         return checkedin;
     }
 
     public void setCheckedin(boolean checkedin) {
         this.checkedin = checkedin;
+    }
+
+    public Long getBoxId() {
+        return boxId;
+    }
+
+    public void setBoxId(Long boxId) {
+        this.boxId = boxId;
     }
 }

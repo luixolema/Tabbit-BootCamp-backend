@@ -33,7 +33,7 @@ public class GuestRepoDbTest extends AbstractRepoDbTest {
         // then
         Guest actualGuestCheckinTrue = Iterables.getOnlyElement(guestsCheckinTrue);
         assertThat(actualGuestCheckinTrue.getId()).isEqualTo(guestCheckedinTrue.getId());
-        assertThat(actualGuestCheckinTrue.getBox().getId()).isEqualTo(guestCheckedinTrue.getBox().getId());
+        assertThat(actualGuestCheckinTrue.getBoxId()).isEqualTo(guestCheckedinTrue.getBoxId());
 
         // when
         List<Guest> actualGuestsCheckinFalse = guestRepo.findByCheckedin(false);
@@ -41,23 +41,4 @@ public class GuestRepoDbTest extends AbstractRepoDbTest {
         // then
         assertThat(actualGuestsCheckinFalse).hasSize(2);
     }
-
-    @Test
-    public void findByCheckedin_shall_return_the_guest_without_a_box() {
-        // given
-        Guest guestWithoutBox = RandomGuest.createRandomGuestWitoutId();
-        guestWithoutBox.setBox(null);
-        guestWithoutBox.setCheckedin(true);
-
-        guestRule.persist(ImmutableList.of(guestWithoutBox));
-
-        // when
-        List<Guest> guestsCheckinTrue = guestRepo.findByCheckedin(true);
-
-        // then
-        Guest actualGuestWitoutBox = Iterables.getOnlyElement(guestsCheckinTrue);
-        assertThat(actualGuestWitoutBox.getId()).isEqualTo(guestWithoutBox.getId());
-        assertThat(actualGuestWitoutBox.getBox()).isNull();
-    }
-
 }

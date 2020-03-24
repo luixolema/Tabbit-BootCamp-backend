@@ -7,14 +7,12 @@ public class RandomGuest {
     public static Guest createRandomGuest() {
         ValueProvider valueProvider = new ValueProvider();
 
-        Box box = new Box();
-
         Guest guest = new Guest();
         guest.setId(valueProvider.randomId());
         guest.setFirstName(valueProvider.randomString("firstname"));
         guest.setLastName(valueProvider.randomString("lastname"));
         guest.setCheckedin(valueProvider.randomBoolean());
-        guest.addBox(box);
+        guest.setBoxId(valueProvider.randomBoolean() ? valueProvider.randomId() : null);
 
         return guest;
     }
