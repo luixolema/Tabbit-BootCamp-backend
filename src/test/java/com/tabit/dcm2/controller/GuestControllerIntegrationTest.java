@@ -1,20 +1,28 @@
 package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.repository.AbstractRepoDbTest;
 import com.tabit.dcm2.repository.IGuestRepo;
+import com.tabit.dcm2.service.GuestDto;
 import com.tabit.dcm2.service.GuestsDto;
 import com.tabit.dcm2.service.IGuestService;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertEquals;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class GuestControllerIntegrationTest extends AbstractRepoDbTest {
+
+    private static final Comparator<GuestDto> SORT_BY_ID = Comparator.comparing(GuestDto::getId);
 
     @Autowired
     private IGuestRepo guestRepo;
@@ -22,15 +30,18 @@ public class GuestControllerIntegrationTest extends AbstractRepoDbTest {
     private IGuestService guestService;
     @Autowired
     private GuestController guestController;
+    private Guest guestCheckedinTrue;
+    private Guest guestCheckedinFalse;
+    private Guest guestCheckedinFalse2;
 
     @Before
     public void setUp() {
         // given
-        Guest guestCheckedinTrue = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedinTrue = RandomGuest.createRandomGuestWitoutId();
         guestCheckedinTrue.setCheckedin(true);
-        Guest guestCheckedinFalse = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedinFalse = RandomGuest.createRandomGuestWitoutId();
         guestCheckedinFalse.setCheckedin(false);
-        Guest guestCheckedinFalse2 = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedinFalse2 = RandomGuest.createRandomGuestWitoutId();
         guestCheckedinFalse2.setCheckedin(false);
 
         guestRule.persist(ImmutableList.of(guestCheckedinTrue, guestCheckedinFalse, guestCheckedinFalse2));
@@ -38,22 +49,47 @@ public class GuestControllerIntegrationTest extends AbstractRepoDbTest {
 
     @Test
     public void getGuests_shall_return_all_guests_for_null_input_param() {
+        // when
         GuestsDto guestsDto = guestController.getGuests(2);
 
-        assertEquals(guestsDto.getTotal(), 3);
+        // then
+        List<GuestDto> sorted = new ArrayList<>(guestsDto.getGuests());
+        sorted.sort(SORT_BY_ID);
+
+        assertGuestDto(sorted.get(0), guestCheckedinTrue);
+        assertGuestDto(sorted.get(1), guestCheckedinFalse);
+        assertGuestDto(sorted.get(2), guestCheckedinFalse2);
+        assertThat(guestsDto.getTotal()).isEqualTo(3);
     }
 
     @Test
     public void getGuests_shall_return_checkedin_guests() {
+        // when
         GuestsDto guestsDto = guestController.getGuests(1);
 
-        assertEquals(guestsDto.getTotal(), 1);
+        // then
+        assertGuestDto(Iterables.getOnlyElement(guestsDto.getGuests()), guestCheckedinTrue);
+        assertThat(guestsDto.getTotal()).isEqualTo(1);
     }
 
     @Test
     public void getGuests_shall_return_not_checkedin_guests() {
+        // when
         GuestsDto guestsDto = guestController.getGuests(0);
 
-        assertEquals(guestsDto.getTotal(), 2);
+        // then
+        List<GuestDto> sorted = new ArrayList<>(guestsDto.getGuests());
+        sorted.sort(SORT_BY_ID);
+
+        assertGuestDto(sorted.get(0), guestCheckedinFalse);
+        assertGuestDto(sorted.get(1), guestCheckedinFalse2);
+        assertThat(guestsDto.getTotal()).isEqualTo(2);
+    }
+
+    private void assertGuestDto(GuestDto expectedGuestDto, Guest guest) {
+        assertThat(expectedGuestDto.getId()).isEqualTo(guest.getId());
+        assertThat(expectedGuestDto.getBoxId()).isEqualTo(guest.getBoxId());
+        assertThat(expectedGuestDto.getFirstName()).isEqualTo(guest.getFirstName());
+        assertThat(expectedGuestDto.getLastName()).isEqualTo(guest.getLastName());
     }
 }
