@@ -18,9 +18,7 @@ public class GuestService implements IGuestService {
     private static final Function<Guest, GuestDto> GUEST_TO_GUEST_DTO = guest -> {
         GuestDto guestDto = new GuestDto();
         guestDto.setId(guest.getId());
-        if (guest.getBox() != null) {
-            guestDto.setBoxId(guest.getBox().getId());
-        }
+        guestDto.setBoxId(guest.getBoxId());
         guestDto.setFirstName(guest.getFirstName());
         guestDto.setLastName(guest.getLastName());
         guestDto.setCheckedin(guest.isCheckedin());

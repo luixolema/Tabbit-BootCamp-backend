@@ -31,7 +31,6 @@ public class GuestServiceTest {
         // given
         Guest randomGuestWithBox = RandomGuest.createRandomGuest();
         Guest randomGuestWitoutBox = RandomGuest.createRandomGuest();
-        randomGuestWitoutBox.setBox(null);
         when(guestRepo.findAll()).thenReturn(ImmutableList.of(randomGuestWithBox, randomGuestWitoutBox));
 
         // when
@@ -48,11 +47,7 @@ public class GuestServiceTest {
 
     private void assertGuestDto(GuestDto expectedGuestDto, Guest randomGuestWithBox) {
         assertThat(expectedGuestDto.getId()).isEqualTo(randomGuestWithBox.getId());
-        if (randomGuestWithBox.getBox() != null) {
-            assertThat(expectedGuestDto.getBoxId()).isEqualTo(randomGuestWithBox.getBox().getId());
-        } else {
-            assertThat(expectedGuestDto.getBoxId()).isNull();
-        }
+        assertThat(expectedGuestDto.getBoxId()).isEqualTo(randomGuestWithBox.getBoxId());
         assertThat(expectedGuestDto.getFirstName()).isEqualTo(randomGuestWithBox.getFirstName());
         assertThat(expectedGuestDto.getLastName()).isEqualTo(randomGuestWithBox.getLastName());
     }

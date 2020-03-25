@@ -1,6 +1,5 @@
 package com.tabit.dcm2.repository;
 
-import com.tabit.dcm2.entity.BoxRule;
 import com.tabit.dcm2.entity.GuestRule;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
@@ -17,19 +16,17 @@ import javax.persistence.EntityManagerFactory;
 @SpringBootTest
 @ActiveProfiles("test")
 public abstract class AbstractRepoDbTest {
-    private static EntityManager entityManager;
+    private EntityManager entityManager;
 
-    protected BoxRule boxRule = new BoxRule();
     protected GuestRule guestRule = new GuestRule();
     @Rule
-    public RuleChain ruleChain = RuleChain.outerRule(guestRule).around(boxRule);
+    public RuleChain ruleChain = RuleChain.outerRule(guestRule);
 
     @Autowired
     public final void setEntityManager(EntityManagerFactory factory) {
         if (entityManager == null) {
             entityManager = factory.createEntityManager();
         }
-        boxRule.setEntityManager(entityManager);
         guestRule.setEntityManager(entityManager);
     }
 }
