@@ -1,7 +1,9 @@
 package com.tabit.dcm2.controller;
 
+import com.tabit.dcm2.entity.Guest;
+import com.tabit.dcm2.service.GuestDto;
 import com.tabit.dcm2.service.GuestFilterType;
-import com.tabit.dcm2.service.GuestsDto;
+import com.tabit.dcm2.service.GuestOverviewDto;
 import com.tabit.dcm2.service.IGuestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,14 +11,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @RestController
 @CrossOrigin
 public class GuestController {
+    private static final Function<Guest, GuestDto> GUEST_TO_GUEST_DTO = guest -> {
+        GuestDto guestDto = new GuestDto();
+        guestDto.setId(guest.getId());
+        guestDto.setBoxId(guest.getBoxId());
+        guestDto.setFirstName(guest.getFirstName());
+        guestDto.setLastName(guest.getLastName());
+        guestDto.setCheckedin(guest.isCheckedin());
+        return guestDto;
+    };
+
     @Autowired
     private IGuestService guestService;
 
-    @RequestMapping(path="/api/guests")
-    public GuestsDto getGuests(@RequestParam(required = false, defaultValue = "2") int checkIn) {
+    @RequestMapping(path = "/api/guests")
+    public GuestOverviewDto getGuests(@RequestParam(required = false, defaultValue = "2") int checkIn) {
         GuestFilterType guestFilterType;
         switch (checkIn) {
             case 0:
@@ -29,6 +45,8 @@ public class GuestController {
                 guestFilterType = GuestFilterType.ALL;
                 break;
         }
-        return guestService.getGuests(guestFilterType);
+
+        List<Guest> guests = guestService.getGuests(guestFilterType);
+        return new GuestOverviewDto(guests.stream().map(GUEST_TO_GUEST_DTO).collect(Collectors.toList()));
     }
 }

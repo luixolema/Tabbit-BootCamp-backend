@@ -2,11 +2,11 @@ package com.tabit.dcm2.service;
 
 import java.util.List;
 
-public class GuestsDto {
+public class GuestOverviewDto {
     private List<GuestDto> guests;
     private int total;
 
-    public GuestsDto(List<GuestDto> guests) {
+    public GuestOverviewDto(List<GuestDto> guests) {
         this.guests = guests;
         this.total = guests.size();
     }
