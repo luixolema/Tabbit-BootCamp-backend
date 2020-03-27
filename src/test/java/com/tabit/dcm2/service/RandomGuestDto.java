@@ -11,7 +11,6 @@ public class RandomGuestDto {
         guestDto.setFirstName(valueProvider.randomString("firstname"));
         guestDto.setLastName(valueProvider.randomString("lastname"));
         guestDto.setCheckedin(valueProvider.randomBoolean());
-        guestDto.setBoxId(valueProvider.randomId());
 
         return guestDto;
     }

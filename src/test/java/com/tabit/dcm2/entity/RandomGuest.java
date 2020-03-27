@@ -12,7 +12,6 @@ public class RandomGuest {
         guest.setFirstName(valueProvider.randomString("firstname"));
         guest.setLastName(valueProvider.randomString("lastname"));
         guest.setCheckedin(valueProvider.randomBoolean());
-        guest.setBoxId(valueProvider.randomBoolean() ? valueProvider.randomId() : null);
 
         return guest;
     }
