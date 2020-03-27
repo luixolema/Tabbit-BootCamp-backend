@@ -1,6 +1,8 @@
 package com.tabit.dcm2.testutils;
 
+import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ValueProvider {
     private Random random = new Random();
@@ -22,7 +24,16 @@ public class ValueProvider {
         return random.nextLong();
     }
 
+
+    public Integer randomInt() {
+        return random.nextInt();
+    }
+
     public boolean randomBoolean() {
         return random.nextBoolean();
+    }
+
+    public Date randomDate(){
+        return new Date(ThreadLocalRandom.current().nextInt() * 1000L);
     }
 }

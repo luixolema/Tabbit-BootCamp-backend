@@ -82,6 +82,8 @@ public class GuestControllerTest {
 
     private void assertGuestDto(GuestDto expectedGuestDto, Guest randomGuestWithBox) {
         assertThat(expectedGuestDto.getId()).isEqualTo(randomGuestWithBox.getId());
+        //TODO: put here logic for getting the box of the last stay
+        // assertThat(expectedGuestDto.getBoxId()).isEqualTo(randomGuestWithBox.getBoxId());
         assertThat(expectedGuestDto.getFirstName()).isEqualTo(randomGuestWithBox.getFirstName());
         assertThat(expectedGuestDto.getLastName()).isEqualTo(randomGuestWithBox.getLastName());
     }

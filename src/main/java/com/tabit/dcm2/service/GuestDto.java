@@ -19,6 +19,7 @@ public class GuestDto {
     private Date lastDive;
     private String brevet;
     private Integer divesAmount;
+    private Long boxId;
     private boolean nitrox;
     private boolean medicalStatement;
     private boolean checkedin;
@@ -165,5 +166,13 @@ public class GuestDto {
 
     public void setCheckedin(boolean checkedin) {
         this.checkedin = checkedin;
+    }
+
+    public Long getBoxId() {
+        return boxId;
+    }
+
+    public void setBoxId(Long boxId) {
+        this.boxId = boxId;
     }
 }

@@ -33,6 +33,7 @@ public class GuestRepoDbTest extends AbstractRepoDbTest {
         // then
         Guest actualGuestCheckinTrue = Iterables.getOnlyElement(guestsCheckinTrue);
         assertThat(actualGuestCheckinTrue.getId()).isEqualTo(guestCheckedinTrue.getId());
+        //assertThat(actualGuestCheckinTrue.getBoxId()).isEqualTo(guestCheckedinTrue.getBoxId());
 
         // when
         List<Guest> actualGuestsCheckinFalse = guestRepo.findByCheckedin(false);
