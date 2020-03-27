@@ -1,15 +1,9 @@
 package com.tabit.dcm2.controller;
 
 import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.service.GuestDto;
-import com.tabit.dcm2.service.GuestFilterType;
-import com.tabit.dcm2.service.GuestOverviewDto;
-import com.tabit.dcm2.service.IGuestService;
+import com.tabit.dcm2.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.function.Function;
@@ -48,5 +42,10 @@ public class GuestController {
 
         List<Guest> guests = guestService.getGuests(guestFilterType);
         return new GuestOverviewDto(guests.stream().map(GUEST_TO_GUEST_DTO).collect(Collectors.toList()));
+    }
+
+    @RequestMapping(path = "/api/guests/{guestId}")
+    public GuestDetailDto getStay(@PathVariable() long guestId) {
+        return null;
     }
 }
