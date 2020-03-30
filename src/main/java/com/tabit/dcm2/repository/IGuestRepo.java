@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface IGuestRepo extends JpaRepository<Guest, Long> {
-    List<Guest> findByCheckedin(boolean checkein);
+    List<Guest> findByCheckedin(boolean checkedIn);
 }

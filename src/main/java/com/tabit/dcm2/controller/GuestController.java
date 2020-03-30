@@ -25,9 +25,9 @@ public class GuestController {
     private IGuestService guestService;
 
     @RequestMapping(path = "/api/guests")
-    public GuestOverviewDto getGuests(@RequestParam(required = false, defaultValue = "2") int checkIn) {
+    public GuestOverviewDto getGuests(@RequestParam(required = false, defaultValue = "2") int checkedIn) {
         GuestFilterType guestFilterType;
-        switch (checkIn) {
+        switch (checkedIn) {
             case 0:
                 guestFilterType = GuestFilterType.NOT_CHECKED_IN;
                 break;
