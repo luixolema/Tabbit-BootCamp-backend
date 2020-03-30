@@ -1,4 +1,4 @@
-package com.tabit.dcm2.service;
+package com.tabit.dcm2.service.dto;
 
 import java.util.Date;
 

@@ -16,7 +16,7 @@ public class RandomGuest {
         guest.setCountry(valueProvider.randomString("country"));
         guest.setBrevet(valueProvider.randomString("brevet"));
         guest.setDivesAmount(valueProvider.randomInt());
-        guest.setLastDive(valueProvider.randomDate());
+        guest.setLastDiveDate(valueProvider.randomDate());
         guest.setEmail(valueProvider.randomString("email"));
         guest.setNationality(valueProvider.randomString("nationality"));
         guest.setPassportId(valueProvider.randomString("passport"));

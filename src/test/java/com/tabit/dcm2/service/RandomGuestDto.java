@@ -1,5 +1,6 @@
 package com.tabit.dcm2.service;
 
+import com.tabit.dcm2.service.dto.GuestDto;
 import com.tabit.dcm2.testutils.ValueProvider;
 
 public class RandomGuestDto {

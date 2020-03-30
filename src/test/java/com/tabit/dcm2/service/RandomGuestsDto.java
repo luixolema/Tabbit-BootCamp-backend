@@ -1,6 +1,8 @@
 package com.tabit.dcm2.service;
 
 import com.google.common.collect.ImmutableList;
+import com.tabit.dcm2.service.dto.GuestDto;
+import com.tabit.dcm2.service.dto.GuestOverviewDto;
 
 public class RandomGuestsDto {
     public static GuestOverviewDto createRandomGuestsDto() {

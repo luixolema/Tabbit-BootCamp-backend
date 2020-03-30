@@ -1,6 +1,7 @@
 package com.tabit.dcm2.repository;
 
 import com.tabit.dcm2.entity.GuestRule;
+import com.tabit.dcm2.entity.StayRule;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
@@ -19,6 +20,7 @@ public abstract class AbstractRepoDbTest {
     private EntityManager entityManager;
 
     protected GuestRule guestRule = new GuestRule();
+    protected StayRule stayRule = new StayRule();
     @Rule
     public RuleChain ruleChain = RuleChain.outerRule(guestRule);
 
@@ -28,5 +30,6 @@ public abstract class AbstractRepoDbTest {
             entityManager = factory.createEntityManager();
         }
         guestRule.setEntityManager(entityManager);
+        stayRule.setEntityManager(entityManager);
     }
 }

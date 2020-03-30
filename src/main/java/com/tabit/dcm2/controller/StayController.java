@@ -1,17 +1,50 @@
 package com.tabit.dcm2.controller;
 
-import com.tabit.dcm2.service.GuestDetailDto;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.service.dto.StayDto;
+import com.tabit.dcm2.service.impl.StayService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
+@RequestMapping(path = "/api/stay")
 public class StayController {
+    @Autowired
+    private StayService stayService;
 
-    @RequestMapping(path = "/api/stay/{stayId}")
-    public GuestDetailDto getStay(@PathVariable() Long stayId) {
-        return null;
+    @GetMapping(path = "/{stayId}")
+    public StayDto getStay(@PathVariable() Long stayId) {
+        return mapStayToStayDto(stayService.findById(stayId));
+    }
+
+    private StayDto mapStayToStayDto(Stay stay) {
+        StayDto stayDto = new StayDto();
+        stayDto.setGuest(stay.getGuest());
+        stayDto.setFirstName(stay.getFirstName());
+        stayDto.setLastName(stay.getLastName());
+        stayDto.setBoxId(stay.getBoxId());
+        stayDto.setBirthDate(stay.getBirthDate());
+        stayDto.setNationality(stay.getNationality());
+        stayDto.setCountry(stay.getCountry());
+        stayDto.setCity(stay.getCity());
+        stayDto.setPostcode(stay.getPostcode());
+        stayDto.setStreet(stay.getStreet());
+        stayDto.setEmail(stay.getEmail());
+        stayDto.setPhone(stay.getPhone());
+        stayDto.setPassportId(stay.getPassportId());
+        stayDto.setCheckInDate(stay.getCheckInDate());
+        stayDto.setCheckOutDate(stay.getCheckOutDate());
+        stayDto.setArriveDate(stay.getArriveDate());
+        stayDto.setLeaveDate(stay.getLeaveDate());
+        stayDto.setHotel(stay.getHotel());
+        stayDto.setRoom(stay.getRoom());
+        stayDto.setLastDive(stay.getLastDiveDate());
+        stayDto.setBrevet(stay.getBrevet());
+        stayDto.setDivesAmount(stay.getDivesAmount());
+        stayDto.setNitrox(stay.isNitrox());
+        stayDto.setMedicalStatement(stay.isMedicalStatement());
+
+        return stayDto;
     }
 }
