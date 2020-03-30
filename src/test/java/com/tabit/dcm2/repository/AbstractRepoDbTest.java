@@ -22,7 +22,7 @@ public abstract class AbstractRepoDbTest {
     protected GuestRule guestRule = new GuestRule();
     protected StayRule stayRule = new StayRule();
     @Rule
-    public RuleChain ruleChain = RuleChain.outerRule(guestRule);
+    public RuleChain ruleChain = RuleChain.outerRule(stayRule).around(guestRule);
 
     @Autowired
     public final void setEntityManager(EntityManagerFactory factory) {
