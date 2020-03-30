@@ -2,24 +2,25 @@ package com.tabit.dcm2.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-public class Guest implements IEntity {
+public class Stay implements IEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "guest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @OrderBy("check_in_date DESC")
-    List<Stay> stays = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "guest_id")
+    private Guest guest;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @Column(name = "box_id", nullable = false)
+    private Long boxId;
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
@@ -48,6 +49,24 @@ public class Guest implements IEntity {
     @Column(name = "passport_id", nullable = false)
     private String passportId;
 
+    @Column(name = "check_in_date", nullable = false)
+    private LocalDate checkInDate;
+
+    @Column(name = "check_out_date", nullable = false)
+    private LocalDate checkOutDate;
+
+    @Column(name = "arrive_date", nullable = false)
+    private LocalDate arriveDate;
+
+    @Column(name = "leave_date", nullable = false)
+    private LocalDate leaveDate;
+
+    @Column(name = "hotel", nullable = false)
+    private String hotel;
+
+    @Column(name = "room", nullable = false)
+    private String room;
+
     @Column(name = "last_dive_date", nullable = false)
     private LocalDate lastDiveDate;
 
@@ -63,9 +82,6 @@ public class Guest implements IEntity {
     @Column(name = "medical_statement", nullable = false)
     private boolean medicalStatement;
 
-    @Column(name = "checked_in")
-    private boolean checkedin;
-
     @Override
     public Long getId() {
         return id;
@@ -73,6 +89,14 @@ public class Guest implements IEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Guest getGuest() {
+        return guest;
+    }
+
+    public void setGuest(Guest guest) {
+        this.guest = guest;
     }
 
     public String getFirstName() {
@@ -89,6 +113,14 @@ public class Guest implements IEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Long getBoxId() {
+        return boxId;
+    }
+
+    public void setBoxId(Long boxId) {
+        this.boxId = boxId;
     }
 
     public LocalDate getBirthDate() {
@@ -163,6 +195,54 @@ public class Guest implements IEntity {
         this.passportId = passportId;
     }
 
+    public LocalDate getCheckInDate() {
+        return checkInDate;
+    }
+
+    public void setCheckInDate(LocalDate checkInDate) {
+        this.checkInDate = checkInDate;
+    }
+
+    public LocalDate getCheckOutDate() {
+        return checkOutDate;
+    }
+
+    public void setCheckOutDate(LocalDate checkOutDate) {
+        this.checkOutDate = checkOutDate;
+    }
+
+    public LocalDate getArriveDate() {
+        return arriveDate;
+    }
+
+    public void setArriveDate(LocalDate arriveDate) {
+        this.arriveDate = arriveDate;
+    }
+
+    public LocalDate getLeaveDate() {
+        return leaveDate;
+    }
+
+    public void setLeaveDate(LocalDate leaveDate) {
+        this.leaveDate = leaveDate;
+    }
+
+    public String getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(String hotel) {
+        this.hotel = hotel;
+    }
+
+    public String getRoom() {
+        return room;
+    }
+
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
     public LocalDate getLastDiveDate() {
         return lastDiveDate;
     }
@@ -201,26 +281,5 @@ public class Guest implements IEntity {
 
     public void setMedicalStatement(boolean medicalStatement) {
         this.medicalStatement = medicalStatement;
-    }
-
-    public boolean isCheckedin() {
-        return checkedin;
-    }
-
-    public void setCheckedin(boolean checkedin) {
-        this.checkedin = checkedin;
-    }
-
-    public List<Stay> getStays() {
-        return stays;
-    }
-
-    public void setStays(List<Stay> stays) {
-        this.stays = stays;
-    }
-
-    public void addStays(List<Stay> stays) {
-        setStays(stays);
-        stays.stream().forEach(s -> s.setGuest(this));
     }
 }

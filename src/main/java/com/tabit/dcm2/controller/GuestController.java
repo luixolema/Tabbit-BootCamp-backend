@@ -15,7 +15,6 @@ public class GuestController {
     private static final Function<Guest, GuestDto> GUEST_TO_GUEST_DTO = guest -> {
         GuestDto guestDto = new GuestDto();
         guestDto.setId(guest.getId());
-        guestDto.setBoxId(guest.getBoxId());
         guestDto.setFirstName(guest.getFirstName());
         guestDto.setLastName(guest.getLastName());
         guestDto.setCheckedin(guest.isCheckedin());
@@ -26,9 +25,9 @@ public class GuestController {
     private IGuestService guestService;
 
     @RequestMapping(path = "/api/guests")
-    public GuestOverviewDto getGuests(@RequestParam(required = false, defaultValue = "2") int checkIn) {
+    public GuestOverviewDto getGuests(@RequestParam(required = false, defaultValue = "2") int checkedIn) {
         GuestFilterType guestFilterType;
-        switch (checkIn) {
+        switch (checkedIn) {
             case 0:
                 guestFilterType = GuestFilterType.NOT_CHECKED_IN;
                 break;

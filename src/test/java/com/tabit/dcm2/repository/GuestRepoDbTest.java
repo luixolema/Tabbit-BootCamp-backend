@@ -16,29 +16,28 @@ public class GuestRepoDbTest extends AbstractRepoDbTest {
     private IGuestRepo guestRepo;
 
     @Test
-    public void findByCheckedin_shall_return_the_guests() {
+    public void findByCheckedIn_shall_return_the_guests() {
         // given
-        Guest guestCheckedinTrue = RandomGuest.createRandomGuestWitoutId();
-        guestCheckedinTrue.setCheckedin(true);
-        Guest guestCheckedinFalse = RandomGuest.createRandomGuestWitoutId();
-        guestCheckedinFalse.setCheckedin(false);
-        Guest guestCheckedinFalse2 = RandomGuest.createRandomGuestWitoutId();
-        guestCheckedinFalse2.setCheckedin(false);
+        Guest guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedInTrue.setCheckedin(true);
+        Guest guestCheckedInFalse = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedInFalse.setCheckedin(false);
+        Guest guestCheckedInFalse2 = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedInFalse2.setCheckedin(false);
 
-        guestRule.persist(ImmutableList.of(guestCheckedinTrue, guestCheckedinFalse, guestCheckedinFalse2));
-
-        // when
-        List<Guest> guestsCheckinTrue = guestRepo.findByCheckedin(true);
-
-        // then
-        Guest actualGuestCheckinTrue = Iterables.getOnlyElement(guestsCheckinTrue);
-        assertThat(actualGuestCheckinTrue.getId()).isEqualTo(guestCheckedinTrue.getId());
-        assertThat(actualGuestCheckinTrue.getBoxId()).isEqualTo(guestCheckedinTrue.getBoxId());
+        guestRule.persist(ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2));
 
         // when
-        List<Guest> actualGuestsCheckinFalse = guestRepo.findByCheckedin(false);
+        List<Guest> guestsCheckedInTrue = guestRepo.findByCheckedin(true);
 
         // then
-        assertThat(actualGuestsCheckinFalse).hasSize(2);
+        Guest actualGuestCheckedInTrue = Iterables.getOnlyElement(guestsCheckedInTrue);
+        assertThat(actualGuestCheckedInTrue.getId()).isEqualTo(guestCheckedInTrue.getId());
+
+        // when
+        List<Guest> actualGuestsCheckedInFalse = guestRepo.findByCheckedin(false);
+
+        // then
+        assertThat(actualGuestsCheckedInFalse).hasSize(2);
     }
 }
