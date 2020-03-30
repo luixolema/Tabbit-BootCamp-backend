@@ -1,8 +1,8 @@
 package com.tabit.dcm2.entity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -11,7 +11,7 @@ public class Guest implements IEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "guest", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "guest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @OrderBy("check_in_date DESC")
     List<Stay> stays = new ArrayList<>();
 
@@ -22,7 +22,7 @@ public class Guest implements IEntity {
     private String lastName;
 
     @Column(name = "birth_date", nullable = false)
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "nationality", nullable = false)
     private String nationality;
@@ -49,7 +49,7 @@ public class Guest implements IEntity {
     private String passportId;
 
     @Column(name = "last_dive_date", nullable = false)
-    private Date lastDiveDate;
+    private LocalDate lastDiveDate;
 
     @Column(name = "brevet", nullable = false)
     private String brevet;
@@ -91,11 +91,11 @@ public class Guest implements IEntity {
         this.lastName = lastName;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -163,11 +163,11 @@ public class Guest implements IEntity {
         this.passportId = passportId;
     }
 
-    public Date getLastDiveDate() {
+    public LocalDate getLastDiveDate() {
         return lastDiveDate;
     }
 
-    public void setLastDiveDate(Date lastDiveDate) {
+    public void setLastDiveDate(LocalDate lastDiveDate) {
         this.lastDiveDate = lastDiveDate;
     }
 
@@ -217,5 +217,10 @@ public class Guest implements IEntity {
 
     public void setStays(List<Stay> stays) {
         this.stays = stays;
+    }
+
+    public void addStays(List<Stay> stays) {
+        setStays(stays);
+        stays.stream().forEach(s -> s.setGuest(this));
     }
 }

@@ -1,7 +1,7 @@
 package com.tabit.dcm2.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Stay implements IEntity {
@@ -9,7 +9,7 @@ public class Stay implements IEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name = "guest_id")
     private Guest guest;
 
@@ -23,7 +23,7 @@ public class Stay implements IEntity {
     private Long boxId;
 
     @Column(name = "birth_date", nullable = false)
-    private Date birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "nationality", nullable = false)
     private String nationality;
@@ -50,16 +50,16 @@ public class Stay implements IEntity {
     private String passportId;
 
     @Column(name = "check_in_date", nullable = false)
-    private Date checkInDate;
+    private LocalDate checkInDate;
 
     @Column(name = "check_out_date", nullable = false)
-    private Date checkOutDate;
+    private LocalDate checkOutDate;
 
     @Column(name = "arrive_date", nullable = false)
-    private Date arriveDate;
+    private LocalDate arriveDate;
 
     @Column(name = "leave_date", nullable = false)
-    private Date leaveDate;
+    private LocalDate leaveDate;
 
     @Column(name = "hotel", nullable = false)
     private String hotel;
@@ -68,7 +68,7 @@ public class Stay implements IEntity {
     private String room;
 
     @Column(name = "last_dive_date", nullable = false)
-    private Date lastDiveDate;
+    private LocalDate lastDiveDate;
 
     @Column(name = "brevet", nullable = false)
     private String brevet;
@@ -123,11 +123,11 @@ public class Stay implements IEntity {
         this.boxId = boxId;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -195,35 +195,35 @@ public class Stay implements IEntity {
         this.passportId = passportId;
     }
 
-    public Date getCheckInDate() {
+    public LocalDate getCheckInDate() {
         return checkInDate;
     }
 
-    public void setCheckInDate(Date checkInDate) {
+    public void setCheckInDate(LocalDate checkInDate) {
         this.checkInDate = checkInDate;
     }
 
-    public Date getCheckOutDate() {
+    public LocalDate getCheckOutDate() {
         return checkOutDate;
     }
 
-    public void setCheckOutDate(Date checkOutDate) {
+    public void setCheckOutDate(LocalDate checkOutDate) {
         this.checkOutDate = checkOutDate;
     }
 
-    public Date getArriveDate() {
+    public LocalDate getArriveDate() {
         return arriveDate;
     }
 
-    public void setArriveDate(Date arriveDate) {
+    public void setArriveDate(LocalDate arriveDate) {
         this.arriveDate = arriveDate;
     }
 
-    public Date getLeaveDate() {
+    public LocalDate getLeaveDate() {
         return leaveDate;
     }
 
-    public void setLeaveDate(Date leaveDate) {
+    public void setLeaveDate(LocalDate leaveDate) {
         this.leaveDate = leaveDate;
     }
 
@@ -243,11 +243,11 @@ public class Stay implements IEntity {
         this.room = room;
     }
 
-    public Date getLastDiveDate() {
+    public LocalDate getLastDiveDate() {
         return lastDiveDate;
     }
 
-    public void setLastDiveDate(Date lastDiveDate) {
+    public void setLastDiveDate(LocalDate lastDiveDate) {
         this.lastDiveDate = lastDiveDate;
     }
 

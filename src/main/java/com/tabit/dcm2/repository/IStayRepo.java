@@ -9,5 +9,9 @@ import java.util.List;
 
 @Repository
 public interface IStayRepo extends JpaRepository<Stay, Long> {
-    List<Stay> findByGuest(Guest guest);
+    List<Stay> findByGuestOrderByCheckInDateDesc(Guest guest);
+
+    List<Stay> findByGuestIdOrderByCheckInDateDesc(Long guestId);
+
+
 }
