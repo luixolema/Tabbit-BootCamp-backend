@@ -19,7 +19,9 @@ public class GuestController {
     private static final Function<Guest, GuestDto> GUEST_TO_GUEST_DTO = guest -> {
         GuestDto guestDto = new GuestDto();
         guestDto.setId(guest.getId());
-        guestDto.setBoxNumber(null); // FIXME in next task: we must get the information from the actual stay if checkedin
+        if(guest.isCheckedin()){
+            guestDto.setBoxNumber(guest.getStays().get(0).getBoxNumber());
+        }
         guestDto.setFirstName(guest.getFirstName());
         guestDto.setLastName(guest.getLastName());
         guestDto.setCheckedin(guest.isCheckedin());
@@ -44,12 +46,18 @@ public class GuestController {
                 break;
         }
 
-        List<Guest> guests = guestService.getGuests(guestFilterType);
+        List<Guest> guests = guestService.getAllGuests(guestFilterType);
         return new GuestOverviewDto(guests.stream().map(GUEST_TO_GUEST_DTO).collect(Collectors.toList()));
     }
 
     @RequestMapping(path = "/api/guests/{guestId}")
     public GuestDetailDto getGuest(@PathVariable() long guestId) {
+        Guest guest = guestService.getGuestById(guestId);
+        if (guest.isCheckedin()){
+//take first one and populate stayhistory
+        } else {
+            // add null to stay summary first + populate gestdetails dto by guest data
+        }
         return null;
     }
 }

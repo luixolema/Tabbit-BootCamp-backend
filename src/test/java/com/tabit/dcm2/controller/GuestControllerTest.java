@@ -32,7 +32,7 @@ public class GuestControllerTest {
         // given
         Guest randomGuestWithBox = RandomGuest.createRandomGuest();
         Guest randomGuestWithoutBox = RandomGuest.createRandomGuest();
-        when(guestService.getGuests(GuestFilterType.ALL)).thenReturn(ImmutableList.of(randomGuestWithBox, randomGuestWithoutBox));
+        when(guestService.getAllGuests(GuestFilterType.ALL)).thenReturn(ImmutableList.of(randomGuestWithBox, randomGuestWithoutBox));
 
         // when
         GuestOverviewDto guestOverviewDto = guestController.getGuests(2);
@@ -50,7 +50,7 @@ public class GuestControllerTest {
     public void getGuests_shall_return_checkedin_guests() {
         // given
         Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        when(guestService.getGuests(GuestFilterType.CHECKED_IN)).thenReturn(ImmutableList.of(randomGuestWithBox));
+        when(guestService.getAllGuests(GuestFilterType.CHECKED_IN)).thenReturn(ImmutableList.of(randomGuestWithBox));
 
         // when
         GuestOverviewDto guestOverviewDto = guestController.getGuests(1);
@@ -67,7 +67,7 @@ public class GuestControllerTest {
     public void getGuests_shall_return_not_checkedin_guests() {
         // given
         Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        when(guestService.getGuests(GuestFilterType.NOT_CHECKED_IN)).thenReturn(ImmutableList.of(randomGuestWithBox));
+        when(guestService.getAllGuests(GuestFilterType.NOT_CHECKED_IN)).thenReturn(ImmutableList.of(randomGuestWithBox));
 
         // when
         GuestOverviewDto guestOverviewDto = guestController.getGuests(0);

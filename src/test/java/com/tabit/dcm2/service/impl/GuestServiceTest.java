@@ -31,7 +31,7 @@ public class GuestServiceTest {
         when(guestRepo.findAll()).thenReturn(ImmutableList.of(randomGuestWithBox, randomGuestWitoutBox));
 
         // when
-        List<Guest> guests = guestService.getGuests(GuestFilterType.ALL);
+        List<Guest> guests = guestService.getAllGuests(GuestFilterType.ALL);
 
         // then
         assertThat(guests).containsExactly(randomGuestWithBox, randomGuestWitoutBox);
@@ -44,7 +44,7 @@ public class GuestServiceTest {
         when(guestRepo.findByCheckedin(true)).thenReturn(ImmutableList.of(randomGuestWithBox));
 
         // when
-        List<Guest> guests = guestService.getGuests(GuestFilterType.CHECKED_IN);
+        List<Guest> guests = guestService.getAllGuests(GuestFilterType.CHECKED_IN);
 
         // then
         assertThat(guests).containsExactly(randomGuestWithBox);
@@ -57,7 +57,7 @@ public class GuestServiceTest {
         when(guestRepo.findByCheckedin(false)).thenReturn(ImmutableList.of(randomGuestWithBox));
 
         // when
-        List<Guest> guests = guestService.getGuests(GuestFilterType.NOT_CHECKED_IN);
+        List<Guest> guests = guestService.getAllGuests(GuestFilterType.NOT_CHECKED_IN);
 
         // then
         assertThat(guests).containsExactly(randomGuestWithBox);
