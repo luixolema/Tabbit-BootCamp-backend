@@ -88,7 +88,11 @@ public class GuestControllerIntegrationTest extends AbstractRepoDbTest {
 
     private void assertGuestDto(GuestDto expectedGuestDto, Guest guest) {
         assertThat(expectedGuestDto.getId()).isEqualTo(guest.getId());
-        assertThat(expectedGuestDto.getBoxNumber()).isNull();
+        if (guest.isCheckedin()) {
+            assertThat(expectedGuestDto.getBoxNumber()).isEqualTo(guest.getStays().get(0).getBoxNumber());
+        } else {
+            assertThat(expectedGuestDto.getBoxNumber()).isNull();
+        }
         assertThat(expectedGuestDto.getFirstName()).isEqualTo(guest.getFirstName());
         assertThat(expectedGuestDto.getLastName()).isEqualTo(guest.getLastName());
     }

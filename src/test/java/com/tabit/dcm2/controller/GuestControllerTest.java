@@ -30,9 +30,9 @@ public class GuestControllerTest {
     @Test
     public void getGuests_shall_return_all_guests() {
         // given
-        Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        Guest randomGuestWithoutBox = RandomGuest.createRandomGuest();
-        when(guestService.getAllGuests(GuestFilterType.ALL)).thenReturn(ImmutableList.of(randomGuestWithBox, randomGuestWithoutBox));
+        Guest randomGuest1 = RandomGuest.createRandomGuest();
+        Guest randomGuest2 = RandomGuest.createRandomGuest();
+        when(guestService.getAllGuests(GuestFilterType.ALL)).thenReturn(ImmutableList.of(randomGuest1, randomGuest2));
 
         // when
         GuestOverviewDto guestOverviewDto = guestController.getGuests(2);
@@ -41,16 +41,17 @@ public class GuestControllerTest {
         List<GuestDto> expectedGuestDtos = guestOverviewDto.getGuests();
 
         assertThat(expectedGuestDtos).hasSize(2);
-        assertGuestDto(expectedGuestDtos.get(0), randomGuestWithBox);
-        assertGuestDto(expectedGuestDtos.get(1), randomGuestWithoutBox);
+        assertGuestDto(expectedGuestDtos.get(0), randomGuest1);
+        assertGuestDto(expectedGuestDtos.get(1), randomGuest2);
         assertThat(guestOverviewDto.getTotal()).isEqualTo(2);
     }
 
     @Test
     public void getGuests_shall_return_checkedin_guests() {
         // given
-        Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        when(guestService.getAllGuests(GuestFilterType.CHECKED_IN)).thenReturn(ImmutableList.of(randomGuestWithBox));
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        randomGuest.setCheckedin(true);
+        when(guestService.getAllGuests(GuestFilterType.CHECKED_IN)).thenReturn(ImmutableList.of(randomGuest));
 
         // when
         GuestOverviewDto guestOverviewDto = guestController.getGuests(1);
@@ -59,15 +60,16 @@ public class GuestControllerTest {
         List<GuestDto> expectedGuestDtos = guestOverviewDto.getGuests();
 
         assertThat(expectedGuestDtos).hasSize(1);
-        assertGuestDto(expectedGuestDtos.get(0), randomGuestWithBox);
+        assertGuestDto(expectedGuestDtos.get(0), randomGuest);
         assertThat(guestOverviewDto.getTotal()).isEqualTo(1);
     }
 
     @Test
     public void getGuests_shall_return_not_checkedin_guests() {
         // given
-        Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        when(guestService.getAllGuests(GuestFilterType.NOT_CHECKED_IN)).thenReturn(ImmutableList.of(randomGuestWithBox));
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        randomGuest.setCheckedin(false);
+        when(guestService.getAllGuests(GuestFilterType.NOT_CHECKED_IN)).thenReturn(ImmutableList.of(randomGuest));
 
         // when
         GuestOverviewDto guestOverviewDto = guestController.getGuests(0);
@@ -76,14 +78,18 @@ public class GuestControllerTest {
         List<GuestDto> expectedGuestDtos = guestOverviewDto.getGuests();
 
         assertThat(expectedGuestDtos).hasSize(1);
-        assertGuestDto(expectedGuestDtos.get(0), randomGuestWithBox);
+        assertGuestDto(expectedGuestDtos.get(0), randomGuest);
         assertThat(guestOverviewDto.getTotal()).isEqualTo(1);
     }
 
-    private void assertGuestDto(GuestDto expectedGuestDto, Guest randomGuestWithBox) {
-        assertThat(expectedGuestDto.getId()).isEqualTo(randomGuestWithBox.getId());
-        assertThat(expectedGuestDto.getBoxNumber()).isNull();
-        assertThat(expectedGuestDto.getFirstName()).isEqualTo(randomGuestWithBox.getFirstName());
-        assertThat(expectedGuestDto.getLastName()).isEqualTo(randomGuestWithBox.getLastName());
+    private void assertGuestDto(GuestDto expectedGuestDto, Guest guest) {
+        assertThat(expectedGuestDto.getId()).isEqualTo(guest.getId());
+        if (guest.isCheckedin()) {
+            assertThat(expectedGuestDto.getBoxNumber()).isEqualTo(guest.getStays().get(0).getBoxNumber());
+        } else {
+            assertThat(expectedGuestDto.getBoxNumber()).isNull();
+        }
+        assertThat(expectedGuestDto.getFirstName()).isEqualTo(guest.getFirstName());
+        assertThat(expectedGuestDto.getLastName()).isEqualTo(guest.getLastName());
     }
 }

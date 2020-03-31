@@ -54,7 +54,7 @@ public class GuestController {
     public GuestDetailDto getGuest(@PathVariable() long guestId) {
         Guest guest = guestService.getGuestById(guestId);
         if (guest.isCheckedin()){
-//take first one and populate stayhistory
+            //take first one and populate stayhistory
         } else {
             // add null to stay summary first + populate gestdetails dto by guest data
         }

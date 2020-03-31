@@ -21,30 +21,34 @@ public class StayController {
     private StayDto mapStayToStayDto(Stay stay) {
         StayDto stayDto = new StayDto();
         stayDto.setId(stay.getId());
-        stayDto.setGuest(stay.getGuest());
-        stayDto.setFirstName(stay.getFirstName());
-        stayDto.setLastName(stay.getLastName());
-        stayDto.setBoxNumber(stay.getBoxNumber());
-        stayDto.setBirthDate(stay.getBirthDate());
-        stayDto.setNationality(stay.getNationality());
-        stayDto.setCountry(stay.getCountry());
-        stayDto.setCity(stay.getCity());
-        stayDto.setPostcode(stay.getPostcode());
-        stayDto.setStreet(stay.getStreet());
-        stayDto.setEmail(stay.getEmail());
-        stayDto.setPhone(stay.getPhone());
-        stayDto.setPassportId(stay.getPassportId());
-        stayDto.setCheckInDate(stay.getCheckInDate());
-        stayDto.setCheckOutDate(stay.getCheckOutDate());
-        stayDto.setArriveDate(stay.getArriveDate());
-        stayDto.setLeaveDate(stay.getLeaveDate());
-        stayDto.setHotel(stay.getHotel());
-        stayDto.setRoom(stay.getRoom());
-        stayDto.setLastDiveDate(stay.getLastDiveDate());
-        stayDto.setBrevet(stay.getBrevet());
-        stayDto.setDivesAmount(stay.getDivesAmount());
-        stayDto.setNitrox(stay.isNitrox());
-        stayDto.setMedicalStatement(stay.isMedicalStatement());
+
+        StayDto.GuestPersonalDetails guestPersonalDetails = stayDto.getGuestPersonalDetails();
+        guestPersonalDetails.setGuestId(stay.getGuest().getId());
+        guestPersonalDetails.setFirstName(stay.getFirstName());
+        guestPersonalDetails.setLastName(stay.getLastName());
+        guestPersonalDetails.setBirthDate(stay.getBirthDate());
+        guestPersonalDetails.setNationality(stay.getNationality());
+        guestPersonalDetails.setCountry(stay.getCountry());
+        guestPersonalDetails.setCity(stay.getCity());
+        guestPersonalDetails.setPostcode(stay.getPostcode());
+        guestPersonalDetails.setStreet(stay.getStreet());
+        guestPersonalDetails.setEmail(stay.getEmail());
+        guestPersonalDetails.setPhone(stay.getPhone());
+        guestPersonalDetails.setPassportId(stay.getPassportId());
+
+        StayDto.StayDetails stayDetails = stayDto.getStayDetails();
+        stayDetails.setBoxNumber(stay.getBoxNumber());
+        stayDetails.setCheckInDate(stay.getCheckInDate());
+        stayDetails.setCheckOutDate(stay.getCheckOutDate());
+        stayDetails.setArriveDate(stay.getArriveDate());
+        stayDetails.setLeaveDate(stay.getLeaveDate());
+        stayDetails.setHotel(stay.getHotel());
+        stayDetails.setRoom(stay.getRoom());
+        stayDetails.setLastDiveDate(stay.getLastDiveDate());
+        stayDetails.setBrevet(stay.getBrevet());
+        stayDetails.setDivesAmount(stay.getDivesAmount());
+        stayDetails.setNitrox(stay.isNitrox());
+        stayDetails.setMedicalStatement(stay.isMedicalStatement());
 
         return stayDto;
     }

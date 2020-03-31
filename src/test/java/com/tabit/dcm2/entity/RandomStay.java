@@ -5,6 +5,12 @@ import com.tabit.dcm2.testutils.ValueProvider;
 public class RandomStay {
 
     public static Stay createRandomStayWithoutId() {
+        Stay stay = createRandomStay();
+        stay.setId(null);
+        return stay;
+    }
+
+    public static Stay createRandomStay() {
         ValueProvider valueProvider = new ValueProvider();
 
         Stay stay = new Stay();
