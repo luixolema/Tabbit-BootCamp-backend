@@ -1,6 +1,8 @@
 package com.tabit.dcm2.controller;
 
+import com.tabit.dcm2.controller.util.MapperUtil;
 import com.tabit.dcm2.entity.Guest;
+import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.dto.GuestDetailDto;
@@ -51,13 +53,18 @@ public class GuestController {
     }
 
     @RequestMapping(path = "/api/guests/{guestId}")
-    public GuestDetailDto getGuest(@PathVariable() long guestId) {
+    public GuestDetailDto getGuestDetails(@PathVariable() long guestId) {
+        GuestDetailDto resultGuestDetailDto = new GuestDetailDto();
         Guest guest = guestService.getGuestById(guestId);
         if (guest.isCheckedin()){
-            //take first one and populate stayhistory
+            Stay currentStay = guest.getStays().get(0);
+            resultGuestDetailDto.setStayDto(MapperUtil.mapStayToStayDto(currentStay));
         } else {
-            // add null to stay summary first + populate gestdetails dto by guest data
+            // there should null value first position in List for not checkIn guest
+            resultGuestDetailDto.addStaySummary(null);
+            resultGuestDetailDto.setStayDto(MapperUtil.mapGuestToStayDto(guest));
         }
-        return null;
+        guest.getStays().forEach(resultGuestDetailDto::addStaySummary);
+        return resultGuestDetailDto;
     }
 }

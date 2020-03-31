@@ -1,14 +1,17 @@
 package com.tabit.dcm2.service.dto;
 
+import com.tabit.dcm2.entity.Stay;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GuestDetailDto {
 
     private StayDto stayDto;
-    private List<StaySummary> staysHistory;
+    private List<StaySummary> staysHistory = new ArrayList<>();
 
-    private class StaySummary{
+    public class StaySummary {
 
         private Long id;
         private LocalDate checkInDate;
@@ -59,5 +62,13 @@ public class GuestDetailDto {
 
     public void setStaysHistory(List<StaySummary> staysHistory) {
         this.staysHistory = staysHistory;
+    }
+
+    public void addStaySummary(Stay stay) {
+        if (stay == null) {
+            staysHistory.add(new StaySummary(null, null, null));
+        } else {
+            staysHistory.add(new StaySummary(stay.getId(), stay.getCheckInDate(), stay.getCheckOutDate()));
+        }
     }
 }
