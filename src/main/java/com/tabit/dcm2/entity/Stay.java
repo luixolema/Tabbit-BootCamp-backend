@@ -6,7 +6,14 @@ import java.time.LocalDate;
 @Entity
 public class Stay implements IEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @TableGenerator(allocationSize = 1,
+            name = "IDGenerator",
+            table = "id_gen",
+            pkColumnName = "id_name",
+            valueColumnName = "id_value",
+            pkColumnValue = "stay_id")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "IDGenerator")
     private Long id;
 
     @ManyToOne

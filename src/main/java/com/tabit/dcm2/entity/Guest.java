@@ -8,10 +8,17 @@ import java.util.List;
 @Entity
 public class Guest implements IEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    @TableGenerator(allocationSize = 1,
+            name = "IDGenerator",
+            table = "id_gen",
+            pkColumnName = "id_name",
+            valueColumnName = "id_value",
+            pkColumnValue = "guest_id")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "IDGenerator")
     private Long id;
 
-    @OneToMany(mappedBy = "guest", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "guest", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @OrderBy("check_in_date DESC")
     List<Stay> stays = new ArrayList<>();
 

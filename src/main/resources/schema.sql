@@ -1,8 +1,9 @@
-DROP TABLE IF EXISTS `guest`;
 DROP TABLE IF EXISTS `stay`;
+DROP TABLE IF EXISTS `guest`;
+DROP TABLE IF EXISTS `id_gen`;
 
   CREATE TABLE `guest` (
-    `id` bigint(20) NOT NULL AUTO_INCREMENT,
+    `id` bigint(20) NOT NULL,
     `first_name` varchar(100) NOT NULL,
     `last_name` varchar(100) NOT NULL,
     `birth_date` DATE NOT NULL,
@@ -19,7 +20,7 @@ DROP TABLE IF EXISTS `stay`;
   );
 
   CREATE TABLE `stay` (
-      `id` bigint(20) NOT NULL AUTO_INCREMENT,
+      `id` bigint(20) NOT NULL,
       `guest_id` bigint(20) NOT NULL,
       `first_name` varchar(100) NOT NULL,
       `last_name` varchar(100) NOT NULL,
@@ -44,5 +45,12 @@ DROP TABLE IF EXISTS `stay`;
       `dives_amount` int(10) NOT NULL,
       `nitrox` tinyint(1) NOT NULL,
       `medical_statement` tinyint(1) NOT NULL,
+      FOREIGN KEY (`guest_id`) REFERENCES guest(`id`),
       PRIMARY KEY (`id`)
     );
+
+  CREATE TABLE `id_gen`(
+    `id_value` INTEGER NOT NULL,
+    `id_name` VARCHAR(24) NOT NULL,
+    PRIMARY KEY(`id_name`)
+  );
