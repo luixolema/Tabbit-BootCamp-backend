@@ -24,7 +24,7 @@ public class StayControllerTest {
     @Test
     public void getStay_shall_return_stay() {
         // given
-        Stay randomStay = RandomStay.createRandomStay();
+        Stay randomStay = RandomStay.createRandomStayWithoutId();
         when(stayService.findById(randomStay.getId())).thenReturn(randomStay);
 
         // when

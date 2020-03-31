@@ -19,8 +19,8 @@ public class Stay implements IEntity {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "box_id", nullable = false)
-    private Long boxId;
+    @Column(name = "box_number", nullable = false)
+    private String boxNumber;
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
@@ -40,7 +40,7 @@ public class Stay implements IEntity {
     @Column(name = "street", nullable = false)
     private String street;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "phone", nullable = false)
@@ -113,14 +113,6 @@ public class Stay implements IEntity {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public Long getBoxId() {
-        return boxId;
-    }
-
-    public void setBoxId(Long boxId) {
-        this.boxId = boxId;
     }
 
     public LocalDate getBirthDate() {
@@ -281,5 +273,13 @@ public class Stay implements IEntity {
 
     public void setMedicalStatement(boolean medicalStatement) {
         this.medicalStatement = medicalStatement;
+    }
+
+    public String getBoxNumber() {
+        return boxNumber;
+    }
+
+    public void setBoxNumber(String boxNumber) {
+        this.boxNumber = boxNumber;
     }
 }

@@ -10,7 +10,7 @@ public class StayDto {
     private Guest guest;
     private String firstName;
     private String lastName;
-    private Long boxId;
+    private String boxNumber;
     private LocalDate birthDate;
     private String nationality;
     private String country;
@@ -64,12 +64,12 @@ public class StayDto {
         this.lastName = lastName;
     }
 
-    public Long getBoxId() {
-        return boxId;
+    public String getBoxNumber() {
+        return boxNumber;
     }
 
-    public void setBoxId(Long boxId) {
-        this.boxId = boxId;
+    public void setBoxNumber(String boxNumber) {
+        this.boxNumber = boxNumber;
     }
 
     public LocalDate getBirthDate() {

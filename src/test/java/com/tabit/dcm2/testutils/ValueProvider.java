@@ -1,5 +1,7 @@
 package com.tabit.dcm2.testutils;
 
+import com.google.common.base.Joiner;
+
 import java.time.LocalDate;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -8,14 +10,14 @@ public class ValueProvider {
     private Random random = new Random();
 
     public String randomString(String base) {
-        int letterSmallA = 97; // letter 'a'
-        int letterSmallZ = 122; // letter 'z'
+        int letterSmallA = 97;
+        int letterSmallZ = 122;
         int targetStringLength = 10;
 
-        return random.ints(letterSmallA, letterSmallZ + 1)
+        return Joiner.on("").join(base, random.ints(letterSmallA, letterSmallZ + 1)
                 .limit(targetStringLength)
                 .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
-                .toString();
+                .toString());
     }
 
     public long randomId() {

@@ -11,7 +11,7 @@ public class Guest implements IEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "guest", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "guest", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OrderBy("check_in_date DESC")
     List<Stay> stays = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class Guest implements IEntity {
     @Column(name = "street", nullable = false)
     private String street;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @Column(name = "phone", nullable = false)
@@ -47,21 +47,6 @@ public class Guest implements IEntity {
 
     @Column(name = "passport_id", nullable = false)
     private String passportId;
-
-    @Column(name = "last_dive_date", nullable = false)
-    private LocalDate lastDiveDate;
-
-    @Column(name = "brevet", nullable = false)
-    private String brevet;
-
-    @Column(name = "dives_amount", nullable = false)
-    private Integer divesAmount;
-
-    @Column(name = "nitrox", nullable = false)
-    private boolean nitrox;
-
-    @Column(name = "medical_statement", nullable = false)
-    private boolean medicalStatement;
 
     @Column(name = "checked_in")
     private boolean checkedin;
@@ -163,46 +148,6 @@ public class Guest implements IEntity {
         this.passportId = passportId;
     }
 
-    public LocalDate getLastDiveDate() {
-        return lastDiveDate;
-    }
-
-    public void setLastDiveDate(LocalDate lastDiveDate) {
-        this.lastDiveDate = lastDiveDate;
-    }
-
-    public String getBrevet() {
-        return brevet;
-    }
-
-    public void setBrevet(String brevet) {
-        this.brevet = brevet;
-    }
-
-    public Integer getDivesAmount() {
-        return divesAmount;
-    }
-
-    public void setDivesAmount(Integer divesAmount) {
-        this.divesAmount = divesAmount;
-    }
-
-    public boolean isNitrox() {
-        return nitrox;
-    }
-
-    public void setNitrox(boolean nitrox) {
-        this.nitrox = nitrox;
-    }
-
-    public boolean isMedicalStatement() {
-        return medicalStatement;
-    }
-
-    public void setMedicalStatement(boolean medicalStatement) {
-        this.medicalStatement = medicalStatement;
-    }
-
     public boolean isCheckedin() {
         return checkedin;
     }
@@ -221,6 +166,6 @@ public class Guest implements IEntity {
 
     public void addStays(List<Stay> stays) {
         setStays(stays);
-        stays.stream().forEach(s -> s.setGuest(this));
+        stays.forEach(s -> s.setGuest(this));
     }
 }

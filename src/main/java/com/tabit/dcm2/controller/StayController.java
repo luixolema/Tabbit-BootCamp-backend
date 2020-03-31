@@ -1,8 +1,8 @@
 package com.tabit.dcm2.controller;
 
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.service.IStayService;
 import com.tabit.dcm2.service.dto.StayDto;
-import com.tabit.dcm2.service.impl.StayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/stay")
 public class StayController {
     @Autowired
-    private StayService stayService;
+    private IStayService stayService;
 
     @GetMapping(path = "/{stayId}")
     public StayDto getStay(@PathVariable() Long stayId) {
@@ -24,7 +24,7 @@ public class StayController {
         stayDto.setGuest(stay.getGuest());
         stayDto.setFirstName(stay.getFirstName());
         stayDto.setLastName(stay.getLastName());
-        stayDto.setBoxId(stay.getBoxId());
+        stayDto.setBoxNumber(stay.getBoxNumber());
         stayDto.setBirthDate(stay.getBirthDate());
         stayDto.setNationality(stay.getNationality());
         stayDto.setCountry(stay.getCountry());
