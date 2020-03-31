@@ -1,13 +1,9 @@
 package com.tabit.dcm2.service.dto;
 
-import com.tabit.dcm2.entity.Guest;
-
 import java.time.LocalDate;
 
 public class StayDto {
 
-    private Long id;
-    private Guest guest;
     private String firstName;
     private String lastName;
     private String boxNumber;
@@ -31,22 +27,6 @@ public class StayDto {
     private Integer divesAmount;
     private boolean nitrox;
     private boolean medicalStatement;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Guest getGuest() {
-        return guest;
-    }
-
-    public void setGuest(Guest guest) {
-        this.guest = guest;
-    }
 
     public String getFirstName() {
         return firstName;
