@@ -15,6 +15,7 @@ public class GuestController {
     private static final Function<Guest, GuestDto> GUEST_TO_GUEST_DTO = guest -> {
         GuestDto guestDto = new GuestDto();
         guestDto.setId(guest.getId());
+        guestDto.setBoxNumber(null); // FIXME in next task: we must get the information from the actual stay if checkedin
         guestDto.setFirstName(guest.getFirstName());
         guestDto.setLastName(guest.getLastName());
         guestDto.setCheckedin(guest.isCheckedin());
@@ -44,7 +45,7 @@ public class GuestController {
     }
 
     @RequestMapping(path = "/api/guests/{guestId}")
-    public GuestDetailDto getStay(@PathVariable() long guestId) {
+    public GuestDetailDto getGuest(@PathVariable() long guestId) {
         return null;
     }
 }

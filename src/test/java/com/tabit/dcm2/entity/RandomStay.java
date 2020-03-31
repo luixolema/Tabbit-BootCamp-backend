@@ -4,13 +4,13 @@ import com.tabit.dcm2.testutils.ValueProvider;
 
 public class RandomStay {
 
-    public static Stay createRandomStay() {
+    public static Stay createRandomStayWithoutId() {
         ValueProvider valueProvider = new ValueProvider();
 
         Stay stay = new Stay();
         stay.setFirstName(valueProvider.randomString("firstname"));
         stay.setLastName(valueProvider.randomString("lastname"));
-        stay.setBoxId(valueProvider.randomId());
+        stay.setBoxNumber(valueProvider.randomInt().toString());
         stay.setBirthDate(valueProvider.randomLocalDate());
         stay.setNationality(valueProvider.randomString("nationality"));
         stay.setCountry(valueProvider.randomString("country"));
