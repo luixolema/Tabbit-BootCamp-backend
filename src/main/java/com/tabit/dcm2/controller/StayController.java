@@ -40,7 +40,7 @@ public class StayController {
         stayDto.setLeaveDate(stay.getLeaveDate());
         stayDto.setHotel(stay.getHotel());
         stayDto.setRoom(stay.getRoom());
-        stayDto.setLastDive(stay.getLastDiveDate());
+        stayDto.setLastDiveDate(stay.getLastDiveDate());
         stayDto.setBrevet(stay.getBrevet());
         stayDto.setDivesAmount(stay.getDivesAmount());
         stayDto.setNitrox(stay.isNitrox());

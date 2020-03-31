@@ -26,7 +26,7 @@ public class StayDto {
     private LocalDate leaveDate;
     private String hotel;
     private String room;
-    private LocalDate lastDive;
+    private LocalDate lastDiveDate;
     private String brevet;
     private Integer divesAmount;
     private boolean nitrox;
@@ -192,12 +192,12 @@ public class StayDto {
         this.room = room;
     }
 
-    public LocalDate getLastDive() {
-        return lastDive;
+    public LocalDate getLastDiveDate() {
+        return lastDiveDate;
     }
 
-    public void setLastDive(LocalDate lastDive) {
-        this.lastDive = lastDive;
+    public void setLastDiveDate(LocalDate lastDiveDate) {
+        this.lastDiveDate = lastDiveDate;
     }
 
     public String getBrevet() {
