@@ -2,15 +2,16 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.entity.Guest;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class StayDto {
 
+    private Long id;
     private Guest guest;
     private String firstName;
     private String lastName;
     private Long boxId;
-    private Date birthDate;
+    private LocalDate birthDate;
     private String nationality;
     private String country;
     private String city;
@@ -19,17 +20,25 @@ public class StayDto {
     private String email;
     private String phone;
     private String passportId;
-    private Date checkInDate;
-    private Date checkOutDate;
-    private Date arriveDate;
-    private Date leaveDate;
+    private LocalDate checkInDate;
+    private LocalDate checkOutDate;
+    private LocalDate arriveDate;
+    private LocalDate leaveDate;
     private String hotel;
     private String room;
-    private Date lastDive;
+    private LocalDate lastDive;
     private String brevet;
     private Integer divesAmount;
     private boolean nitrox;
     private boolean medicalStatement;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Guest getGuest() {
         return guest;
@@ -63,11 +72,11 @@ public class StayDto {
         this.boxId = boxId;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -135,35 +144,35 @@ public class StayDto {
         this.passportId = passportId;
     }
 
-    public Date getCheckInDate() {
+    public LocalDate getCheckInDate() {
         return checkInDate;
     }
 
-    public void setCheckInDate(Date checkInDate) {
+    public void setCheckInDate(LocalDate checkInDate) {
         this.checkInDate = checkInDate;
     }
 
-    public Date getCheckOutDate() {
+    public LocalDate getCheckOutDate() {
         return checkOutDate;
     }
 
-    public void setCheckOutDate(Date checkOutDate) {
+    public void setCheckOutDate(LocalDate checkOutDate) {
         this.checkOutDate = checkOutDate;
     }
 
-    public Date getArriveDate() {
+    public LocalDate getArriveDate() {
         return arriveDate;
     }
 
-    public void setArriveDate(Date arriveDate) {
+    public void setArriveDate(LocalDate arriveDate) {
         this.arriveDate = arriveDate;
     }
 
-    public Date getLeaveDate() {
+    public LocalDate getLeaveDate() {
         return leaveDate;
     }
 
-    public void setLeaveDate(Date leaveDate) {
+    public void setLeaveDate(LocalDate leaveDate) {
         this.leaveDate = leaveDate;
     }
 
@@ -183,11 +192,11 @@ public class StayDto {
         this.room = room;
     }
 
-    public Date getLastDive() {
+    public LocalDate getLastDive() {
         return lastDive;
     }
 
-    public void setLastDive(Date lastDive) {
+    public void setLastDive(LocalDate lastDive) {
         this.lastDive = lastDive;
     }
 
