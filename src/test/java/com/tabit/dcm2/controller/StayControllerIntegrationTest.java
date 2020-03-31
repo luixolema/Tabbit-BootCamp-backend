@@ -35,11 +35,10 @@ public class StayControllerIntegrationTest extends AbstractRepoDbTest {
         StayDto stayDto = stayController.getStay(stay.getId());
 
         // then
-        assertStayDto(stayDto, stay, stayDto.getGuest().getId());
+        assertStayDto(stayDto, stay);
     }
 
-    private void assertStayDto(StayDto stayDto, Stay stay, Long expectedGuestId) {
-        assertThat(stayDto.getId()).isEqualTo(stay.getId());
+    private void assertStayDto(StayDto stayDto, Stay stay) {
         assertThat(stayDto.getFirstName()).isEqualTo(stay.getFirstName());
         assertThat(stayDto.getLastName()).isEqualTo(stay.getLastName());
         assertThat(stayDto.getBirthDate()).isEqualTo(stay.getBirthDate());
@@ -62,7 +61,5 @@ public class StayControllerIntegrationTest extends AbstractRepoDbTest {
         assertThat(stayDto.getRoom()).isEqualTo(stay.getRoom());
         assertThat(stayDto.isNitrox()).isEqualTo(stay.isNitrox());
         assertThat(stayDto.isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
-
-        assertThat(stayDto.getGuest().getId()).isEqualTo(expectedGuestId);
     }
 }

@@ -34,4 +34,13 @@ public class RandomStay {
 
         return stay;
     }
+
+    public static Stay createRandomStay() {
+        ValueProvider valueProvider = new ValueProvider();
+
+        Stay randomStay = createRandomStayWithoutId();
+        randomStay.setId(valueProvider.randomId());
+
+        return randomStay;
+    }
 }

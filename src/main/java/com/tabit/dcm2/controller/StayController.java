@@ -20,8 +20,6 @@ public class StayController {
 
     private StayDto mapStayToStayDto(Stay stay) {
         StayDto stayDto = new StayDto();
-        stayDto.setId(stay.getId());
-        stayDto.setGuest(stay.getGuest());
         stayDto.setFirstName(stay.getFirstName());
         stayDto.setLastName(stay.getLastName());
         stayDto.setBoxNumber(stay.getBoxNumber());

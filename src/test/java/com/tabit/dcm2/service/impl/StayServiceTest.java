@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,15 +31,14 @@ public class StayServiceTest {
     @Test
     public void findById_shall_return_stay_by_id() {
         // given
-        Stay randomStay = RandomStay.createRandomStayWithoutId();
+        Stay randomStay = RandomStay.createRandomStay();
         when(stayRepo.findById(randomStay.getId())).thenReturn(Optional.of(randomStay));
-
 
         // when
         Stay actualStay = stayService.findById(randomStay.getId());
 
         // then
-        assertThat(actualStay.getFirstName()).isEqualTo(randomStay.getFirstName());
+        assertThat(actualStay).isEqualTo(randomStay);
     }
 
     @Test(expected = ResourceNotFoundException.class)
@@ -57,10 +55,8 @@ public class StayServiceTest {
     public void findByGuestIdOrderByCheckInDateDesc_shall_return_ordered_list_of_stays() {
         // given
         Long randomId = valueProvider.randomId();
-        Stay randomStay1 = RandomStay.createRandomStayWithoutId();
-        randomStay1.setCheckInDate(LocalDate.of(2019, 4, 14));
-        Stay randomStay2 = RandomStay.createRandomStayWithoutId();
-        randomStay2.setCheckInDate(LocalDate.of(2020, 1, 25));
+        Stay randomStay1 = RandomStay.createRandomStay();
+        Stay randomStay2 = RandomStay.createRandomStay();
         when(stayRepo.findByGuestIdOrderByCheckInDateDesc(randomId)).thenReturn(ImmutableList.of(randomStay2, randomStay1));
 
         // when
