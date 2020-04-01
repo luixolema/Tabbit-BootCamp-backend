@@ -5,9 +5,16 @@ import com.tabit.dcm2.testutils.ValueProvider;
 public class RandomStay {
 
     public static Stay createRandomStayWithoutId() {
+        Stay stay = createRandomStay();
+        stay.setId(null);
+        return stay;
+    }
+
+    public static Stay createRandomStay() {
         ValueProvider valueProvider = new ValueProvider();
 
         Stay stay = new Stay();
+        stay.setId(valueProvider.randomId());
         stay.setFirstName(valueProvider.randomString("firstname"));
         stay.setLastName(valueProvider.randomString("lastname"));
         stay.setBoxNumber(valueProvider.randomInt().toString());
@@ -33,14 +40,5 @@ public class RandomStay {
         stay.setMedicalStatement(valueProvider.randomBoolean());
 
         return stay;
-    }
-
-    public static Stay createRandomStay() {
-        ValueProvider valueProvider = new ValueProvider();
-
-        Stay randomStay = createRandomStayWithoutId();
-        randomStay.setId(valueProvider.randomId());
-
-        return randomStay;
     }
 }

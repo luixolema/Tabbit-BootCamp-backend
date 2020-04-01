@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -26,40 +27,53 @@ public class GuestServiceTest {
     @Test
     public void getGuests_shall_return_all_guests() {
         // given
-        Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        Guest randomGuestWitoutBox = RandomGuest.createRandomGuest();
-        when(guestRepo.findAll()).thenReturn(ImmutableList.of(randomGuestWithBox, randomGuestWitoutBox));
+        Guest randomGuest1 = RandomGuest.createRandomGuest();
+        Guest randomGuest2 = RandomGuest.createRandomGuest();
+        when(guestRepo.findAll()).thenReturn(ImmutableList.of(randomGuest1, randomGuest2));
 
         // when
-        List<Guest> guests = guestService.getGuests(GuestFilterType.ALL);
+        List<Guest> guests = guestService.getAllGuests(GuestFilterType.ALL);
 
         // then
-        assertThat(guests).containsExactly(randomGuestWithBox, randomGuestWitoutBox);
+        assertThat(guests).containsExactly(randomGuest1, randomGuest2);
     }
 
     @Test
     public void getGuests_shall_return_checkedin_guests() {
         // given
-        Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        when(guestRepo.findByCheckedin(true)).thenReturn(ImmutableList.of(randomGuestWithBox));
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        when(guestRepo.findByCheckedin(true)).thenReturn(ImmutableList.of(randomGuest));
 
         // when
-        List<Guest> guests = guestService.getGuests(GuestFilterType.CHECKED_IN);
+        List<Guest> guests = guestService.getAllGuests(GuestFilterType.CHECKED_IN);
 
         // then
-        assertThat(guests).containsExactly(randomGuestWithBox);
+        assertThat(guests).containsExactly(randomGuest);
     }
 
     @Test
     public void getGuests_shall_return_not_checkedin_guests() {
         // given
-        Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        when(guestRepo.findByCheckedin(false)).thenReturn(ImmutableList.of(randomGuestWithBox));
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        when(guestRepo.findByCheckedin(false)).thenReturn(ImmutableList.of(randomGuest));
 
         // when
-        List<Guest> guests = guestService.getGuests(GuestFilterType.NOT_CHECKED_IN);
+        List<Guest> guests = guestService.getAllGuests(GuestFilterType.NOT_CHECKED_IN);
 
         // then
-        assertThat(guests).containsExactly(randomGuestWithBox);
+        assertThat(guests).containsExactly(randomGuest);
+    }
+
+    @Test
+    public void getGuestById_shall_return_guest() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        when(guestRepo.findById(randomGuest.getId())).thenReturn(Optional.of(randomGuest));
+
+        // when
+        Guest guest = guestService.getGuestById(randomGuest.getId());
+
+        // then
+        assertThat(guest).isEqualTo(randomGuest);
     }
 }

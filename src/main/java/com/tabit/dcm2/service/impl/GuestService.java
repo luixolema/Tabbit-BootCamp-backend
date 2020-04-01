@@ -15,7 +15,12 @@ public class GuestService implements IGuestService {
     private IGuestRepo guestRepo;
 
     @Override
-    public List<Guest> getGuests(GuestFilterType guestFilterType) {
+    public List<Guest> getAllGuests(GuestFilterType guestFilterType) {
         return guestFilterType == GuestFilterType.ALL ? guestRepo.findAll() : guestRepo.findByCheckedin(guestFilterType == GuestFilterType.CHECKED_IN);
+    }
+
+    @Override
+    public Guest getGuestById(Long guestId) {
+        return guestRepo.findById(guestId).get();
     }
 }

@@ -5,16 +5,20 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IGuestService;
+import com.tabit.dcm2.service.dto.GuestDetailDto;
 import com.tabit.dcm2.service.dto.GuestDto;
 import com.tabit.dcm2.service.dto.GuestOverviewDto;
+import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -30,9 +34,9 @@ public class GuestControllerTest {
     @Test
     public void getGuests_shall_return_all_guests() {
         // given
-        Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        Guest randomGuestWithoutBox = RandomGuest.createRandomGuest();
-        when(guestService.getGuests(GuestFilterType.ALL)).thenReturn(ImmutableList.of(randomGuestWithBox, randomGuestWithoutBox));
+        Guest randomGuest1 = RandomGuest.createRandomGuest();
+        Guest randomGuest2 = RandomGuest.createRandomGuest();
+        when(guestService.getAllGuests(GuestFilterType.ALL)).thenReturn(ImmutableList.of(randomGuest1, randomGuest2));
 
         // when
         GuestOverviewDto guestOverviewDto = guestController.getGuests(2);
@@ -41,16 +45,17 @@ public class GuestControllerTest {
         List<GuestDto> expectedGuestDtos = guestOverviewDto.getGuests();
 
         assertThat(expectedGuestDtos).hasSize(2);
-        assertGuestDto(expectedGuestDtos.get(0), randomGuestWithBox);
-        assertGuestDto(expectedGuestDtos.get(1), randomGuestWithoutBox);
+        GuestMappingAssertions.assertGuestDto(expectedGuestDtos.get(0), randomGuest1, randomGuest1.isCheckedin());
+        GuestMappingAssertions.assertGuestDto(expectedGuestDtos.get(1), randomGuest2, randomGuest2.isCheckedin());
         assertThat(guestOverviewDto.getTotal()).isEqualTo(2);
     }
 
     @Test
     public void getGuests_shall_return_checkedin_guests() {
         // given
-        Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        when(guestService.getGuests(GuestFilterType.CHECKED_IN)).thenReturn(ImmutableList.of(randomGuestWithBox));
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        randomGuest.setCheckedin(true);
+        when(guestService.getAllGuests(GuestFilterType.CHECKED_IN)).thenReturn(ImmutableList.of(randomGuest));
 
         // when
         GuestOverviewDto guestOverviewDto = guestController.getGuests(1);
@@ -59,15 +64,16 @@ public class GuestControllerTest {
         List<GuestDto> expectedGuestDtos = guestOverviewDto.getGuests();
 
         assertThat(expectedGuestDtos).hasSize(1);
-        assertGuestDto(expectedGuestDtos.get(0), randomGuestWithBox);
+        GuestMappingAssertions.assertGuestDto(expectedGuestDtos.get(0), randomGuest, true);
         assertThat(guestOverviewDto.getTotal()).isEqualTo(1);
     }
 
     @Test
     public void getGuests_shall_return_not_checkedin_guests() {
         // given
-        Guest randomGuestWithBox = RandomGuest.createRandomGuest();
-        when(guestService.getGuests(GuestFilterType.NOT_CHECKED_IN)).thenReturn(ImmutableList.of(randomGuestWithBox));
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        randomGuest.setCheckedin(false);
+        when(guestService.getAllGuests(GuestFilterType.NOT_CHECKED_IN)).thenReturn(ImmutableList.of(randomGuest));
 
         // when
         GuestOverviewDto guestOverviewDto = guestController.getGuests(0);
@@ -76,14 +82,50 @@ public class GuestControllerTest {
         List<GuestDto> expectedGuestDtos = guestOverviewDto.getGuests();
 
         assertThat(expectedGuestDtos).hasSize(1);
-        assertGuestDto(expectedGuestDtos.get(0), randomGuestWithBox);
+        GuestMappingAssertions.assertGuestDto(expectedGuestDtos.get(0), randomGuest, false);
         assertThat(guestOverviewDto.getTotal()).isEqualTo(1);
     }
 
-    private void assertGuestDto(GuestDto expectedGuestDto, Guest randomGuestWithBox) {
-        assertThat(expectedGuestDto.getId()).isEqualTo(randomGuestWithBox.getId());
-        assertThat(expectedGuestDto.getBoxNumber()).isNull();
-        assertThat(expectedGuestDto.getFirstName()).isEqualTo(randomGuestWithBox.getFirstName());
-        assertThat(expectedGuestDto.getLastName()).isEqualTo(randomGuestWithBox.getLastName());
+    @Test
+    public void getGuestDetails_shall_return_stay_and_personal_details_from_actual_stay_for_checkedIn_guest() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        randomGuest.setCheckedin(true);
+        when(guestService.getGuestById(randomGuest.getId())).thenReturn(randomGuest);
+
+        // when
+        GuestDetailDto guestDetailDto = guestController.getGuestDetails(randomGuest.getId());
+
+        // then
+        GuestMappingAssertions.assertGuestDetailDto(guestDetailDto, randomGuest, WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY);
+    }
+
+    @Test
+    public void getGuestDetails_shall_return_only_personal_details_from_guest_for_not_checkedIn_guest() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        randomGuest.setCheckedin(false);
+        when(guestService.getGuestById(randomGuest.getId())).thenReturn(randomGuest);
+
+        // when
+        GuestDetailDto guestDetailDto = guestController.getGuestDetails(randomGuest.getId());
+
+        // then
+        GuestMappingAssertions.assertGuestDetailDto(guestDetailDto, randomGuest, WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY);
+    }
+
+    @Test
+    public void getGuestDetails_shall_return_no_summary_for_not_checkedIn_guest_without_stays() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        randomGuest.setCheckedin(false);
+        randomGuest.setStays(new ArrayList<>());
+        when(guestService.getGuestById(randomGuest.getId())).thenReturn(randomGuest);
+
+        // when
+        GuestDetailDto guestDetailDto = guestController.getGuestDetails(randomGuest.getId());
+
+        // then
+        GuestMappingAssertions.assertGuestDetailDto(guestDetailDto, randomGuest, WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY);
     }
 }
