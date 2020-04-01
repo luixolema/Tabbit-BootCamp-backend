@@ -53,8 +53,7 @@ public class GuestControllerIntegrationTest extends AbstractRepoDbTest {
 
         guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInTrue.setCheckedin(true);
-        guestCheckedInTrue.addStays(ImmutableList.of(stayActual, stayOld)); // FIXME: we want to change the stays orderig, but actually there is no ordering in the guestdetail
-//        guestCheckedInTrue.addStays(ImmutableList.of(stayOld, stayActual));
+        guestCheckedInTrue.addStays(ImmutableList.of(stayOld, stayActual));
 
         guestCheckedInFalse = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInFalse.setCheckedin(false);

@@ -44,7 +44,7 @@ public class GuestRepoDbTest extends AbstractRepoDbTest {
 
         // then
         Guest actualGuestCheckedInTrue = Iterables.getOnlyElement(guestsCheckedInTrue);
-        assertGuest(actualGuestCheckedInTrue, guestCheckedInTrue);
+        assertGuest(actualGuestCheckedInTrue, guestCheckedInTrue, ImmutableList.of(stayNew.getId(), stayOld.getId()));
 
         // when
         List<Guest> actualGuestsCheckedInFalse = guestRepo.findByCheckedin(false);
@@ -53,7 +53,7 @@ public class GuestRepoDbTest extends AbstractRepoDbTest {
         assertThat(actualGuestsCheckedInFalse).hasSize(2);
     }
 
-    private void assertGuest(Guest actualGuest, Guest expectedGuest) {
+    private void assertGuest(Guest actualGuest, Guest expectedGuest, List<Long> sortedStayIds) {
         assertThat(actualGuest.getId()).isEqualTo(expectedGuest.getId());
         assertThat(actualGuest.getFirstName()).isEqualTo(expectedGuest.getFirstName());
         assertThat(actualGuest.getLastName()).isEqualTo(expectedGuest.getLastName());
@@ -68,7 +68,6 @@ public class GuestRepoDbTest extends AbstractRepoDbTest {
 
         assertThat(actualGuest.getStays()).hasSize(expectedGuest.getStays().size());
         List<Long> actualStayIds = actualGuest.getStays().stream().map(Stay::getId).collect(Collectors.toList());
-        List<Long> expectedStyIds = expectedGuest.getStays().stream().map(Stay::getId).collect(Collectors.toList());
-        assertThat(actualStayIds).containsAll(expectedStyIds);
+        assertThat(actualStayIds).containsExactlyElementsOf(sortedStayIds);
     }
 }
