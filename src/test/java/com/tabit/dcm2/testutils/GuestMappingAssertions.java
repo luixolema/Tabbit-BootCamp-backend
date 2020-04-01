@@ -6,18 +6,21 @@ import com.tabit.dcm2.service.dto.GuestDetailDto;
 import com.tabit.dcm2.service.dto.GuestDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.dto.StaySummaryDto;
+import org.assertj.core.util.Lists;
 
 import java.util.List;
 
 import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
 import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
+import static java.util.Comparator.comparing;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestMappingAssertions {
     public static void assertGuestDto(GuestDto expectedGuestDto, Guest guest, boolean expectBoxNumber) {
         assertThat(expectedGuestDto.getId()).isEqualTo(guest.getId());
         if (expectBoxNumber) {
-            assertThat(expectedGuestDto.getBoxNumber()).isEqualTo(guest.getStays().get(0).getBoxNumber());
+            List<Stay> sortedStays = sortStayByCheckInDate(guest);
+            assertThat(expectedGuestDto.getBoxNumber()).isEqualTo(sortedStays.get(0).getBoxNumber());
         } else {
             assertThat(expectedGuestDto.getBoxNumber()).isNull();
         }
@@ -27,10 +30,11 @@ public class GuestMappingAssertions {
 
     public static void assertGuestDetailDto(GuestDetailDto expectedGuestDetailDto, Guest guest, GuestDetailType guestDetailType) {
         StayDto stayDto = expectedGuestDetailDto.getStayDto();
-        List<StaySummaryDto> stayHistory = expectedGuestDetailDto.getStaySummaries();
+        List<StaySummaryDto> staySummary = expectedGuestDetailDto.getStaySummaries();
+        List<Stay> sortedStays = sortStayByCheckInDate(guest);
 
         if (guestDetailType == WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY) {
-            Stay stay = guest.getStays().get(0);
+            Stay stay = sortedStays.get(0);
             assertThat(stayDto.getStayDetails().getArriveDate()).isEqualTo(stay.getArriveDate());
             assertThat(stayDto.getStayDetails().getBoxNumber()).isEqualTo(stay.getBoxNumber());
             assertThat(stayDto.getStayDetails().getBrevet()).isEqualTo(stay.getBrevet());
@@ -55,7 +59,7 @@ public class GuestMappingAssertions {
             assertThat(stayDto.getGuestPersonalDetails().getPhone()).isEqualTo(stay.getPhone());
             assertThat(stayDto.getGuestPersonalDetails().getPostcode()).isEqualTo(stay.getPostcode());
 
-            assertStaySummaries(guest, stayHistory, guestDetailType);
+            assertStaySummaries(staySummary, sortedStays, guestDetailType);
         } else {
             assertThat(stayDto.getStayDetails()).isNull();
 
@@ -70,19 +74,25 @@ public class GuestMappingAssertions {
             assertThat(stayDto.getGuestPersonalDetails().getPhone()).isEqualTo(guest.getPhone());
             assertThat(stayDto.getGuestPersonalDetails().getPostcode()).isEqualTo(guest.getPostcode());
 
-            assertStaySummaries(guest, stayHistory, guestDetailType);
+            assertStaySummaries(staySummary, sortedStays, guestDetailType);
         }
     }
 
-    private static void assertStaySummaries(Guest guest, List<StaySummaryDto> stayHistory, GuestDetailType guestDetailType) {
-        assertThat(stayHistory).hasSize(guest.getStays().size());
+    private static List<Stay> sortStayByCheckInDate(Guest guest) {
+        List<Stay> sortedStays = Lists.newArrayList(guest.getStays());
+        sortedStays.sort(comparing(Stay::getCheckInDate).reversed());
+        return sortedStays;
+    }
+
+    private static void assertStaySummaries(List<StaySummaryDto> staySummaries, List<Stay> sortedStays, GuestDetailType guestDetailType) {
 
         if (guestDetailType == WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY) {
-            assertThat(stayHistory).isEmpty();
+            assertThat(staySummaries).isEmpty();
         } else {
-            for (int i = 0; i < stayHistory.size(); i++) {
-                StaySummaryDto staySummaryDto = stayHistory.get(i);
-                Stay stay = guest.getStays().get(i);
+            assertThat(staySummaries).hasSize(sortedStays.size());
+            for (int i = 0; i < staySummaries.size(); i++) {
+                StaySummaryDto staySummaryDto = staySummaries.get(i);
+                Stay stay = sortedStays.get(i);
 
                 assertThat(staySummaryDto.getId()).isEqualTo(stay.getId());
                 assertThat(staySummaryDto.getCheckInDate()).isEqualTo(stay.getCheckInDate());
