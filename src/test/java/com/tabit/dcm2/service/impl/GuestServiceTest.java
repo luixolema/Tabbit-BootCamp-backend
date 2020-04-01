@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -67,7 +68,7 @@ public class GuestServiceTest {
     public void getGuestById_shall_return_guest() {
         // given
         Guest randomGuest = RandomGuest.createRandomGuest();
-        when(guestRepo.findById(randomGuest.getId())).thenReturn(java.util.Optional.of(randomGuest));
+        when(guestRepo.findById(randomGuest.getId())).thenReturn(Optional.of(randomGuest));
 
         // when
         Guest guest = guestService.getGuestById(randomGuest.getId());

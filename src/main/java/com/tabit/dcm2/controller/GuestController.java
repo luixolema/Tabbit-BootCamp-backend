@@ -47,7 +47,6 @@ public class GuestController {
                 guestFilterType = GuestFilterType.ALL;
                 break;
         }
-
         List<Guest> guests = guestService.getAllGuests(guestFilterType);
         return new GuestOverviewDto(guests.stream().map(GUEST_TO_GUEST_DTO).collect(Collectors.toList()));
     }
@@ -55,16 +54,16 @@ public class GuestController {
     @RequestMapping(path = "/api/guests/{guestId}")
     public GuestDetailDto getGuestDetails(@PathVariable() long guestId) {
         GuestDetailDto resultGuestDetailDto = new GuestDetailDto();
+
         Guest guest = guestService.getGuestById(guestId);
         if (guest.isCheckedin()){
             Stay currentStay = guest.getStays().get(0);
             resultGuestDetailDto.setStayDto(MapperUtil.mapStayToStayDto(currentStay));
         } else {
-            // there should null value first position in List for not checkIn guest
-            resultGuestDetailDto.addStaySummary(null);
             resultGuestDetailDto.setStayDto(MapperUtil.mapGuestToStayDto(guest));
         }
         guest.getStays().forEach(resultGuestDetailDto::addStaySummary);
+
         return resultGuestDetailDto;
     }
 }

@@ -22,7 +22,7 @@ public class RandomGuest {
         guest.setStreet(valueProvider.randomString("street"));
         guest.setPostcode(valueProvider.randomString("postcode"));
         guest.setCheckedin(valueProvider.randomBoolean());
-        guest.addStays(ImmutableList.of(createStayForGuest(guest)));
+        guest.addStays(ImmutableList.of(RandomStay.createRandomStay()));
 
         return guest;
     }
@@ -30,25 +30,8 @@ public class RandomGuest {
     public static Guest createRandomGuestWitoutId() {
         Guest guest = createRandomGuest();
         guest.setId(null);
+        guest.addStays(ImmutableList.of(RandomStay.createRandomStayWithoutId()));
 
         return guest;
-    }
-
-    private static Stay createStayForGuest(Guest guest) {
-        Stay stay = RandomStay.createRandomStayWithoutId();
-        stay.setGuest(guest);
-        stay.setFirstName(guest.getFirstName());
-        stay.setLastName(guest.getLastName());
-        stay.setBirthDate(guest.getBirthDate());
-        stay.setNationality(guest.getNationality());
-        stay.setCountry(guest.getCountry());
-        stay.setCity(guest.getCity());
-        stay.setPostcode(guest.getPostcode());
-        stay.setStreet(guest.getStreet());
-        stay.setEmail(guest.getEmail());
-        stay.setPhone(guest.getPhone());
-        stay.setPassportId(guest.getPassportId());
-
-        return stay;
     }
 }

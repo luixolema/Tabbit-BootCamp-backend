@@ -14,6 +14,7 @@ public class RandomStay {
         ValueProvider valueProvider = new ValueProvider();
 
         Stay stay = new Stay();
+        stay.setId(valueProvider.randomId());
         stay.setFirstName(valueProvider.randomString("firstname"));
         stay.setLastName(valueProvider.randomString("lastname"));
         stay.setBoxNumber(valueProvider.randomInt().toString());

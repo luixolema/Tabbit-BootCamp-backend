@@ -15,7 +15,7 @@ import javax.persistence.EntityManagerFactory;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("mysql")
 public abstract class AbstractRepoDbTest {
     private EntityManager entityManager;
 
