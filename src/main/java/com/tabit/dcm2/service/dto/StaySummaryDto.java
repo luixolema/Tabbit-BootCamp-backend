@@ -5,13 +5,13 @@ import java.time.LocalDate;
 public class StaySummaryDto {
 
     private Long id;
-    private LocalDate checkInDate;
-    private LocalDate checkOutDate;
+    private LocalDate arriveDate;
+    private LocalDate leaveDate;
 
-    public StaySummaryDto(Long id, LocalDate checkInDate, LocalDate checkOutDate) {
+    public StaySummaryDto(Long id, LocalDate arriveDate, LocalDate leaveDate) {
         this.id = id;
-        this.checkInDate = checkInDate;
-        this.checkOutDate = checkOutDate;
+        this.arriveDate = arriveDate;
+        this.leaveDate = leaveDate;
     }
 
     public Long getId() {
@@ -22,19 +22,19 @@ public class StaySummaryDto {
         this.id = id;
     }
 
-    public LocalDate getCheckInDate() {
-        return checkInDate;
+    public LocalDate getArriveDate() {
+        return arriveDate;
     }
 
-    public void setCheckInDate(LocalDate checkInDate) {
-        this.checkInDate = checkInDate;
+    public void setArriveDate(LocalDate arriveDate) {
+        this.arriveDate = arriveDate;
     }
 
-    public LocalDate getCheckOutDate() {
-        return checkOutDate;
+    public LocalDate getLeaveDate() {
+        return leaveDate;
     }
 
-    public void setCheckOutDate(LocalDate checkOutDate) {
-        this.checkOutDate = checkOutDate;
+    public void setLeaveDate(LocalDate leaveDate) {
+        this.leaveDate = leaveDate;
     }
 }
