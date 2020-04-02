@@ -95,8 +95,8 @@ public class GuestMappingAssertions {
                 Stay stay = sortedStays.get(i);
 
                 assertThat(staySummaryDto.getId()).isEqualTo(stay.getId());
-                assertThat(staySummaryDto.getCheckInDate()).isEqualTo(stay.getCheckInDate());
-                assertThat(staySummaryDto.getCheckOutDate()).isEqualTo(stay.getCheckOutDate());
+                assertThat(staySummaryDto.getArriveDate()).isEqualTo(stay.getArriveDate());
+                assertThat(staySummaryDto.getLeaveDate()).isEqualTo(stay.getLeaveDate());
             }
         }
     }
