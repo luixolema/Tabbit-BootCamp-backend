@@ -13,11 +13,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
+/**
+ * for developing and local testing set ActiveProfile to mysql.
+ * but dont commit it!
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public abstract class AbstractRepoDbTest {
-    private EntityManager entityManager;
+    private static EntityManager entityManager;
 
     protected GuestRule guestRule = new GuestRule();
     protected StayRule stayRule = new StayRule();
