@@ -24,12 +24,8 @@ public class TestdataImporter {
     @Autowired
     private IGuestRepo guestRepo;
 
-    @Test
-    public void do_nothing_just_to_have_a_test_method() {
-    }
-
     /**
-     * to import some testdata to the application, just uncomment the annotation and set ActiveProfile to mysql.
+     * to import some testdata to the application just set ActiveProfile to test.
      * but dont commit it!
      * <p>
      * start the application first, the import the testdata
@@ -51,8 +47,6 @@ public class TestdataImporter {
         Guest guest9 = createGuestMelGibson();
 
         guestRepo.saveAll(ImmutableList.of(guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
-
-        System.out.println();
     }
 
     private Guest createGuestAntonioBanderas() {
