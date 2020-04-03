@@ -14,8 +14,14 @@ public class StayService implements IStayService {
     @Autowired
     private IStayRepo stayRepo;
 
+    @Override
     public Stay findById(Long stayId) {
         Optional<Stay> stay = stayRepo.findById(stayId);
         return stay.orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Override
+    public void updateStay(Stay stay) {
+        stayRepo.saveAndFlush(stay);
     }
 }
