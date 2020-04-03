@@ -1,15 +1,6 @@
 package com.tabit.dcm2.repository;
-
-import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDate;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,30 +8,6 @@ public class StayRepoDbTest extends AbstractRepoDbTest {
 
     @Autowired
     private IStayRepo stayRepo;
-
-    @Test
-    public void findByGuestIdOrderByCheckInDateDesc_shall_return_stays_for_guest() {
-        // given
-        Stay stayOld = RandomStay.createRandomStayWithoutId();
-        stayOld.setArriveDate(LocalDate.now().minusYears(5));
-        Stay stayNew = RandomStay.createRandomStayWithoutId();
-        stayNew.setArriveDate(LocalDate.now().minusDays(10));
-
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
-        guest.addStays(ImmutableList.of(stayOld, stayNew));
-
-        guestRule.persist(ImmutableList.of(guest));
-
-        // when
-        List<Stay> guestStays = stayRepo.findByGuestIdOrderByArriveDateDesc(guest.getId());
-
-        // then
-        assertThat(guestStays).hasSize(2);
-        Stay actualGuestStayNew = guestStays.get(0);
-        Stay actualGuestStayOld = guestStays.get(1);
-        assertStay(actualGuestStayNew, stayNew, guest.getId());
-        assertStay(actualGuestStayOld, stayOld, guest.getId());
-    }
 
     private void assertStay(Stay actualStay, Stay expectedStay, Long expectedGuestId) {
         assertThat(actualStay.getId()).isEqualTo(expectedStay.getId());
