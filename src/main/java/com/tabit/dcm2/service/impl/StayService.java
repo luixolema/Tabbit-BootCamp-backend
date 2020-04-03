@@ -7,7 +7,6 @@ import com.tabit.dcm2.service.IStayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,9 +17,5 @@ public class StayService implements IStayService {
     public Stay findById(Long stayId) {
         Optional<Stay> stay = stayRepo.findById(stayId);
         return stay.orElseThrow(ResourceNotFoundException::new);
-    }
-
-    public List<Stay> findByGuestIdOrderByArriveDateDesc(Long guestId) {
-        return stayRepo.findByGuestIdOrderByArriveDateDesc(guestId);
     }
 }
