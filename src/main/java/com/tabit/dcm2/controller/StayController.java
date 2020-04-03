@@ -17,4 +17,8 @@ public class StayController {
     public StayDto getStay(@PathVariable() Long stayId) {
         return MapperUtil.mapStayToStayDto(stayService.findById(stayId));
     }
+
+    @PostMapping
+    public void updateStay(@RequestParam StayDto stayDto) {
+    }
 }
