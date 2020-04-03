@@ -1,11 +1,14 @@
 package com.tabit.dcm2.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class GuestPersonalDetailsDto {
     private long id;
     private String firstName;
     private String lastName;
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate birthDate;
     private String nationality;
     private String country;

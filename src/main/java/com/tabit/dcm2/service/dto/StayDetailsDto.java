@@ -1,15 +1,22 @@
 package com.tabit.dcm2.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDate;
 
 public class StayDetailsDto {
     private String boxNumber;
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate checkInDate;
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate checkOutDate;
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate arriveDate;
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate leaveDate;
     private String hotel;
     private String room;
+    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate lastDiveDate;
     private String brevet;
     private Integer divesAmount;
