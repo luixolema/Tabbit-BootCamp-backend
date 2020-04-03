@@ -47,6 +47,7 @@ public class GuestMappingAssertions {
             assertThat(stayDto.getStayDetails().getRoom()).isEqualTo(stay.getRoom());
             assertThat(stayDto.getStayDetails().isNitrox()).isEqualTo(stay.isNitrox());
             assertThat(stayDto.getStayDetails().isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
+            assertThat(stayDto.getStayDetails().getPreBoocking()).isEqualTo(stay.getPreBoocking());
 
             assertThat(stayDto.getGuestPersonalDetails().getFirstName()).isEqualTo(stay.getFirstName());
             assertThat(stayDto.getGuestPersonalDetails().getLastName()).isEqualTo(stay.getLastName());
@@ -58,11 +59,13 @@ public class GuestMappingAssertions {
             assertThat(stayDto.getGuestPersonalDetails().getPassportId()).isEqualTo(stay.getPassportId());
             assertThat(stayDto.getGuestPersonalDetails().getPhone()).isEqualTo(stay.getPhone());
             assertThat(stayDto.getGuestPersonalDetails().getPostcode()).isEqualTo(stay.getPostcode());
+            assertThat(stayDto.getGuestPersonalDetails().getId()).isEqualTo(stay.getGuest().getId());
 
             assertStaySummaries(staySummary, sortedStays, guestDetailType);
         } else {
             assertThat(stayDto.getStayDetails()).isNull();
 
+            assertThat(stayDto.getGuestPersonalDetails().getId()).isEqualTo(guest.getId());
             assertThat(stayDto.getGuestPersonalDetails().getFirstName()).isEqualTo(guest.getFirstName());
             assertThat(stayDto.getGuestPersonalDetails().getLastName()).isEqualTo(guest.getLastName());
             assertThat(stayDto.getGuestPersonalDetails().getBirthDate()).isEqualTo(guest.getBirthDate());
@@ -97,6 +100,7 @@ public class GuestMappingAssertions {
                 assertThat(staySummaryDto.getId()).isEqualTo(stay.getId());
                 assertThat(staySummaryDto.getArriveDate()).isEqualTo(stay.getArriveDate());
                 assertThat(staySummaryDto.getLeaveDate()).isEqualTo(stay.getLeaveDate());
+                assertThat(staySummaryDto.isActive()).isEqualTo(stay.isActive());
             }
         }
     }

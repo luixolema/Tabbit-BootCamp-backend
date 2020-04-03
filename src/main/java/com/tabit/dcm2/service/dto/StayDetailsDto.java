@@ -15,6 +15,7 @@ public class StayDetailsDto {
     private Integer divesAmount;
     private boolean nitrox;
     private boolean medicalStatement;
+    private String preBoocking;
 
     public LocalDate getCheckInDate() {
         return checkInDate;
@@ -110,5 +111,13 @@ public class StayDetailsDto {
 
     public void setBoxNumber(String boxNumber) {
         this.boxNumber = boxNumber;
+    }
+
+    public String getPreBoocking() {
+        return preBoocking;
+    }
+
+    public void setPreBoocking(String preBoocking) {
+        this.preBoocking = preBoocking;
     }
 }

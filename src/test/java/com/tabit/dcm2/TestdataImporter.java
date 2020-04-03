@@ -72,6 +72,8 @@ public class TestdataImporter {
         stayActual.setFirstName(firstName);
         stayActual.setLastName("Banderas With Many Stays And Different Names");
         stayActual.setBoxNumber("123AB");
+        stayActual.setPreBoocking("Antonio Banderas made a pre-boocking and save 19 Euro. Smart man.");
+        stayActual.setActive(true);
 
         Guest guest = RandomGuest.createRandomGuestWitoutId();
         guest.setFirstName(firstName);
@@ -98,6 +100,7 @@ public class TestdataImporter {
         stayOld.setFirstName(firstName);
         stayOld.setLastName("Montana");
         stayOld.setBoxNumber("ABCD");
+        stayOld.setPreBoocking("Anthony Hopkins made a pre-boocking and save 28 Euro. Smart man.");
 
         Guest guest = RandomGuest.createRandomGuestWitoutId();
         guest.setFirstName(firstName);
@@ -124,6 +127,7 @@ public class TestdataImporter {
         stayActual.setFirstName("Keanu");
         stayActual.setLastName("Reeves");
         stayActual.setBoxNumber("666");
+        stayActual.setActive(true);
 
         Guest guest = RandomGuest.createRandomGuestWitoutId();
         guest.setFirstName("Keanu");
@@ -140,6 +144,7 @@ public class TestdataImporter {
         stayActual.setFirstName("Agent");
         stayActual.setLastName("Smith");
         stayActual.setBoxNumber("98765");
+        stayActual.setActive(true);
 
         Guest guest = RandomGuest.createRandomGuestWitoutId();
         guest.setFirstName("Agent");
@@ -191,6 +196,8 @@ public class TestdataImporter {
         stayActual.setFirstName("Mel");
         stayActual.setLastName("Gibson Same Names");
         stayActual.setBoxNumber("4567");
+        stayActual.setActive(true);
+        stayActual.setPreBoocking("Mel Gibson made a pre-boocking and save 20 Euro. Smart man.");
 
         Guest guest = RandomGuest.createRandomGuestWitoutId();
         guest.setFirstName("Mel");

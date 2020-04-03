@@ -10,6 +10,7 @@ public class MapperUtil {
 
     public static StayDto mapStayToStayDto(Stay stay) {
         GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto();
+        guestPersonalDetails.setId(stay.getGuest().getId());
         guestPersonalDetails.setFirstName(stay.getFirstName());
         guestPersonalDetails.setLastName(stay.getLastName());
         guestPersonalDetails.setBirthDate(stay.getBirthDate());
@@ -35,6 +36,7 @@ public class MapperUtil {
         stayDetails.setDivesAmount(stay.getDivesAmount());
         stayDetails.setNitrox(stay.isNitrox());
         stayDetails.setMedicalStatement(stay.isMedicalStatement());
+        stayDetails.setPreBoocking(stay.getPreBoocking());
 
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(guestPersonalDetails);
@@ -45,6 +47,7 @@ public class MapperUtil {
 
     public static StayDto mapGuestToStayDto(Guest guest) {
         GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto();
+        guestPersonalDetails.setId(guest.getId());
         guestPersonalDetails.setFirstName(guest.getFirstName());
         guestPersonalDetails.setLastName(guest.getLastName());
         guestPersonalDetails.setBirthDate(guest.getBirthDate());

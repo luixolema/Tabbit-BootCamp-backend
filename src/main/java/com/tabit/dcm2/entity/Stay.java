@@ -89,6 +89,12 @@ public class Stay implements IEntity {
     @Column(name = "medical_statement", nullable = false)
     private boolean medicalStatement;
 
+    @Column(name = "active", nullable = false)
+    private boolean active;
+
+    @Column(name = "pre_boocking", nullable = true)
+    private String preBoocking;
+
     @Override
     public Long getId() {
         return id;
@@ -288,5 +294,21 @@ public class Stay implements IEntity {
 
     public void setBoxNumber(String boxNumber) {
         this.boxNumber = boxNumber;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getPreBoocking() {
+        return preBoocking;
+    }
+
+    public void setPreBoocking(String preBoocking) {
+        this.preBoocking = preBoocking;
     }
 }
