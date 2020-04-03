@@ -1,6 +1,5 @@
 package com.tabit.dcm2.service.impl;
 
-import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
@@ -12,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,20 +47,5 @@ public class StayServiceTest {
 
         // when
         stayService.findById(randomId);
-    }
-
-    @Test
-    public void findByGuestIdOrderByCheckInDateDesc_shall_return_ordered_list_of_stays() {
-        // given
-        Long randomId = valueProvider.randomId();
-        Stay randomStay1 = RandomStay.createRandomStay();
-        Stay randomStay2 = RandomStay.createRandomStay();
-        when(stayRepo.findByGuestIdOrderByCheckInDateDesc(randomId)).thenReturn(ImmutableList.of(randomStay2, randomStay1));
-
-        // when
-        List<Stay> stays = stayService.findByGuestIdOrderByCheckInDateDesc(randomId);
-
-        // then
-        assertThat(stays).containsExactly(randomStay2, randomStay1);
     }
 }

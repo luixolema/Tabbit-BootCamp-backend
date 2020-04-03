@@ -24,8 +24,10 @@ public class GuestRepoDbTest extends AbstractRepoDbTest {
         // given
         Stay stayOld = RandomStay.createRandomStayWithoutId();
         stayOld.setCheckInDate(LocalDate.now().minusYears(5));
+        stayOld.setArriveDate(LocalDate.now().minusYears(5));
         Stay stayNew = RandomStay.createRandomStayWithoutId();
         stayNew.setCheckInDate(LocalDate.now().minusDays(10));
+        stayNew.setArriveDate(LocalDate.now().minusDays(10));
 
         Guest guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInTrue.setCheckedin(true);
