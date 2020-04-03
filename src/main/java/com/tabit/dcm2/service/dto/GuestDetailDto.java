@@ -27,6 +27,6 @@ public class GuestDetailDto {
     }
 
     public void addStaySummary(Stay stay) {
-        staySummaries.add(new StaySummaryDto(stay.getId(), stay.getArriveDate(), stay.getLeaveDate()));
+        staySummaries.add(new StaySummaryDto(stay.getId(), stay.getArriveDate(), stay.getLeaveDate(), stay.isActive()));
     }
 }
