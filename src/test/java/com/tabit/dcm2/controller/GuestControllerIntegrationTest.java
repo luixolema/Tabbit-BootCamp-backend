@@ -22,7 +22,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -48,8 +50,10 @@ public class GuestControllerIntegrationTest extends AbstractRepoDbTest {
         // given
         stayOld = RandomStay.createRandomStayWithoutId();
         stayOld.setCheckInDate(LocalDate.now().minusYears(5));
+        stayOld.setArriveDate(LocalDate.now().minusYears(5));
         stayActual = RandomStay.createRandomStayWithoutId();
         stayActual.setCheckInDate(LocalDate.now().minusDays(10));
+        stayActual.setArriveDate(LocalDate.now().minusDays(10));
 
         guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInTrue.setCheckedin(true);
