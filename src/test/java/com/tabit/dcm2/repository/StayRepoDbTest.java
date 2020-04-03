@@ -22,9 +22,9 @@ public class StayRepoDbTest extends AbstractRepoDbTest {
     public void findByGuestIdOrderByCheckInDateDesc_shall_return_stays_for_guest() {
         // given
         Stay stayOld = RandomStay.createRandomStayWithoutId();
-        stayOld.setCheckInDate(LocalDate.now().minusYears(5));
+        stayOld.setArriveDate(LocalDate.now().minusYears(5));
         Stay stayNew = RandomStay.createRandomStayWithoutId();
-        stayNew.setCheckInDate(LocalDate.now().minusDays(10));
+        stayNew.setArriveDate(LocalDate.now().minusDays(10));
 
         Guest guest = RandomGuest.createRandomGuestWitoutId();
         guest.addStays(ImmutableList.of(stayOld, stayNew));
@@ -32,7 +32,7 @@ public class StayRepoDbTest extends AbstractRepoDbTest {
         guestRule.persist(ImmutableList.of(guest));
 
         // when
-        List<Stay> guestStays = stayRepo.findByGuestIdOrderByCheckInDateDesc(guest.getId());
+        List<Stay> guestStays = stayRepo.findByGuestIdOrderByArriveDateDesc(guest.getId());
 
         // then
         assertThat(guestStays).hasSize(2);

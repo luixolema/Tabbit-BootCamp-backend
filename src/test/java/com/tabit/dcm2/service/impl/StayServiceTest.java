@@ -57,10 +57,10 @@ public class StayServiceTest {
         Long randomId = valueProvider.randomId();
         Stay randomStay1 = RandomStay.createRandomStay();
         Stay randomStay2 = RandomStay.createRandomStay();
-        when(stayRepo.findByGuestIdOrderByCheckInDateDesc(randomId)).thenReturn(ImmutableList.of(randomStay2, randomStay1));
+        when(stayRepo.findByGuestIdOrderByArriveDateDesc(randomId)).thenReturn(ImmutableList.of(randomStay2, randomStay1));
 
         // when
-        List<Stay> stays = stayService.findByGuestIdOrderByCheckInDateDesc(randomId);
+        List<Stay> stays = stayService.findByGuestIdOrderByArriveDateDesc(randomId);
 
         // then
         assertThat(stays).containsExactly(randomStay2, randomStay1);

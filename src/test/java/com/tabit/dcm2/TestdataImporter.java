@@ -18,14 +18,14 @@ import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("mysql")
 public class TestdataImporter {
 
     @Autowired
     private IGuestRepo guestRepo;
 
     /**
-     * to import some testdata to the application just set ActiveProfile to test.
+     * to import some testdata to the application just set ActiveProfile to mysql.
      * but dont commit it!
      * <p>
      * start the application first, the import the testdata
@@ -53,28 +53,22 @@ public class TestdataImporter {
         String firstName = "Antonio";
 
         Stay stayVeryOld = RandomStay.createRandomStayWithoutId();
-        stayVeryOld.setCheckInDate(LocalDate.now().minusYears(15));
-        stayVeryOld.setCheckOutDate(LocalDate.now().minusYears(14));
-        stayVeryOld.setArriveDate(stayVeryOld.getCheckInDate());
-        stayVeryOld.setLeaveDate(stayVeryOld.getCheckOutDate());
+        stayVeryOld.setArriveDate(LocalDate.now().minusYears(15));
+        stayVeryOld.setLeaveDate(LocalDate.now().minusYears(14));
         stayVeryOld.setFirstName(firstName);
         stayVeryOld.setLastName("Montana");
         stayVeryOld.setBoxNumber("123456");
 
         Stay stayOld = RandomStay.createRandomStayWithoutId();
-        stayOld.setCheckInDate(LocalDate.now().minusYears(7));
-        stayOld.setCheckOutDate(LocalDate.now().minusYears(6));
-        stayOld.setArriveDate(stayOld.getCheckInDate());
-        stayOld.setLeaveDate(stayOld.getCheckOutDate());
+        stayOld.setArriveDate(LocalDate.now().minusYears(7));
+        stayOld.setLeaveDate(LocalDate.now().minusYears(6));
         stayOld.setFirstName(firstName);
         stayOld.setLastName("Montana");
         stayOld.setBoxNumber("12");
 
         Stay stayActual = RandomStay.createRandomStayWithoutId();
-        stayActual.setCheckInDate(LocalDate.now().minusDays(3));
-        stayActual.setCheckOutDate(LocalDate.now().plusDays(3));
-        stayActual.setArriveDate(stayActual.getCheckInDate());
-        stayActual.setLeaveDate(stayActual.getCheckOutDate());
+        stayActual.setArriveDate(LocalDate.now().minusDays(3));
+        stayActual.setLeaveDate(LocalDate.now().plusDays(3));
         stayActual.setFirstName(firstName);
         stayActual.setLastName("Banderas With Many Stays And Different Names");
         stayActual.setBoxNumber("123AB");
@@ -92,19 +86,15 @@ public class TestdataImporter {
         String firstName = "Anthony";
 
         Stay stayVeryOld = RandomStay.createRandomStayWithoutId();
-        stayVeryOld.setCheckInDate(LocalDate.now().minusYears(10));
-        stayVeryOld.setCheckOutDate(LocalDate.now().minusYears(9));
-        stayVeryOld.setArriveDate(stayVeryOld.getCheckInDate());
-        stayVeryOld.setLeaveDate(stayVeryOld.getCheckOutDate());
+        stayVeryOld.setArriveDate(LocalDate.now().minusYears(10));
+        stayVeryOld.setLeaveDate(LocalDate.now().minusYears(9));
         stayVeryOld.setFirstName(firstName);
         stayVeryOld.setLastName("Hopkins");
         stayVeryOld.setBoxNumber("6789");
 
         Stay stayOld = RandomStay.createRandomStayWithoutId();
-        stayOld.setCheckInDate(LocalDate.now().minusYears(5));
-        stayOld.setCheckOutDate(LocalDate.now().minusYears(4));
-        stayOld.setArriveDate(stayOld.getCheckInDate());
-        stayOld.setLeaveDate(stayOld.getCheckOutDate());
+        stayOld.setArriveDate(LocalDate.now().minusYears(5));
+        stayOld.setLeaveDate(LocalDate.now().minusYears(4));
         stayOld.setFirstName(firstName);
         stayOld.setLastName("Montana");
         stayOld.setBoxNumber("ABCD");
@@ -129,10 +119,8 @@ public class TestdataImporter {
 
     private Guest createGuestKeanuReeves() {
         Stay stayActual = RandomStay.createRandomStayWithoutId();
-        stayActual.setCheckInDate(LocalDate.now().minusDays(8));
-        stayActual.setCheckOutDate(LocalDate.now().plusDays(8));
-        stayActual.setArriveDate(stayActual.getCheckInDate());
-        stayActual.setLeaveDate(stayActual.getCheckOutDate());
+        stayActual.setArriveDate(LocalDate.now().minusDays(8));
+        stayActual.setLeaveDate(LocalDate.now().plusDays(8));
         stayActual.setFirstName("Keanu");
         stayActual.setLastName("Reeves");
         stayActual.setBoxNumber("666");
@@ -147,10 +135,8 @@ public class TestdataImporter {
 
     private Guest createGuestAgentSmith() {
         Stay stayActual = RandomStay.createRandomStayWithoutId();
-        stayActual.setCheckInDate(LocalDate.now().minusDays(10));
-        stayActual.setCheckOutDate(LocalDate.now().plusDays(10));
-        stayActual.setArriveDate(stayActual.getCheckInDate());
-        stayActual.setLeaveDate(stayActual.getCheckOutDate());
+        stayActual.setArriveDate(LocalDate.now().minusDays(10));
+        stayActual.setLeaveDate(LocalDate.now().plusDays(10));
         stayActual.setFirstName("Agent");
         stayActual.setLastName("Smith");
         stayActual.setBoxNumber("98765");
@@ -193,19 +179,15 @@ public class TestdataImporter {
 
     private Guest createGuestMelGibson() {
         Stay stayOld = RandomStay.createRandomStayWithoutId();
-        stayOld.setCheckInDate(LocalDate.now().minusYears(6));
-        stayOld.setCheckOutDate(LocalDate.now().minusYears(4));
-        stayOld.setArriveDate(stayOld.getCheckInDate());
-        stayOld.setLeaveDate(stayOld.getCheckOutDate());
+        stayOld.setArriveDate(LocalDate.now().minusYears(6));
+        stayOld.setLeaveDate(LocalDate.now().minusYears(4));
         stayOld.setFirstName("Mel");
         stayOld.setLastName("Gibson Same Names");
         stayOld.setBoxNumber("ZXY");
 
         Stay stayActual = RandomStay.createRandomStayWithoutId();
-        stayActual.setCheckInDate(LocalDate.now().minusDays(15));
-        stayActual.setCheckOutDate(LocalDate.now().plusDays(15));
-        stayActual.setArriveDate(stayActual.getCheckInDate());
-        stayActual.setLeaveDate(stayActual.getCheckOutDate());
+        stayActual.setArriveDate(LocalDate.now().minusDays(15));
+        stayActual.setLeaveDate(LocalDate.now().plusDays(15));
         stayActual.setFirstName("Mel");
         stayActual.setLastName("Gibson Same Names");
         stayActual.setBoxNumber("4567");

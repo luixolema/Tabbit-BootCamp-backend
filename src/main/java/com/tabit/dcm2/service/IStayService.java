@@ -7,5 +7,5 @@ import java.util.List;
 public interface IStayService {
     Stay findById(Long stayId);
 
-    List<Stay> findByGuestIdOrderByCheckInDateDesc(Long guestId);
+    List<Stay> findByGuestIdOrderByArriveDateDesc(Long guestId);
 }

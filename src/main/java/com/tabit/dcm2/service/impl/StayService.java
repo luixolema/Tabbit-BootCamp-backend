@@ -20,7 +20,7 @@ public class StayService implements IStayService {
         return stay.orElseThrow(ResourceNotFoundException::new);
     }
 
-    public List<Stay> findByGuestIdOrderByCheckInDateDesc(Long guestId) {
-        return stayRepo.findByGuestIdOrderByCheckInDateDesc(guestId);
+    public List<Stay> findByGuestIdOrderByArriveDateDesc(Long guestId) {
+        return stayRepo.findByGuestIdOrderByArriveDateDesc(guestId);
     }
 }

@@ -19,7 +19,7 @@ public class Guest implements IEntity {
     private Long id;
 
     @OneToMany(mappedBy = "guest", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @OrderBy("check_in_date DESC")
+    @OrderBy("arrive_date DESC")
     List<Stay> stays = new ArrayList<>();
 
     @Column(name = "first_name", nullable = false)
