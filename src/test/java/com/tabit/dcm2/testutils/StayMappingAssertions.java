@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StayMappingAssertions {
     public static void assertStayDto(StayDto stayDto, Stay stay) {
+        assertThat(stayDto.getGuestPersonalDetails().getId()).isEqualTo(stay.getGuest().getId());
         assertThat(stayDto.getGuestPersonalDetails().getFirstName()).isEqualTo(stay.getFirstName());
         assertThat(stayDto.getGuestPersonalDetails().getLastName()).isEqualTo(stay.getLastName());
         assertThat(stayDto.getGuestPersonalDetails().getBirthDate()).isEqualTo(stay.getBirthDate());
@@ -30,5 +31,6 @@ public class StayMappingAssertions {
         assertThat(stayDto.getStayDetails().getRoom()).isEqualTo(stay.getRoom());
         assertThat(stayDto.getStayDetails().isNitrox()).isEqualTo(stay.isNitrox());
         assertThat(stayDto.getStayDetails().isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
+        assertThat(stayDto.getStayDetails().getPreBoocking()).isEqualTo(stay.getPreBoocking());
     }
 }

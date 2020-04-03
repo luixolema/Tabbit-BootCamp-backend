@@ -7,11 +7,13 @@ public class StaySummaryDto {
     private Long id;
     private LocalDate arriveDate;
     private LocalDate leaveDate;
+    private boolean active;
 
-    public StaySummaryDto(Long id, LocalDate arriveDate, LocalDate leaveDate) {
+    public StaySummaryDto(Long id, LocalDate arriveDate, LocalDate leaveDate, boolean active) {
         this.id = id;
         this.arriveDate = arriveDate;
         this.leaveDate = leaveDate;
+        this.active = active;
     }
 
     public Long getId() {
@@ -36,5 +38,13 @@ public class StaySummaryDto {
 
     public void setLeaveDate(LocalDate leaveDate) {
         this.leaveDate = leaveDate;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

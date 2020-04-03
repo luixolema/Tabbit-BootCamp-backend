@@ -3,6 +3,7 @@ package com.tabit.dcm2.service.dto;
 import java.time.LocalDate;
 
 public class GuestPersonalDetailsDto {
+    private long id;
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
@@ -14,6 +15,14 @@ public class GuestPersonalDetailsDto {
     private String email;
     private String phone;
     private String passportId;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getFirstName() {
         return firstName;
