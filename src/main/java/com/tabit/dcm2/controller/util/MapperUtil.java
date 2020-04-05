@@ -24,6 +24,7 @@ public class MapperUtil {
         guestPersonalDetails.setPassportId(stay.getPassportId());
 
         StayDetailsDto stayDetails = new StayDetailsDto();
+        stayDetails.setId(stay.getId());
         stayDetails.setBoxNumber(stay.getBoxNumber());
         stayDetails.setCheckInDate(stay.getCheckInDate());
         stayDetails.setCheckOutDate(stay.getCheckOutDate());

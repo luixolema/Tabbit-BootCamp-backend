@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 
 public class StayDetailsDto {
+    private Long id;
     private String boxNumber;
     @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate checkInDate;
@@ -23,6 +24,14 @@ public class StayDetailsDto {
     private boolean nitrox;
     private boolean medicalStatement;
     private String preBoocking;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public LocalDate getCheckInDate() {
         return checkInDate;

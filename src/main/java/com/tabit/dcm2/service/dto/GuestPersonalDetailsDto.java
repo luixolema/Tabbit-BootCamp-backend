@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDate;
 
 public class GuestPersonalDetailsDto {
-    private long id;
+    private Long id;
     private String firstName;
     private String lastName;
     @JsonFormat(pattern = "dd.MM.yyyy")
@@ -19,11 +19,11 @@ public class GuestPersonalDetailsDto {
     private String phone;
     private String passportId;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

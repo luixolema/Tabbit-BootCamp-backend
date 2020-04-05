@@ -6,7 +6,7 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
-import com.tabit.dcm2.repository.AbstractRepoDbTest;
+import com.tabit.dcm2.repository.AbstractDbTest;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.dto.GuestDetailDto;
@@ -22,13 +22,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
 import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
 import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class GuestControllerIntegrationTest extends AbstractRepoDbTest {
+public class GuestControllerIntegrationTest extends AbstractDbTest {
 
     private static final Comparator<GuestDto> SORT_BY_ID = Comparator.comparing(GuestDto::getId);
 
@@ -128,15 +127,4 @@ public class GuestControllerIntegrationTest extends AbstractRepoDbTest {
         // then
         GuestMappingAssertions.assertGuestDetailDto(guestDetailDto, guestCheckedInFalseWithoutStay, WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY);
     }
-
-    @Test
-    public void getGuestDetails_shall_return_stay_and_personal_details_from_actual_stay_for_checkedIn_guest() {
-        // when
-        GuestDetailDto guestDetailDto = guestController.getGuestDetails(guestCheckedInTrue.getId());
-
-        // then
-        GuestMappingAssertions.assertGuestDetailDto(guestDetailDto, guestCheckedInTrue, WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY);
-        assertThat(guestDetailDto.getStayDto().getStayDetails().getCheckInDate()).isEqualTo(stayActual.getCheckInDate());
-    }
-
 }
