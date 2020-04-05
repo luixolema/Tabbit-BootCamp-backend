@@ -18,9 +18,9 @@ import javax.persistence.EntityManagerFactory;
  * but dont commit it!
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public abstract class AbstractRepoDbTest {
+public abstract class AbstractDbTest {
     private static EntityManager entityManager;
 
     protected GuestRule guestRule = new GuestRule();
