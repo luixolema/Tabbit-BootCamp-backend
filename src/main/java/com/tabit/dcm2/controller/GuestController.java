@@ -8,6 +8,7 @@ import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.dto.GuestDetailDto;
 import com.tabit.dcm2.service.dto.GuestDto;
 import com.tabit.dcm2.service.dto.GuestOverviewDto;
+import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,7 +57,7 @@ public class GuestController {
         GuestDetailDto resultGuestDetailDto = new GuestDetailDto();
 
         Guest guest = guestService.getGuestById(guestId);
-        if (guest.isCheckedin()){
+        if (guest.isCheckedin()) {
             Stay currentStay = guest.getStays().get(0);
             resultGuestDetailDto.setStayDto(MapperUtil.mapStayToStayDto(currentStay));
         } else {
@@ -65,5 +66,9 @@ public class GuestController {
         guest.getStays().forEach(resultGuestDetailDto::addStaySummary);
 
         return resultGuestDetailDto;
+    }
+
+    @PostMapping(path = "/api/guests")
+    public void updateGuest(@RequestBody GuestPersonalDetailsDto personalDetailsDto) {
     }
 }

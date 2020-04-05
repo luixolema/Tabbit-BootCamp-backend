@@ -5,7 +5,7 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
-import com.tabit.dcm2.repository.AbstractRepoDbTest;
+import com.tabit.dcm2.repository.AbstractDbTest;
 import com.tabit.dcm2.service.dto.StayDto;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.tabit.dcm2.testutils.StayMappingAssertions.assertStayDto;
 
-public class StayControllerIntegrationTest extends AbstractRepoDbTest {
+public class StayControllerIntegrationTest extends AbstractDbTest {
     @Autowired
     private StayController stayController;
 

@@ -35,6 +35,7 @@ public class GuestMappingAssertions {
 
         if (guestDetailType == WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY) {
             Stay stay = sortedStays.get(0);
+            assertThat(stayDto.getStayDetails().getId()).isEqualTo(stay.getId());
             assertThat(stayDto.getStayDetails().getArriveDate()).isEqualTo(stay.getArriveDate());
             assertThat(stayDto.getStayDetails().getBoxNumber()).isEqualTo(stay.getBoxNumber());
             assertThat(stayDto.getStayDetails().getBrevet()).isEqualTo(stay.getBrevet());
