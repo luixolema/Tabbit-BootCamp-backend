@@ -49,6 +49,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThat(response.getBody()).isNull();
     }
 
     @Test

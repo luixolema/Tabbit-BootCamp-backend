@@ -1,28 +1,22 @@
 package com.tabit.dcm2.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDate;
 
 public class StayDetailsDto {
     private Long id;
     private String boxNumber;
-    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate checkInDate;
-    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate checkOutDate;
-    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate arriveDate;
-    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate leaveDate;
     private String hotel;
     private String room;
-    @JsonFormat(pattern = "dd.MM.yyyy")
     private LocalDate lastDiveDate;
     private String brevet;
     private Integer divesAmount;
     private boolean nitrox;
     private boolean medicalStatement;
+    private boolean active;
     private String preBoocking;
 
     public Long getId() {
@@ -127,6 +121,14 @@ public class StayDetailsDto {
 
     public void setBoxNumber(String boxNumber) {
         this.boxNumber = boxNumber;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getPreBoocking() {
