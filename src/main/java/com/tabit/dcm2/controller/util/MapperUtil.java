@@ -1,8 +1,10 @@
 package com.tabit.dcm2.controller.util;
 
 import com.tabit.dcm2.entity.Guest;
+import com.tabit.dcm2.entity.Invoice;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.InvoiceDto;
 import com.tabit.dcm2.service.dto.StayDetailsDto;
 import com.tabit.dcm2.service.dto.StayDto;
 
@@ -61,5 +63,26 @@ public class MapperUtil {
         stayDto.setGuestPersonalDetails(guestPersonalDetails);
 
         return stayDto;
+    }
+
+    public static InvoiceDto mapStayToInvoiceDto(Stay stay) {
+        InvoiceDto invoiceDto = new InvoiceDto();
+        Invoice invoice = stay.getInvoice();
+        invoiceDto.setInvoiceId(invoice.getInvoiceId());
+        invoiceDto.setBox(stay.getBoxNumber());
+        invoiceDto.setCheckInDate(stay.getCheckInDate());
+        invoiceDto.setCheckOutDate(stay.getCheckOutDate());
+        invoiceDto.setFirstName(stay.getFirstName());
+        invoiceDto.setLastName(stay.getLastName());
+        invoiceDto.setArriveDate(stay.getArriveDate());
+        invoiceDto.setLeaveDate(stay.getLeaveDate());
+        invoiceDto.setCity(stay.getCity());
+        invoiceDto.setPostcode(stay.getPostcode());
+        invoiceDto.setStreet(stay.getStreet());
+        invoiceDto.setCountry(stay.getCountry());
+
+        invoice.getPayments().forEach(invoiceDto::addPaymentDetail);
+        invoiceDto.setTotal(invoiceDto.getPayments().stream().mapToLong(p -> p.getPrice()).sum());
+        return invoiceDto;
     }
 }

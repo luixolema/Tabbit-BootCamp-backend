@@ -38,7 +38,7 @@ public class RandomStay {
         stay.setDivesAmount(valueProvider.randomInt());
         stay.setNitrox(valueProvider.randomBoolean());
         stay.setMedicalStatement(valueProvider.randomBoolean());
-
+        stay.setInvoice(RandomInvoice.createRandomInvoice(stay));
         return stay;
     }
 }

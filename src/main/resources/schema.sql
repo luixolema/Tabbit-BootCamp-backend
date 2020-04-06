@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `payment`;
+DROP TABLE IF EXISTS `invoice`;
 DROP TABLE IF EXISTS `stay`;
 DROP TABLE IF EXISTS `guest`;
 DROP TABLE IF EXISTS `id_gen`;
@@ -48,6 +50,24 @@ DROP TABLE IF EXISTS `id_gen`;
       FOREIGN KEY (`guest_id`) REFERENCES guest(`id`),
       PRIMARY KEY (`id`)
     );
+
+  CREATE TABLE `invoice` (
+    `id` bigint(20) NOT NULL,
+    `invoice_id` varchar(100) NOT NULL,
+    `stay_id` bigint(20) NOT NULL,
+    FOREIGN KEY (`stay_id`) REFERENCES stay(`id`),
+    PRIMARY KEY (`id`)
+  );
+
+  CREATE TABLE `payment` (
+    `id` bigint(20) NOT NULL,
+    `invoice_id` bigint(20) NOT NULL,
+    `activity` varchar(100) NOT NULL,
+    `activity_date` DATE NOT NULL,
+    `price` bigint(20) NOT NULL,
+    FOREIGN KEY (`invoice_id`) REFERENCES invoice(`id`),
+    PRIMARY KEY (`id`)
+  );
 
   CREATE TABLE `id_gen`(
     `id_value` INTEGER NOT NULL,

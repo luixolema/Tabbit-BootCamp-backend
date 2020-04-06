@@ -16,6 +16,9 @@ public class Stay implements IEntity {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "IDGenerator")
     private Long id;
 
+    @OneToOne(mappedBy = "stay"/*, cascade = CascadeType.PERSIST*/)
+    private Invoice invoice;
+
     @ManyToOne
     @JoinColumn(name = "guest_id")
     private Guest guest;
@@ -288,5 +291,13 @@ public class Stay implements IEntity {
 
     public void setBoxNumber(String boxNumber) {
         this.boxNumber = boxNumber;
+    }
+
+    public Invoice getInvoice() {
+        return invoice;
+    }
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
 }

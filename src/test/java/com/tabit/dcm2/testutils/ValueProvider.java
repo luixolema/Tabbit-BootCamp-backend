@@ -29,6 +29,10 @@ public class ValueProvider {
         return random.nextInt();
     }
 
+    public Long randomPrice() {
+        return Long.valueOf(random.nextInt(20000));
+    }
+
     public boolean randomBoolean() {
         return random.nextBoolean();
     }
