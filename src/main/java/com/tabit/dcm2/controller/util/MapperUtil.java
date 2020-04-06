@@ -2,9 +2,13 @@ package com.tabit.dcm2.controller.util;
 
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.service.dto.ActivityDTO;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.StayDetailsDto;
 import com.tabit.dcm2.service.dto.StayDto;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapperUtil {
 
@@ -39,9 +43,16 @@ public class MapperUtil {
         stayDetails.setMedicalStatement(stay.isMedicalStatement());
         stayDetails.setPreBoocking(stay.getPreBoocking());
 
+        // Mocking Activities data
+        List<ActivityDTO> activityDTOS = new ArrayList<>();
+        activityDTOS.add(RandomActivityDto.createRandomActivityDTO());
+        activityDTOS.add(RandomActivityDto.createRandomActivityDTO());
+        activityDTOS.add(RandomActivityDto.createRandomActivityDTO());
+
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(guestPersonalDetails);
         stayDto.setStayDetails(stayDetails);
+        stayDto.setActivities(activityDTOS);
 
         return stayDto;
     }

@@ -41,4 +41,8 @@ public class ValueProvider {
 
         return LocalDate.ofEpochDay(randomDay);
     }
+
+    public Double randomDouble() {
+        return random.nextDouble();
+    }
 }
