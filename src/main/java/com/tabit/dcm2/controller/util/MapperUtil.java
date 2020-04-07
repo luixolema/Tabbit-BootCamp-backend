@@ -111,7 +111,7 @@ public class MapperUtil {
         stay.setDivesAmount(stayDto.getStayDetails().getDivesAmount());
         stay.setNitrox(stayDto.getStayDetails().isNitrox());
         stay.setMedicalStatement(stayDto.getStayDetails().isMedicalStatement());
-        stay.setPreBoocking(stayDto.getStayDetails().getPreBoocking());
+        stay.setPreBooking(stayDto.getStayDetails().getPreBooking());
 
         return stay;
     }
