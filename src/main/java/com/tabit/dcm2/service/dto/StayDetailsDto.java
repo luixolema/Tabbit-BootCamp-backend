@@ -16,6 +16,7 @@ public class StayDetailsDto {
     private Integer divesAmount;
     private boolean nitrox;
     private boolean medicalStatement;
+    private boolean active;
     private String preBooking;
 
     public Long getId() {
@@ -120,6 +121,14 @@ public class StayDetailsDto {
 
     public void setBoxNumber(String boxNumber) {
         this.boxNumber = boxNumber;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getPreBooking() {

@@ -59,7 +59,7 @@ public class StayMappingAssertions {
         assertThat(oldStay.getRoom()).isEqualTo(newStay.getRoom());
         assertThat(oldStay.isNitrox()).isEqualTo(newStay.isNitrox());
         assertThat(oldStay.isMedicalStatement()).isEqualTo(newStay.isMedicalStatement());
-        assertThat(oldStay.getPreBoocking()).isEqualTo(newStay.getPreBoocking());
+        assertThat(oldStay.getPreBooking()).isEqualTo(newStay.getPreBooking());
     }
 
     public static void assertTwoStaysWithoutGuest(Stay oldStay, Stay newStay) {
@@ -87,6 +87,6 @@ public class StayMappingAssertions {
         assertThat(oldStay.getRoom()).isEqualTo(newStay.getRoom());
         assertThat(oldStay.isNitrox()).isEqualTo(newStay.isNitrox());
         assertThat(oldStay.isMedicalStatement()).isEqualTo(newStay.isMedicalStatement());
-        assertThat(oldStay.getPreBoocking()).isEqualTo(newStay.getPreBoocking());
+        assertThat(oldStay.getPreBooking()).isEqualTo(newStay.getPreBooking());
     }
 }

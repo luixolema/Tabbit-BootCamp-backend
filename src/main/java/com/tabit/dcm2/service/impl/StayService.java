@@ -61,7 +61,7 @@ public class StayService implements IStayService {
         stay.setDivesAmount(stayDto.getStayDetails().getDivesAmount());
         stay.setNitrox(stayDto.getStayDetails().isNitrox());
         stay.setActive(stayDto.getStayDetails().isActive());
-        stay.setPreBoocking(stayDto.getStayDetails().getPreBoocking());
+        stay.setPreBooking(stayDto.getStayDetails().getPreBooking());
 
         return stay;
     }
