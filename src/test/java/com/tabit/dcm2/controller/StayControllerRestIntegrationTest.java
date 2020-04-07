@@ -45,7 +45,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
 
         // when
-        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.POST, entity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.PUT, entity, Void.class);
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
@@ -70,7 +70,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
 
         // when
-        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.POST, entity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.PUT, entity, Void.class);
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
@@ -94,7 +94,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
 
         // when
-        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.POST, entity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.PUT, entity, Void.class);
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
