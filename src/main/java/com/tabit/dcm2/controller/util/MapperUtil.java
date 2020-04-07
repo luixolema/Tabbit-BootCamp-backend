@@ -37,7 +37,7 @@ public class MapperUtil {
         stayDetails.setDivesAmount(stay.getDivesAmount());
         stayDetails.setNitrox(stay.isNitrox());
         stayDetails.setMedicalStatement(stay.isMedicalStatement());
-        stayDetails.setPreBoocking(stay.getPreBoocking());
+        stayDetails.setPreBooking(stay.getPreBooking());
 
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(guestPersonalDetails);

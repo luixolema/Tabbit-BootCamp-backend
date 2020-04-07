@@ -19,7 +19,7 @@ public class RandomStayDetailsDto {
         stayDetailsDto.setLeaveDate(valueProvider.randomLocalDate());
         stayDetailsDto.setMedicalStatement(valueProvider.randomBoolean());
         stayDetailsDto.setNitrox(valueProvider.randomBoolean());
-        stayDetailsDto.setPreBoocking(valueProvider.randomString("prebooking"));
+        stayDetailsDto.setPreBooking(valueProvider.randomString("prebooking"));
         stayDetailsDto.setRoom(valueProvider.randomString("room"));
 
         return stayDetailsDto;
