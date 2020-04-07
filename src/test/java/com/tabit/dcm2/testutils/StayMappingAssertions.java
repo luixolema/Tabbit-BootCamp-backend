@@ -33,4 +33,60 @@ public class StayMappingAssertions {
         assertThat(stayDto.getStayDetails().isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
         assertThat(stayDto.getStayDetails().getPreBoocking()).isEqualTo(stay.getPreBoocking());
     }
+
+    public static void assertTwoStaysWithGuest(Stay oldStay, Stay newStay) {
+        assertThat(oldStay.getId()).isEqualTo(newStay.getGuest().getId());
+        assertThat(oldStay.getFirstName() + "Update").isEqualTo(newStay.getFirstName());
+        assertThat(oldStay.getLastName()).isEqualTo(newStay.getLastName());
+        assertThat(oldStay.getBirthDate().minusDays(10)).isEqualTo(newStay.getBirthDate());
+        assertThat(oldStay.getCity()).isEqualTo(newStay.getCity());
+        assertThat(oldStay.getCountry()).isEqualTo(newStay.getCountry());
+        assertThat(oldStay.getEmail()).isEqualTo(newStay.getEmail());
+        assertThat(oldStay.getNationality()).isEqualTo(newStay.getNationality());
+        assertThat(oldStay.getPassportId()).isEqualTo(newStay.getPassportId());
+        assertThat(oldStay.getPhone()).isEqualTo(newStay.getPhone());
+        assertThat(oldStay.getPostcode()).isEqualTo(newStay.getPostcode());
+
+        assertThat(oldStay.getArriveDate()).isEqualTo(newStay.getArriveDate());
+        assertThat(oldStay.getBoxNumber()).isEqualTo(newStay.getBoxNumber());
+        assertThat(oldStay.getBrevet()).isEqualTo(newStay.getBrevet());
+        assertThat(oldStay.getCheckInDate()).isEqualTo(newStay.getCheckInDate());
+        assertThat(oldStay.getCheckOutDate()).isEqualTo(newStay.getCheckOutDate());
+        assertThat(oldStay.getLastDiveDate()).isEqualTo(newStay.getLastDiveDate());
+        assertThat(oldStay.getLeaveDate()).isEqualTo(newStay.getLeaveDate());
+        assertThat(oldStay.getDivesAmount()).isEqualTo(newStay.getDivesAmount());
+        assertThat(oldStay.getHotel() + "Update").isEqualTo(newStay.getHotel());
+        assertThat(oldStay.getRoom()).isEqualTo(newStay.getRoom());
+        assertThat(oldStay.isNitrox()).isEqualTo(newStay.isNitrox());
+        assertThat(oldStay.isMedicalStatement()).isEqualTo(newStay.isMedicalStatement());
+        assertThat(oldStay.getPreBoocking()).isEqualTo(newStay.getPreBoocking());
+    }
+
+    public static void assertTwoStaysWithoutGuest(Stay oldStay, Stay newStay) {
+        assertThat(oldStay.getId()).isEqualTo(newStay.getGuest().getId());
+        assertThat(oldStay.getFirstName()).isEqualTo(newStay.getFirstName());
+        assertThat(oldStay.getLastName()).isEqualTo(newStay.getLastName());
+        assertThat(oldStay.getBirthDate()).isEqualTo(newStay.getBirthDate());
+        assertThat(oldStay.getCity()).isEqualTo(newStay.getCity());
+        assertThat(oldStay.getCountry()).isEqualTo(newStay.getCountry());
+        assertThat(oldStay.getEmail()).isEqualTo(newStay.getEmail());
+        assertThat(oldStay.getNationality()).isEqualTo(newStay.getNationality());
+        assertThat(oldStay.getPassportId()).isEqualTo(newStay.getPassportId());
+        assertThat(oldStay.getPhone()).isEqualTo(newStay.getPhone());
+        assertThat(oldStay.getPostcode()).isEqualTo(newStay.getPostcode());
+
+        assertThat(oldStay.getArriveDate()).isEqualTo(newStay.getArriveDate());
+        assertThat(oldStay.getBoxNumber()).isEqualTo(newStay.getBoxNumber());
+        assertThat(oldStay.getBrevet()).isEqualTo(newStay.getBrevet());
+        assertThat(oldStay.getCheckInDate()).isEqualTo(newStay.getCheckInDate());
+        assertThat(oldStay.getCheckOutDate()).isEqualTo(newStay.getCheckOutDate());
+        assertThat(oldStay.getLastDiveDate()).isEqualTo(newStay.getLastDiveDate());
+        assertThat(oldStay.getLeaveDate()).isEqualTo(newStay.getLeaveDate());
+        assertThat(oldStay.getDivesAmount()).isEqualTo(newStay.getDivesAmount());
+        assertThat(oldStay.getHotel() + "Update").isEqualTo(newStay.getHotel());
+        assertThat(oldStay.getRoom()).isEqualTo(newStay.getRoom());
+        assertThat(oldStay.isNitrox()).isEqualTo(newStay.isNitrox());
+        assertThat(oldStay.isMedicalStatement()).isEqualTo(newStay.isMedicalStatement());
+        assertThat(oldStay.getPreBoocking()).isEqualTo(newStay.getPreBoocking());
+    }
 }

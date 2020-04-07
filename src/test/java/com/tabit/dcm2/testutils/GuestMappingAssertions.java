@@ -82,6 +82,21 @@ public class GuestMappingAssertions {
         }
     }
 
+    public static void assertTwoGuestsForUpdate(Guest oldGuest, Guest newGuest) {
+        assertThat(oldGuest.getId()).isEqualTo(newGuest.getId());
+        assertThat(oldGuest.getFirstName() + "Update").isEqualTo(newGuest.getFirstName());
+        assertThat(oldGuest.getLastName()).isEqualTo(newGuest.getLastName());
+        assertThat(oldGuest.getBirthDate().minusDays(10)).isEqualTo(newGuest.getBirthDate());
+        assertThat(oldGuest.getNationality()).isEqualTo(newGuest.getNationality());
+        assertThat(oldGuest.getCountry()).isEqualTo(newGuest.getCountry());
+        assertThat(oldGuest.getCity()).isEqualTo(newGuest.getCity());
+        assertThat(oldGuest.getPostcode()).isEqualTo(newGuest.getPostcode());
+        assertThat(oldGuest.getStreet()).isEqualTo(newGuest.getStreet());
+        assertThat(oldGuest.getEmail()).isEqualTo(newGuest.getEmail());
+        assertThat(oldGuest.getPhone()).isEqualTo(newGuest.getPhone());
+        assertThat(oldGuest.getPassportId()).isEqualTo(newGuest.getPassportId());
+    }
+
     private static List<Stay> sortStayByCheckInDate(Guest guest) {
         List<Stay> sortedStays = Lists.newArrayList(guest.getStays());
         sortedStays.sort(comparing(Stay::getCheckInDate).reversed());

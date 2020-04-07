@@ -18,7 +18,7 @@ public class StayController {
         return MapperUtil.mapStayToStayDto(stayService.findById(stayId));
     }
 
-    @PostMapping
+    @PutMapping
     public void updateStay(@RequestBody StayDto stayDto) {
         stayService.updateStay(stayDto);
     }

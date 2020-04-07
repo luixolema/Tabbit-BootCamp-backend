@@ -34,4 +34,23 @@ public class RandomGuest {
 
         return guest;
     }
+
+    public static Guest createSpecificGuestForStay(Stay stay) {
+        Guest guest = new Guest();
+        guest.setId(stay.getGuest().getId());
+        guest.setFirstName(stay.getFirstName());
+        guest.setLastName(stay.getLastName());
+        guest.setBirthDate(stay.getBirthDate());
+        guest.setCity(stay.getCity());
+        guest.setCountry(stay.getCountry());
+        guest.setEmail(stay.getEmail());
+        guest.setNationality(stay.getNationality());
+        guest.setPassportId(stay.getPassportId());
+        guest.setPhone(stay.getPhone());
+        guest.setStreet(stay.getStreet());
+        guest.setPostcode(stay.getPostcode());
+        guest.addStays(ImmutableList.of(stay));
+
+        return guest;
+    }
 }
