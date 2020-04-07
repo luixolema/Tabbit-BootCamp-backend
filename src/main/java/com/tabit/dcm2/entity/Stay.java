@@ -92,8 +92,8 @@ public class Stay implements IEntity {
     @Column(name = "active", nullable = false)
     private boolean active;
 
-    @Column(name = "pre_boocking", nullable = true)
-    private String preBoocking;
+    @Column(name = "pre_booking", nullable = true)
+    private String preBooking;
 
     @Override
     public Long getId() {
@@ -304,11 +304,11 @@ public class Stay implements IEntity {
         this.active = active;
     }
 
-    public String getPreBoocking() {
-        return preBoocking;
+    public String getPreBooking() {
+        return preBooking;
     }
 
-    public void setPreBoocking(String preBoocking) {
-        this.preBoocking = preBoocking;
+    public void setPreBooking(String preBooking) {
+        this.preBooking = preBooking;
     }
 }
