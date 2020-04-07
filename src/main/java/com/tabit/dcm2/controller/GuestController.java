@@ -69,8 +69,8 @@ public class GuestController {
         return resultGuestDetailDto;
     }
 
-    @PutMapping("/{guestId}")
+    @PutMapping
     public void updateGuest(@RequestBody GuestPersonalDetailsDto personalDetailsDto) {
-        this.guestService.update(personalDetailsDto);
+        this.guestService.updatePersonalDetails(personalDetailsDto);
     }
 }

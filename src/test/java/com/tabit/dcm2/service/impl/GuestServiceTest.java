@@ -5,8 +5,13 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.service.GuestFilterType;
+import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
+import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -15,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -23,6 +29,9 @@ public class GuestServiceTest {
     private IGuestRepo guestRepo;
     @InjectMocks
     private GuestService guestService;
+
+    @Captor
+    private ArgumentCaptor<Guest> guestArgumentCaptor;
 
     @Test
     public void getGuests_shall_return_all_guests() {
@@ -75,5 +84,24 @@ public class GuestServiceTest {
 
         // then
         assertThat(guest).isEqualTo(randomGuest);
+    }
+
+    @Test
+    public void updatePersonalDetails_shall_update_guest() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
+        guestPersonalDetailsDto.setId(randomGuest.getId());
+
+        when(guestRepo.findById(randomGuest.getId())).thenReturn(Optional.of(randomGuest));
+
+        // when
+        guestService.updatePersonalDetails(guestPersonalDetailsDto);
+
+        // then
+        verify(guestRepo).save(guestArgumentCaptor.capture());
+        Guest expectedGuest = guestArgumentCaptor.getValue();
+
+        GuestMappingAssertions.assertGuestPersonalDetails(guestPersonalDetailsDto, expectedGuest);
     }
 }

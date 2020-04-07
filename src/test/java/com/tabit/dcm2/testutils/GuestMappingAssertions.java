@@ -2,10 +2,7 @@ package com.tabit.dcm2.testutils;
 
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
-import com.tabit.dcm2.service.dto.GuestDetailDto;
-import com.tabit.dcm2.service.dto.GuestDto;
-import com.tabit.dcm2.service.dto.StayDto;
-import com.tabit.dcm2.service.dto.StaySummaryDto;
+import com.tabit.dcm2.service.dto.*;
 import org.assertj.core.util.Lists;
 
 import java.util.List;
@@ -104,6 +101,20 @@ public class GuestMappingAssertions {
                 assertThat(staySummaryDto.isActive()).isEqualTo(stay.isActive());
             }
         }
+    }
+
+    public static void assertGuestPersonalDetails(GuestPersonalDetailsDto guestPersonalDetailsDto, Guest guest) {
+        assertThat(guest.getFirstName()).isEqualTo(guestPersonalDetailsDto.getFirstName());
+        assertThat(guest.getLastName()).isEqualTo(guestPersonalDetailsDto.getLastName());
+        assertThat(guest.getBirthDate()).isEqualTo(guestPersonalDetailsDto.getBirthDate());
+        assertThat(guest.getEmail()).isEqualTo(guestPersonalDetailsDto.getEmail());
+        assertThat(guest.getNationality()).isEqualTo(guestPersonalDetailsDto.getNationality());
+        assertThat(guest.getCity()).isEqualTo(guestPersonalDetailsDto.getCity());
+        assertThat(guest.getPassportId()).isEqualTo(guestPersonalDetailsDto.getPassportId());
+        assertThat(guest.getPhone()).isEqualTo(guestPersonalDetailsDto.getPhone());
+        assertThat(guest.getCountry()).isEqualTo(guestPersonalDetailsDto.getCountry());
+        assertThat(guest.getPostcode()).isEqualTo(guestPersonalDetailsDto.getPostcode());
+        assertThat(guest.getStreet()).isEqualTo(guestPersonalDetailsDto.getStreet());
     }
 
     public enum GuestDetailType {

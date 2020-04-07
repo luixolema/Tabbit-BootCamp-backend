@@ -9,5 +9,5 @@ public interface IGuestService {
     List<Guest> getAllGuests(GuestFilterType guestFilterType);
     Guest getGuestById(Long guestId);
 
-    void update(GuestPersonalDetailsDto personalDetailsDto);
+    void updatePersonalDetails(GuestPersonalDetailsDto personalDetailsDto);
 }

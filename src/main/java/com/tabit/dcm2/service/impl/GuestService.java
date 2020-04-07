@@ -16,6 +16,9 @@ public class GuestService implements IGuestService {
     @Autowired
     private IGuestRepo guestRepo;
 
+    @Autowired
+    private StayService stayService;
+
     @Override
     public List<Guest> getAllGuests(GuestFilterType guestFilterType) {
         return guestFilterType == GuestFilterType.ALL ? guestRepo.findAll() : guestRepo.findByCheckedin(guestFilterType == GuestFilterType.CHECKED_IN);
@@ -27,9 +30,25 @@ public class GuestService implements IGuestService {
     }
 
     @Override
-    public void update(GuestPersonalDetailsDto personalDetailsDto) {
-        Guest guestInDb = getGuestById(personalDetailsDto.getId());
-        // update the properties according to personalDetailsDTO
-        guestRepo.save(guestInDb);
+    public void updatePersonalDetails(GuestPersonalDetailsDto guestPersonalDetailsDto) {
+        Guest guest = getGuestById(guestPersonalDetailsDto.getId());
+        guestPersonalDetailsDtoToGuestMapping(guestPersonalDetailsDto, guest);
+        guestRepo.save(guest);
+    }
+
+    private Guest guestPersonalDetailsDtoToGuestMapping(GuestPersonalDetailsDto guestPersonalDetailsDto, Guest guestInDb) {
+        guestInDb.setFirstName(guestPersonalDetailsDto.getFirstName());
+        guestInDb.setLastName(guestPersonalDetailsDto.getLastName());
+        guestInDb.setBirthDate(guestPersonalDetailsDto.getBirthDate());
+        guestInDb.setEmail(guestPersonalDetailsDto.getEmail());
+        guestInDb.setNationality(guestPersonalDetailsDto.getNationality());
+        guestInDb.setCity(guestPersonalDetailsDto.getCity());
+        guestInDb.setPassportId(guestPersonalDetailsDto.getPassportId());
+        guestInDb.setPhone(guestPersonalDetailsDto.getPhone());
+        guestInDb.setCountry(guestPersonalDetailsDto.getCountry());
+        guestInDb.setPostcode(guestPersonalDetailsDto.getPostcode());
+        guestInDb.setStreet(guestPersonalDetailsDto.getStreet());
+
+        return guestInDb;
     }
 }
