@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
+@RequestMapping("/api/guests")
 public class GuestController {
     private static final Function<Guest, GuestDto> GUEST_TO_GUEST_DTO = guest -> {
         GuestDto guestDto = new GuestDto();
@@ -34,7 +35,7 @@ public class GuestController {
     @Autowired
     private IGuestService guestService;
 
-    @RequestMapping(path = "/api/guests")
+    @GetMapping
     public GuestOverviewDto getGuests(@RequestParam(required = false, defaultValue = "2") int checkedIn) {
         GuestFilterType guestFilterType;
         switch (checkedIn) {
@@ -52,8 +53,8 @@ public class GuestController {
         return new GuestOverviewDto(guests.stream().map(GUEST_TO_GUEST_DTO).collect(Collectors.toList()));
     }
 
-    @RequestMapping(path = "/api/guests/{guestId}")
-    public GuestDetailDto getGuestDetails(@PathVariable() long guestId) {
+    @GetMapping("/{guestId}")
+    public GuestDetailDto getGuestDetails(@PathVariable long guestId) {
         GuestDetailDto resultGuestDetailDto = new GuestDetailDto();
 
         Guest guest = guestService.getGuestById(guestId);
@@ -68,7 +69,8 @@ public class GuestController {
         return resultGuestDetailDto;
     }
 
-    @PostMapping(path = "/api/guests")
+    @PutMapping("/{guestId}")
     public void updateGuest(@RequestBody GuestPersonalDetailsDto personalDetailsDto) {
+        this.guestService.update(personalDetailsDto);
     }
 }
