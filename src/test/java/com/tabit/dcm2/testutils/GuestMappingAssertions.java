@@ -19,7 +19,7 @@ public class GuestMappingAssertions {
     public static void assertGuestDto(GuestDto expectedGuestDto, Guest guest, boolean expectBoxNumber) {
         assertThat(expectedGuestDto.getId()).isEqualTo(guest.getId());
         if (expectBoxNumber) {
-            List<Stay> sortedStays = sortStayByCheckInDate(guest);
+            List<Stay> sortedStays = sortStayByArriveDate(guest);
             assertThat(expectedGuestDto.getBoxNumber()).isEqualTo(sortedStays.get(0).getBoxNumber());
         } else {
             assertThat(expectedGuestDto.getBoxNumber()).isNull();
@@ -31,7 +31,7 @@ public class GuestMappingAssertions {
     public static void assertGuestDetailDto(GuestDetailDto expectedGuestDetailDto, Guest guest, GuestDetailType guestDetailType) {
         StayDto stayDto = expectedGuestDetailDto.getStayDto();
         List<StaySummaryDto> staySummary = expectedGuestDetailDto.getStaySummaries();
-        List<Stay> sortedStays = sortStayByCheckInDate(guest);
+        List<Stay> sortedStays = sortStayByArriveDate(guest);
 
         if (guestDetailType == WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY) {
             Stay stay = sortedStays.get(0);
@@ -82,9 +82,9 @@ public class GuestMappingAssertions {
         }
     }
 
-    private static List<Stay> sortStayByCheckInDate(Guest guest) {
+    private static List<Stay> sortStayByArriveDate(Guest guest) {
         List<Stay> sortedStays = Lists.newArrayList(guest.getStays());
-        sortedStays.sort(comparing(Stay::getCheckInDate).reversed());
+        sortedStays.sort(comparing(Stay::getArriveDate).reversed());
         return sortedStays;
     }
 

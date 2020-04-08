@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.tabit.dcm2.testutils.StayMappingAssertions.assertStayDto;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class StayControllerIntegrationTest extends AbstractDbTest {
     @Autowired
@@ -24,6 +25,7 @@ public class StayControllerIntegrationTest extends AbstractDbTest {
         // given
         stay = RandomStay.createRandomStayWithoutId();
         Guest guest = RandomGuest.createRandomGuestWitoutId();
+        guest.setCheckedin(true);
         guest.addStays(ImmutableList.of(stay));
 
         guestRule.persist(ImmutableList.of(guest));
@@ -36,5 +38,18 @@ public class StayControllerIntegrationTest extends AbstractDbTest {
 
         // then
         assertStayDto(stayDto, stay);
+    }
+
+    @Test
+    public void updateStay_shall_update_checked_in_guest() {
+        StayDto oldStayDto = stayController.getStay(stay.getId());
+        oldStayDto.getGuestPersonalDetails().setFirstName("newFirstName");
+        oldStayDto.getStayDetails().setBoxNumber("newBoxNumber");
+
+        stayController.updateStay(oldStayDto);
+        StayDto updatedStayDto = stayController.getStay(stay.getId());
+
+        assertThat(oldStayDto.getGuestPersonalDetails().getFirstName()).isEqualTo(updatedStayDto.getGuestPersonalDetails().getFirstName());
+        assertThat(oldStayDto.getStayDetails().getBoxNumber()).isEqualTo(updatedStayDto.getStayDetails().getBoxNumber());
     }
 }

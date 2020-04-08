@@ -23,4 +23,9 @@ public class GuestService implements IGuestService {
     public Guest getGuestById(Long guestId) {
         return guestRepo.findById(guestId).get();
     }
+
+    @Override
+    public void updateGuest(Guest guest) {
+        guestRepo.saveAndFlush(guest);
+    }
 }

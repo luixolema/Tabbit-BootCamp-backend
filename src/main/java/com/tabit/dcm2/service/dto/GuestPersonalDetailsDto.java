@@ -1,5 +1,6 @@
 package com.tabit.dcm2.service.dto;
 
+
 import java.time.LocalDate;
 
 public class GuestPersonalDetailsDto {
