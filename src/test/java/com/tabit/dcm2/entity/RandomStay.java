@@ -38,7 +38,7 @@ public class RandomStay {
         stay.setDivesAmount(valueProvider.randomInt());
         stay.setNitrox(valueProvider.randomBoolean());
         stay.setMedicalStatement(valueProvider.randomBoolean());
-        stay.setPreBoocking(valueProvider.randomString("pre-boocking"));
+        stay.setPreBooking(valueProvider.randomString("pre-booking"));
 
         return stay;
     }

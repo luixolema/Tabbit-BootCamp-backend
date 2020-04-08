@@ -46,7 +46,7 @@ DROP TABLE IF EXISTS `id_gen`;
       `nitrox` tinyint(1) NOT NULL,
       `medical_statement` tinyint(1) NOT NULL,
       `active` tinyint(1) NOT NULL,
-      `pre_boocking` varchar(400),
+      `pre_booking` varchar(400),
       FOREIGN KEY (`guest_id`) REFERENCES guest(`id`),
       PRIMARY KEY (`id`)
     );
