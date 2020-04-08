@@ -4,7 +4,7 @@ import com.tabit.dcm2.entity.Activity;
 
 import java.time.LocalDate;
 
-public class ActivityDTO {
+public class ActivityDto {
     private Long id;
 
     private String pos;

@@ -1,14 +1,9 @@
 package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.RandomStay;
-import com.tabit.dcm2.entity.Stay;
-import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
-import com.tabit.dcm2.service.dto.RandomStayDto;
-import com.tabit.dcm2.service.dto.StayDetailsDto;
-import com.tabit.dcm2.service.dto.StayDto;
+import com.tabit.dcm2.entity.*;
+import com.tabit.dcm2.service.dto.*;
+import com.tabit.dcm2.testutils.BillMappingAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,5 +98,37 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         // FIXME DCM2-71
         // assertThat only the updated fields in the stay have changed and all the other remains the same
         // if guestpersoneldetails changes also the guest has to be updated because this is the actual stay so there must be the same information as in the guest
+    }
+
+    @Test
+    public void getBill_shall_return_billDto() {
+        // given
+        Stay randomStay = RandomStay.createRandomStayWithoutId();
+        randomStay.setGuest(guest);
+
+        // add some mocked activities to test the total (latter)
+
+        this.stayRule.persist(ImmutableList.of(randomStay));
+        Bill bill = RandomBill.createRandomBillWithoutId();
+        bill.setStay(randomStay);
+        this.billRule.persist(ImmutableList.of(bill));
+
+
+        // when
+        ResponseEntity<BillDto> responseEntity = restTemplate.getForEntity(getBaseUrl() + "/api/stay/" + randomStay.getId() + "/bill", BillDto.class);
+
+        // then
+        assertThat(responseEntity.getBody()).isNotNull();
+        assertThat(responseEntity.getStatusCode().toString()).isEqualTo(HttpStatus.OK.toString());
+        BillMappingAssertions.assertBillDto(responseEntity.getBody(), bill);
+    }
+
+    @Test
+    public void getBill_shall_throw_respond_404_when_not_resource_found() {
+        // when
+        ResponseEntity<BillDto> responseEntity = restTemplate.getForEntity(getBaseUrl() + "/api/stay/-1/bill", BillDto.class);
+
+        // then
+        assertThat(responseEntity.getStatusCode().toString()).isEqualTo(HttpStatus.NOT_FOUND.toString());
     }
 }

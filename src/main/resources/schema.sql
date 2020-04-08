@@ -1,8 +1,8 @@
-DROP TABLE IF EXISTS `stay`;
-DROP TABLE IF EXISTS `guest`;
-DROP TABLE IF EXISTS `id_gen`;
+drop table IF EXISTS `stay`;
+drop table IF EXISTS `guest`;
+drop table IF EXISTS `id_gen`;
 
-  CREATE TABLE `guest` (
+  create TABLE `guest` (
     `id` bigint(20) NOT NULL,
     `first_name` varchar(100) NOT NULL,
     `last_name` varchar(100) NOT NULL,
@@ -19,7 +19,7 @@ DROP TABLE IF EXISTS `id_gen`;
     PRIMARY KEY (`id`)
   );
 
-  CREATE TABLE `stay` (
+  create TABLE `stay` (
       `id` bigint(20) NOT NULL,
       `guest_id` bigint(20) NOT NULL,
       `first_name` varchar(100) NOT NULL,
@@ -51,8 +51,27 @@ DROP TABLE IF EXISTS `id_gen`;
       PRIMARY KEY (`id`)
     );
 
-  CREATE TABLE `id_gen`(
+  create TABLE `id_gen`(
     `id_value` INTEGER NOT NULL,
     `id_name` VARCHAR(24) NOT NULL,
     PRIMARY KEY(`id_name`)
+  );
+
+  create TABLE `bill`(
+    `id` bigint(20) NOT NULL,
+    `code` VARCHAR(24) NOT NULL,
+    `stay_id` bigint(20) NOT NULL,
+    FOREIGN KEY (`stay_id`) REFERENCES stay(`id`),
+    PRIMARY KEY(`id`)
+  );
+
+  create TABLE `activity`(
+    `id` bigint(20) NOT NULL,
+    `pos` VARCHAR(24) NOT NULL,
+    `type` VARCHAR(24) NOT NULL,
+    `date` DATE NOT NULL,
+    `price` Numeric NOT NULL,
+    `stay_id` bigint(20) NOT NULL,
+    FOREIGN KEY (`stay_id`) REFERENCES stay(`id`),
+    PRIMARY KEY(`id`)
   );

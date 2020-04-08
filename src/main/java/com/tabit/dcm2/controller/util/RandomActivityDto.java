@@ -2,7 +2,7 @@ package com.tabit.dcm2.controller.util;
 
 import com.google.common.base.Joiner;
 import com.tabit.dcm2.entity.Activity;
-import com.tabit.dcm2.service.dto.ActivityDTO;
+import com.tabit.dcm2.service.dto.ActivityDto;
 
 import java.time.LocalDate;
 import java.util.Random;
@@ -10,10 +10,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 class RandomActivityDto {
 
-    static ActivityDTO createRandomActivityDTO() {
+    static ActivityDto createRandomActivityDTO() {
         Random random = new Random();
 
-        ActivityDTO activityDTO = new ActivityDTO();
+        ActivityDto activityDTO = new ActivityDto();
         activityDTO.setId((long) random.nextInt());
         activityDTO.setDate(randomLocalDate());
         activityDTO.setPos(randomString("base"));
