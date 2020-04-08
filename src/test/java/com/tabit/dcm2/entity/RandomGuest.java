@@ -35,9 +35,8 @@ public class RandomGuest {
         return guest;
     }
 
-    public static Guest createSpecificGuestForStay(Stay stay) {
+    public static Guest createGuestFromStayWithoutId(Stay stay) {
         Guest guest = new Guest();
-        guest.setId(stay.getGuest().getId());
         guest.setFirstName(stay.getFirstName());
         guest.setLastName(stay.getLastName());
         guest.setBirthDate(stay.getBirthDate());

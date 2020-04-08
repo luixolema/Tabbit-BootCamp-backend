@@ -19,7 +19,7 @@ public class GuestMappingAssertions {
     public static void assertGuestDto(GuestDto expectedGuestDto, Guest guest, boolean expectBoxNumber) {
         assertThat(expectedGuestDto.getId()).isEqualTo(guest.getId());
         if (expectBoxNumber) {
-            List<Stay> sortedStays = sortStayByCheckInDate(guest);
+            List<Stay> sortedStays = sortStayByArriveDate(guest);
             assertThat(expectedGuestDto.getBoxNumber()).isEqualTo(sortedStays.get(0).getBoxNumber());
         } else {
             assertThat(expectedGuestDto.getBoxNumber()).isNull();
@@ -31,7 +31,7 @@ public class GuestMappingAssertions {
     public static void assertGuestDetailDto(GuestDetailDto expectedGuestDetailDto, Guest guest, GuestDetailType guestDetailType) {
         StayDto stayDto = expectedGuestDetailDto.getStayDto();
         List<StaySummaryDto> staySummary = expectedGuestDetailDto.getStaySummaries();
-        List<Stay> sortedStays = sortStayByCheckInDate(guest);
+        List<Stay> sortedStays = sortStayByArriveDate(guest);
 
         if (guestDetailType == WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY) {
             Stay stay = sortedStays.get(0);
@@ -82,24 +82,9 @@ public class GuestMappingAssertions {
         }
     }
 
-    public static void assertTwoGuestsForUpdate(Guest oldGuest, Guest newGuest) {
-        assertThat(oldGuest.getId()).isEqualTo(newGuest.getId());
-        assertThat(oldGuest.getFirstName() + "Update").isEqualTo(newGuest.getFirstName());
-        assertThat(oldGuest.getLastName()).isEqualTo(newGuest.getLastName());
-        assertThat(oldGuest.getBirthDate().minusDays(10)).isEqualTo(newGuest.getBirthDate());
-        assertThat(oldGuest.getNationality()).isEqualTo(newGuest.getNationality());
-        assertThat(oldGuest.getCountry()).isEqualTo(newGuest.getCountry());
-        assertThat(oldGuest.getCity()).isEqualTo(newGuest.getCity());
-        assertThat(oldGuest.getPostcode()).isEqualTo(newGuest.getPostcode());
-        assertThat(oldGuest.getStreet()).isEqualTo(newGuest.getStreet());
-        assertThat(oldGuest.getEmail()).isEqualTo(newGuest.getEmail());
-        assertThat(oldGuest.getPhone()).isEqualTo(newGuest.getPhone());
-        assertThat(oldGuest.getPassportId()).isEqualTo(newGuest.getPassportId());
-    }
-
-    private static List<Stay> sortStayByCheckInDate(Guest guest) {
+    private static List<Stay> sortStayByArriveDate(Guest guest) {
         List<Stay> sortedStays = Lists.newArrayList(guest.getStays());
-        sortedStays.sort(comparing(Stay::getCheckInDate).reversed());
+        sortedStays.sort(comparing(Stay::getArriveDate).reversed());
         return sortedStays;
     }
 

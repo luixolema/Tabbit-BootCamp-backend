@@ -19,9 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StayServiceTest {
@@ -60,37 +58,39 @@ public class StayServiceTest {
     }
 
     @Test
-    public void updateStay_shall_call_only_save_stay() {
+    public void updateStay_shall_only_update_stay_if_personeldetails_dont_changed() {
         // given
         StayDto randomStayDto = RandomStayDto.createRandomStayDto();
         Stay randomStay = RandomStay.createRandomStay();
-        Guest randomGuest = getGuestFromStayDto(randomStayDto);
+        Guest guestWithNoChanges = getGuestFromStayDto(randomStayDto);
+        randomStay.setGuest(guestWithNoChanges);
+
+        when(stayRepo.findById(randomStayDto.getStayDetails().getId())).thenReturn(Optional.of(randomStay));
 
         // when
-        when(stayRepo.findById(randomStayDto.getStayDetails().getId())).thenReturn(Optional.of(randomStay));
-        when(guestRepo.findById(randomStayDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(randomGuest));
         stayService.updateStay(randomStayDto);
 
         // then
         verify(stayRepo).save(randomStay);
-        verify(guestRepo, times(0)).save(randomGuest);
+        verify(guestRepo, times(0)).save(guestWithNoChanges);
     }
 
     @Test
-    public void updateStay_shall_call_save_stay_and_guest() {
+    public void updateStay_shall_update_stay_and_guest_if_personeldetails_changed() {
         // given
         StayDto randomStayDto = RandomStayDto.createRandomStayDto();
         Stay randomStay = RandomStay.createRandomStay();
-        Guest randomGuest = RandomGuest.createRandomGuest();
+        Guest guestWithChanges = RandomGuest.createRandomGuest();
+        randomStay.setGuest(guestWithChanges);
+
+        when(stayRepo.findById(randomStayDto.getStayDetails().getId())).thenReturn(Optional.of(randomStay));
 
         // when
-        when(stayRepo.findById(randomStayDto.getStayDetails().getId())).thenReturn(Optional.of(randomStay));
-        when(guestRepo.findById(randomStayDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(randomGuest));
         stayService.updateStay(randomStayDto);
 
         // then
         verify(stayRepo).save(randomStay);
-        verify(guestRepo).save(randomGuest);
+        verify(guestRepo).save(guestWithChanges);
     }
 
     private Guest getGuestFromStayDto(StayDto stayDto) {

@@ -10,7 +10,7 @@ public class RandomStayDto {
         return stayDto;
     }
 
-    public static StayDto createStayDtoFromGuest(Stay stay) {
+    public static StayDto createStayDtoFromStay(Stay stay) {
         GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto();
         guestPersonalDetails.setId(stay.getGuest().getId());
         guestPersonalDetails.setFirstName(stay.getFirstName());

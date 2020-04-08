@@ -2,7 +2,6 @@ package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.repository.IGuestRepo;
@@ -17,9 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.assertTwoGuestsForUpdate;
-import static com.tabit.dcm2.testutils.StayMappingAssertions.assertTwoStaysWithGuest;
-import static com.tabit.dcm2.testutils.StayMappingAssertions.assertTwoStaysWithoutGuest;
+import static com.tabit.dcm2.entity.RandomGuest.createGuestFromStayWithoutId;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -38,7 +35,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     @Before
     public void setUp() {
         stay = RandomStay.createRandomStayWithoutId();
-        guest = RandomGuest.createRandomGuestWitoutId();
+        guest = createGuestFromStayWithoutId(stay);
         guest.addStays(ImmutableList.of(stay));
 
         guestRule.persist(ImmutableList.of(guest));
@@ -64,8 +61,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     @Test
     public void updateStay_shall_update_data_when_guestDetails_is_also_updated() {
         // given
-        Guest specificGuest = RandomGuest.createSpecificGuestForStay(stay);
-        StayDto stayDto = RandomStayDto.createStayDtoFromGuest(stay);
+        StayDto stayDto = RandomStayDto.createStayDtoFromStay(stay);
         stayDto.getGuestPersonalDetails().setFirstName(stay.getFirstName() + "Update");
         stayDto.getGuestPersonalDetails().setBirthDate(stay.getBirthDate().minusDays(10));
         stayDto.getStayDetails().setHotel(stay.getHotel() + "Update");
@@ -80,14 +76,53 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
         assertThat(response.getBody()).isNull();
-        assertTwoGuestsForUpdate(specificGuest, newGuest);
-        assertTwoStaysWithGuest(stay, newStay);
+
+        assertThat(newStay.getFirstName()).isNotEqualTo(stay.getFirstName()).isEqualTo(stayDto.getGuestPersonalDetails().getFirstName());
+        assertThat(newStay.getBirthDate()).isNotEqualTo(stay.getBirthDate()).isEqualTo(stayDto.getGuestPersonalDetails().getBirthDate());
+        assertThat(newStay.getHotel()).isNotEqualTo(stay.getHotel()).isEqualTo(stayDto.getStayDetails().getHotel());
+
+        assertThat(newStay.getId()).isEqualTo(stay.getId());
+        assertThat(newStay.getGuest().getId()).isEqualTo(stay.getGuest().getId());
+        assertThat(newStay.getLastName()).isEqualTo(stay.getLastName());
+        assertThat(newStay.getCity()).isEqualTo(stay.getCity());
+        assertThat(newStay.getCountry()).isEqualTo(stay.getCountry());
+        assertThat(newStay.getEmail()).isEqualTo(stay.getEmail());
+        assertThat(newStay.getNationality()).isEqualTo(stay.getNationality());
+        assertThat(newStay.getPassportId()).isEqualTo(stay.getPassportId());
+        assertThat(newStay.getPhone()).isEqualTo(stay.getPhone());
+        assertThat(newStay.getPostcode()).isEqualTo(stay.getPostcode());
+        assertThat(newStay.getArriveDate()).isEqualTo(stay.getArriveDate());
+        assertThat(newStay.getBoxNumber()).isEqualTo(stay.getBoxNumber());
+        assertThat(newStay.getBrevet()).isEqualTo(stay.getBrevet());
+        assertThat(newStay.getCheckInDate()).isEqualTo(stay.getCheckInDate());
+        assertThat(newStay.getCheckOutDate()).isEqualTo(stay.getCheckOutDate());
+        assertThat(newStay.getLastDiveDate()).isEqualTo(stay.getLastDiveDate());
+        assertThat(newStay.getLeaveDate()).isEqualTo(stay.getLeaveDate());
+        assertThat(newStay.getDivesAmount()).isEqualTo(stay.getDivesAmount());
+        assertThat(newStay.getRoom()).isEqualTo(stay.getRoom());
+        assertThat(newStay.isNitrox()).isEqualTo(stay.isNitrox());
+        assertThat(newStay.isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
+        assertThat(newStay.getPreBooking()).isEqualTo(stay.getPreBooking());
+
+        assertThat(newGuest.getFirstName()).isNotEqualTo(guest.getFirstName()).isEqualTo(stayDto.getGuestPersonalDetails().getFirstName());
+        assertThat(newGuest.getBirthDate()).isNotEqualTo(guest.getBirthDate()).isEqualTo(stayDto.getGuestPersonalDetails().getBirthDate());
+
+        assertThat(newGuest.getId()).isEqualTo(guest.getId());
+        assertThat(newGuest.getLastName()).isEqualTo(guest.getLastName());
+        assertThat(newGuest.getNationality()).isEqualTo(guest.getNationality());
+        assertThat(newGuest.getCountry()).isEqualTo(guest.getCountry());
+        assertThat(newGuest.getCity()).isEqualTo(guest.getCity());
+        assertThat(newGuest.getPostcode()).isEqualTo(guest.getPostcode());
+        assertThat(newGuest.getStreet()).isEqualTo(guest.getStreet());
+        assertThat(newGuest.getEmail()).isEqualTo(guest.getEmail());
+        assertThat(newGuest.getPhone()).isEqualTo(guest.getPhone());
+        assertThat(newGuest.getPassportId()).isEqualTo(guest.getPassportId());
     }
 
     @Test
     public void updateStay_shall_update_data_when_no_guestDetails_is_updated() {
         // given
-        StayDto stayDto = RandomStayDto.createStayDtoFromGuest(stay);
+        StayDto stayDto = RandomStayDto.createStayDtoFromStay(stay);
         stayDto.getStayDetails().setHotel(stay.getHotel() + "Update");
 
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
@@ -99,6 +134,48 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
         assertThat(response.getBody()).isNull();
-        assertTwoStaysWithoutGuest(stay, newStay);
+
+        assertThat(newStay.getHotel()).isNotEqualTo(stay.getHotel()).isEqualTo(stayDto.getStayDetails().getHotel());
+
+        assertThat(newStay.getId()).isEqualTo(stay.getId());
+        assertThat(newStay.getGuest().getId()).isEqualTo(stay.getGuest().getId());
+        assertThat(newStay.getFirstName()).isEqualTo(stay.getFirstName());
+        assertThat(newStay.getLastName()).isEqualTo(stay.getLastName());
+        assertThat(newStay.getBirthDate()).isEqualTo(stay.getBirthDate());
+        assertThat(newStay.getCity()).isEqualTo(stay.getCity());
+        assertThat(newStay.getCountry()).isEqualTo(stay.getCountry());
+        assertThat(newStay.getEmail()).isEqualTo(stay.getEmail());
+        assertThat(newStay.getNationality()).isEqualTo(stay.getNationality());
+        assertThat(newStay.getPassportId()).isEqualTo(stay.getPassportId());
+        assertThat(newStay.getPhone()).isEqualTo(stay.getPhone());
+        assertThat(newStay.getPostcode()).isEqualTo(stay.getPostcode());
+        assertThat(newStay.getArriveDate()).isEqualTo(stay.getArriveDate());
+        assertThat(newStay.getBoxNumber()).isEqualTo(stay.getBoxNumber());
+        assertThat(newStay.getBrevet()).isEqualTo(stay.getBrevet());
+        assertThat(newStay.getCheckInDate()).isEqualTo(stay.getCheckInDate());
+        assertThat(newStay.getCheckOutDate()).isEqualTo(stay.getCheckOutDate());
+        assertThat(newStay.getLastDiveDate()).isEqualTo(stay.getLastDiveDate());
+        assertThat(newStay.getLeaveDate()).isEqualTo(stay.getLeaveDate());
+        assertThat(newStay.getDivesAmount()).isEqualTo(stay.getDivesAmount());
+        assertThat(newStay.getRoom()).isEqualTo(stay.getRoom());
+        assertThat(newStay.isNitrox()).isEqualTo(stay.isNitrox());
+        assertThat(newStay.isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
+        assertThat(newStay.getPreBooking()).isEqualTo(stay.getPreBooking());
+
+        Guest sameGuest = newStay.getGuest();
+
+
+        assertThat(sameGuest.getId()).isEqualTo(guest.getId());
+        assertThat(sameGuest.getFirstName()).isEqualTo(guest.getFirstName());
+        assertThat(sameGuest.getLastName()).isEqualTo(guest.getLastName());
+        assertThat(sameGuest.getBirthDate()).isEqualTo(guest.getBirthDate());
+        assertThat(sameGuest.getNationality()).isEqualTo(guest.getNationality());
+        assertThat(sameGuest.getCountry()).isEqualTo(guest.getCountry());
+        assertThat(sameGuest.getCity()).isEqualTo(guest.getCity());
+        assertThat(sameGuest.getPostcode()).isEqualTo(guest.getPostcode());
+        assertThat(sameGuest.getStreet()).isEqualTo(guest.getStreet());
+        assertThat(sameGuest.getEmail()).isEqualTo(guest.getEmail());
+        assertThat(sameGuest.getPhone()).isEqualTo(guest.getPhone());
+        assertThat(sameGuest.getPassportId()).isEqualTo(guest.getPassportId());
     }
 }

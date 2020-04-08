@@ -29,15 +29,15 @@ public class StayService implements IStayService {
     @Override
     public void updateStay(StayDto stayDto) {
         Stay stay = findById(stayDto.getStayDetails().getId());
-        stayRepo.save(setStay(stay, stayDto));
+        stayRepo.save(updateStay(stay, stayDto));
 
-        Guest guest = guestRepo.findById(stayDto.getGuestPersonalDetails().getId()).get();
+        Guest guest = stay.getGuest();
         if (isPersonalDetailsChanged(guest, stayDto)) {
-            guestRepo.save(setGuest(guest, stayDto));
+            guestRepo.save(updateGuest(guest, stayDto));
         }
     }
 
-    private Stay setStay(Stay stay, StayDto stayDto) {
+    private Stay updateStay(Stay stay, StayDto stayDto) {
         stay.setFirstName(stayDto.getGuestPersonalDetails().getFirstName());
         stay.setLastName(stayDto.getGuestPersonalDetails().getLastName());
         stay.setBoxNumber(stayDto.getStayDetails().getBoxNumber());
@@ -80,7 +80,7 @@ public class StayService implements IStayService {
                 !guest.getPassportId().equals(stayDto.getGuestPersonalDetails().getPassportId());
     }
 
-    private Guest setGuest(Guest guest, StayDto stayDto) {
+    private Guest updateGuest(Guest guest, StayDto stayDto) {
         guest.setFirstName(stayDto.getGuestPersonalDetails().getFirstName());
         guest.setLastName(stayDto.getGuestPersonalDetails().getLastName());
         guest.setBirthDate(stayDto.getGuestPersonalDetails().getBirthDate());
