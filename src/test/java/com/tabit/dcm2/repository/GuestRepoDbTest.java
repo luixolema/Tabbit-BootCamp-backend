@@ -80,16 +80,13 @@ public class GuestRepoDbTest extends AbstractDbTest {
         Guest randomGuest = RandomGuest.createRandomGuestWitoutId();
         guestRule.persist(ImmutableList.of(randomGuest));
 
-        List<Long> stayIds = randomGuest.getStays().stream().map(Stay::getId).collect(Collectors.toList());
-
         //when
         Optional<Guest> expectedGuest = guestRepo.findById(randomGuest.getId());
 
         //then
         assertThat(expectedGuest.isPresent()).isTrue();
-        assertGuest(randomGuest, expectedGuest.get(), stayIds);
+        assertGuest(randomGuest, expectedGuest.get(), ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
     }
-
 
     @Test
     public void save_shall_save_the_guest() {
@@ -100,10 +97,8 @@ public class GuestRepoDbTest extends AbstractDbTest {
         guestRepo.save(randomGuest);
 
         //then
-        assertThat(randomGuest.getId()).isNotNull();
         Optional<Guest> expectedGuest = guestRepo.findById(randomGuest.getId());
         assertThat(expectedGuest.isPresent()).isTrue();
-        List<Long> stayIds = randomGuest.getStays().stream().map(Stay::getId).collect(Collectors.toList());
-        assertGuest(randomGuest, expectedGuest.get(), stayIds);
+        assertGuest(randomGuest, expectedGuest.get(), ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
     }
 }

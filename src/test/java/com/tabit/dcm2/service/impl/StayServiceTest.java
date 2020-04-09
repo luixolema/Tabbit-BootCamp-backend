@@ -7,9 +7,9 @@ import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
-import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
+import com.tabit.dcm2.service.util.GuestMapper;
 import com.tabit.dcm2.testutils.ValueProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +29,7 @@ public class StayServiceTest {
     @Mock
     private IGuestRepo guestRepo;
     @Mock
-    private IGuestService guestService;
+    private GuestMapper guestMapper;
 
     @InjectMocks
     private StayService stayService;
@@ -74,7 +74,7 @@ public class StayServiceTest {
 
         // then
         verify(stayRepo).save(randomStay);
-        verifyZeroInteractions(guestRepo, guestService);
+        verifyZeroInteractions(guestRepo, guestMapper);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class StayServiceTest {
 
         // then
         verify(stayRepo).save(randomStay);
-        verify(guestService).updatePersonalDetailsFromDto(guestWithChanges, randomStayDto.getGuestPersonalDetails());
+        verify(guestMapper).mapPersonalDetailsFromDto(guestWithChanges, randomStayDto.getGuestPersonalDetails());
         verify(guestRepo).save(guestWithChanges);
     }
 
