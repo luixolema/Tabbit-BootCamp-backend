@@ -20,5 +20,6 @@ public class StayController {
 
     @PutMapping
     public void updateStay(@RequestBody StayDto stayDto) {
+        stayService.updateStay(stayDto);
     }
 }

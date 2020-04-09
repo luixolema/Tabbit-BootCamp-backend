@@ -4,6 +4,7 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.impl.StayService;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static com.tabit.dcm2.testutils.StayMappingAssertions.assertStayDto;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -36,5 +38,17 @@ public class StayControllerTest {
 
         // then
         assertStayDto(stayDto, randomStay);
+    }
+
+    @Test
+    public void updateStay_shall_update_stay() {
+        // given
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+
+        // when
+        stayController.updateStay(randomStayDto);
+
+        // then
+        verify(stayService).updateStay(randomStayDto);
     }
 }

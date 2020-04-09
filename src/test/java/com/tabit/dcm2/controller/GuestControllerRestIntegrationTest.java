@@ -39,10 +39,8 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     public void setUp() {
         // given
         stayOld = RandomStay.createRandomStayWithoutId();
-        stayOld.setCheckInDate(LocalDate.now().minusYears(5));
         stayOld.setArriveDate(LocalDate.now().minusYears(5));
         stayActual = RandomStay.createRandomStayWithoutId();
-        stayActual.setCheckInDate(LocalDate.now().minusDays(10));
         stayActual.setArriveDate(LocalDate.now().minusDays(10));
 
         guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
