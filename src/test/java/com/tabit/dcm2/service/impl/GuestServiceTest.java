@@ -91,9 +91,8 @@ public class GuestServiceTest {
         // given
         Guest randomGuest = RandomGuest.createRandomGuest();
         GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
-        guestPersonalDetailsDto.setId(randomGuest.getId());
 
-        when(guestRepo.findById(randomGuest.getId())).thenReturn(Optional.of(randomGuest));
+        when(guestRepo.findById(guestPersonalDetailsDto.getId())).thenReturn(Optional.of(randomGuest));
 
         // when
         guestService.updatePersonalDetails(guestPersonalDetailsDto);
@@ -102,6 +101,6 @@ public class GuestServiceTest {
         verify(guestRepo).save(guestArgumentCaptor.capture());
         Guest expectedGuest = guestArgumentCaptor.getValue();
 
-        GuestMappingAssertions.assertGuestPersonalDetails(guestPersonalDetailsDto, expectedGuest);
+        GuestMappingAssertions.assertPersonalDetails(expectedGuest, guestPersonalDetailsDto);
     }
 }

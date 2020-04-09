@@ -7,8 +7,6 @@ import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.testutils.ValueProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -25,9 +23,6 @@ public class StayServiceTest {
 
     @InjectMocks
     private StayService stayService;
-
-    @Captor
-    ArgumentCaptor<Stay> stayArgumentCaptor;
 
     private ValueProvider valueProvider = new ValueProvider();
 

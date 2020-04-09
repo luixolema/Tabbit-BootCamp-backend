@@ -114,12 +114,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
         assertThat(response.getBody()).isNull();
 
-
-        // assertThat only the updated fields in the stay have changed and all the other remains the same
-        Guest expectedGuest = guestService.getGuestById(guestPersonalDetailsDto.getId());
-        GuestMappingAssertions.assertGuestPersonalDetails(guestPersonalDetailsDto, expectedGuest);
-
-        // if guestpersoneldetails changes also the guest has to be updated because this is the actual stay so there must be the same information as in the guest
-        // this was done in the updateStay endpoint
+        Guest actualGuest = guestService.getGuestById(guestPersonalDetailsDto.getId());
+        GuestMappingAssertions.assertPersonalDetails(actualGuest, guestPersonalDetailsDto);
     }
 }

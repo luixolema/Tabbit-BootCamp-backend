@@ -16,9 +16,6 @@ public class GuestService implements IGuestService {
     @Autowired
     private IGuestRepo guestRepo;
 
-    @Autowired
-    private StayService stayService;
-
     @Override
     public List<Guest> getAllGuests(GuestFilterType guestFilterType) {
         return guestFilterType == GuestFilterType.ALL ? guestRepo.findAll() : guestRepo.findByCheckedin(guestFilterType == GuestFilterType.CHECKED_IN);
@@ -36,7 +33,7 @@ public class GuestService implements IGuestService {
         guestRepo.save(guest);
     }
 
-    private Guest guestPersonalDetailsDtoToGuestMapping(GuestPersonalDetailsDto guestPersonalDetailsDto, Guest guestInDb) {
+    private void guestPersonalDetailsDtoToGuestMapping(GuestPersonalDetailsDto guestPersonalDetailsDto, Guest guestInDb) {
         guestInDb.setFirstName(guestPersonalDetailsDto.getFirstName());
         guestInDb.setLastName(guestPersonalDetailsDto.getLastName());
         guestInDb.setBirthDate(guestPersonalDetailsDto.getBirthDate());
@@ -48,7 +45,5 @@ public class GuestService implements IGuestService {
         guestInDb.setCountry(guestPersonalDetailsDto.getCountry());
         guestInDb.setPostcode(guestPersonalDetailsDto.getPostcode());
         guestInDb.setStreet(guestPersonalDetailsDto.getStreet());
-
-        return guestInDb;
     }
 }

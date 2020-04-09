@@ -70,7 +70,7 @@ public class GuestController {
     }
 
     @PutMapping
-    public void updateGuest(@RequestBody GuestPersonalDetailsDto personalDetailsDto) {
-        this.guestService.updatePersonalDetails(personalDetailsDto);
+    public void updatePersonalDetails(@RequestBody GuestPersonalDetailsDto personalDetailsDto) {
+        guestService.updatePersonalDetails(personalDetailsDto);
     }
 }
