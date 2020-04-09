@@ -1,14 +1,14 @@
 package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+import com.tabit.dcm2.controller.util.MapperUtil;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.IGuestService;
-import com.tabit.dcm2.service.dto.GuestDetailDto;
-import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
-import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,8 +20,11 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -34,6 +37,9 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     private Guest guestCheckedInFalseWithoutStay;
     private Stay stayOld;
     private Stay stayActual;
+    private List<Guest> allGuests;
+    private List<Guest> checkedInGuests;
+    private List<Guest> notCheckedInGuests;
 
     @Before
     public void setUp() {
@@ -45,7 +51,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
         guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInTrue.setCheckedin(true);
-        guestCheckedInTrue.addStays(ImmutableList.of(stayOld, stayActual));
+        guestCheckedInTrue.addStays(ImmutableList.of(stayActual, stayOld));
 
         guestCheckedInFalse = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInFalse.setCheckedin(false);
@@ -55,19 +61,82 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         guestCheckedInFalseWithoutStay.setCheckedin(false);
         guestCheckedInFalseWithoutStay.setStays(new ArrayList<>());
 
-        guestRule.persist(ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2, guestCheckedInFalseWithoutStay));
+        allGuests = ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2, guestCheckedInFalseWithoutStay);
+        checkedInGuests = ImmutableList.of(guestCheckedInTrue);
+        notCheckedInGuests = ImmutableList.of(guestCheckedInFalse, guestCheckedInFalse2, guestCheckedInFalseWithoutStay);
+
+        guestRule.persist(allGuests);
+    }
+
+    @Test
+    public void  getGuests_shall_return_all_guests_for_null_input_param() {
+        //when
+        ResponseEntity<GuestOverviewDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests", GuestOverviewDto.class);
+
+        //then
+        assertThat(response.getBody().getTotal()).isEqualTo(allGuests.size());
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        GuestMappingAssertions.assertGuestOverviewDto(allGuests, response.getBody());
+
+    }
+
+    @Test
+    public void getGuests_shall_return_checkedin_guests() {
+        // when
+        ResponseEntity<GuestOverviewDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/?checkedIn=1", GuestOverviewDto.class);
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThat(response.getBody().getTotal()).isEqualTo(checkedInGuests.size());
+        GuestMappingAssertions.assertGuestOverviewDto(checkedInGuests, response.getBody());
+        for ( GuestDto guestDto : response.getBody().getGuests() ) { assertThat(guestDto.isCheckedin()).isTrue(); }
+    }
+
+    @Test
+    public void getGuests_shall_return_not_checkedin_guests() {
+        // when
+        ResponseEntity<GuestOverviewDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/?checkedIn=0", GuestOverviewDto.class);
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThat(response.getBody().getTotal()).isEqualTo(notCheckedInGuests.size());
+        GuestMappingAssertions.assertGuestOverviewDto(notCheckedInGuests, response.getBody());
+        for (GuestDto guestDto : response.getBody().getGuests()) { assertThat(guestDto.isCheckedin()).isFalse(); }
+    }
+    @Test
+    public void getGuestDetails_shall_return_only_personal_details_from_guest_for_not_checkedIn_guest() {
+        // when
+        ResponseEntity<GuestDetailDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/" + guestCheckedInFalse.getId(), GuestDetailDto.class);
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        GuestMappingAssertions.assertGuestDetailDto(response.getBody(), guestCheckedInFalse, WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY);
+        assertThat(response.getBody().getStayDto().getStayDetails()).isNull();
+        assertThat(response.getBody().getStayDto().getGuestPersonalDetails().getId()).isEqualTo(guestCheckedInFalse.getId());
     }
 
     @Test
     public void getGuestDetails_shall_return_stay_and_personal_details_from_actual_stay_for_checkedIn_guest() {
         // when
-        ResponseEntity<GuestDetailDto> result = restTemplate.getForEntity(getBaseUrl() + "/api/guests/" + guestCheckedInTrue.getId(), GuestDetailDto.class);
+        ResponseEntity<GuestDetailDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/" + guestCheckedInTrue.getId(), GuestDetailDto.class);
 
         // then
-        GuestMappingAssertions.assertGuestDetailDto(result.getBody(), guestCheckedInTrue, WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY);
-        assertThat(result.getBody().getStayDto().getStayDetails().getId()).isEqualTo(stayActual.getId());
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        GuestMappingAssertions.assertGuestDetailDto(response.getBody(), guestCheckedInTrue, WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY);
+        assertThat(response.getBody().getStayDto().getStayDetails().getId()).isEqualTo(stayActual.getId());
+        assertThat(response.getBody().getStayDto().getGuestPersonalDetails().getId()).isEqualTo(guestCheckedInTrue.getId());
 
 //        printJson(result.getBody());
+    }
+    @Test
+    public void getGuestDetails_shall_return_no_summary_for_not_checkedIn_guest_without_stays() {
+        // when
+        ResponseEntity<GuestDetailDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/" + guestCheckedInFalseWithoutStay.getId(), GuestDetailDto.class);
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThat(response.getBody().getStayDto().getStayDetails()).isNull();
+        assertThat(response.getBody().getStaySummaries()).isEmpty();
+        GuestMappingAssertions.assertGuestDetailDto(response.getBody(), guestCheckedInFalseWithoutStay, WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY);
     }
 
     @Test

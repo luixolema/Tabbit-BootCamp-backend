@@ -9,9 +9,11 @@ import com.tabit.dcm2.service.dto.GuestDetailDto;
 import com.tabit.dcm2.service.dto.GuestDto;
 import com.tabit.dcm2.service.dto.GuestOverviewDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -20,17 +22,6 @@ import java.util.stream.Collectors;
 @CrossOrigin
 @RequestMapping("/api/guests")
 public class GuestController {
-    private static final Function<Guest, GuestDto> GUEST_TO_GUEST_DTO = guest -> {
-        GuestDto guestDto = new GuestDto();
-        guestDto.setId(guest.getId());
-        if(guest.isCheckedin()){
-            guestDto.setBoxNumber(guest.getStays().get(0).getBoxNumber());
-        }
-        guestDto.setFirstName(guest.getFirstName());
-        guestDto.setLastName(guest.getLastName());
-        guestDto.setCheckedin(guest.isCheckedin());
-        return guestDto;
-    };
 
     @Autowired
     private IGuestService guestService;
@@ -50,7 +41,11 @@ public class GuestController {
                 break;
         }
         List<Guest> guests = guestService.getAllGuests(guestFilterType);
-        return new GuestOverviewDto(guests.stream().map(GUEST_TO_GUEST_DTO).collect(Collectors.toList()));
+
+        List<GuestDto> guestDtos = new ArrayList<>();
+        for (Guest guest : guests) { guestDtos.add(MapperUtil.guestToGuestDTO(guest)); }
+
+        return new GuestOverviewDto(guestDtos);
     }
 
     @GetMapping("/{guestId}")

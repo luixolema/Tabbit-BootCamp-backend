@@ -2,6 +2,7 @@ package com.tabit.dcm2.controller.util;
 
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.service.dto.GuestDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.StayDetailsDto;
 import com.tabit.dcm2.service.dto.StayDto;
@@ -66,4 +67,16 @@ public class MapperUtil {
 
         return stayDto;
     }
+
+    public static GuestDto guestToGuestDTO (Guest guest){
+        GuestDto guestDto = new GuestDto();
+        guestDto.setId(guest.getId());
+        if(guest.isCheckedin()){
+            guestDto.setBoxNumber(guest.getStays().get(0).getBoxNumber());
+        }
+        guestDto.setFirstName(guest.getFirstName());
+        guestDto.setLastName(guest.getLastName());
+        guestDto.setCheckedin(guest.isCheckedin());
+        return guestDto;
+    };
 }

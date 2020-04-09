@@ -8,6 +8,7 @@ import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
+import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +35,25 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
 
     @Before
     public void setUp() {
+
+        //given
         stay = RandomStay.createRandomStayWithoutId();
         guest = createGuestFromStayWithoutId(stay);
         guest.addStays(ImmutableList.of(stay));
 
         guestRule.persist(ImmutableList.of(guest));
+    }
+
+    @Test
+    public void getStay_shall_return_stay() {
+
+        //when
+        ResponseEntity<StayDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/stay/" + stay.getId(), StayDto.class);
+
+        //then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        StayMappingAssertions.assertStayDto(response.getBody(),stay);
+
     }
 
     @Test
@@ -178,4 +193,5 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         assertThat(sameGuest.getPhone()).isEqualTo(guest.getPhone());
         assertThat(sameGuest.getPassportId()).isEqualTo(guest.getPassportId());
     }
+
 }
