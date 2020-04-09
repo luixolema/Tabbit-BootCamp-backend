@@ -5,9 +5,9 @@ import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
-import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.IStayService;
 import com.tabit.dcm2.service.dto.StayDto;
+import com.tabit.dcm2.service.util.GuestMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class StayService implements IStayService {
     @Autowired
     private IGuestRepo guestRepo;
     @Autowired
-    private IGuestService guestService;
+    private GuestMapper guestMapper;
 
     @Override
     public Stay findById(Long stayId) {
@@ -35,7 +35,7 @@ public class StayService implements IStayService {
 
         Guest guest = stay.getGuest();
         if (isPersonalDetailsChanged(guest, stayDto)) {
-            guestService.updatePersonalDetailsFromDto(guest, stayDto.getGuestPersonalDetails());
+            guestMapper.mapPersonalDetailsFromDto(guest, stayDto.getGuestPersonalDetails());
             guestRepo.save(guest);
         }
     }
@@ -81,21 +81,5 @@ public class StayService implements IStayService {
                 !guest.getEmail().equals(stayDto.getGuestPersonalDetails().getEmail()) ||
                 !guest.getPhone().equals(stayDto.getGuestPersonalDetails().getPhone()) ||
                 !guest.getPassportId().equals(stayDto.getGuestPersonalDetails().getPassportId());
-    }
-
-    private Guest updateGuest(Guest guest, StayDto stayDto) {
-        guest.setFirstName(stayDto.getGuestPersonalDetails().getFirstName());
-        guest.setLastName(stayDto.getGuestPersonalDetails().getLastName());
-        guest.setBirthDate(stayDto.getGuestPersonalDetails().getBirthDate());
-        guest.setNationality(stayDto.getGuestPersonalDetails().getNationality());
-        guest.setCountry(stayDto.getGuestPersonalDetails().getCountry());
-        guest.setCity(stayDto.getGuestPersonalDetails().getCity());
-        guest.setPostcode(stayDto.getGuestPersonalDetails().getPostcode());
-        guest.setStreet(stayDto.getGuestPersonalDetails().getStreet());
-        guest.setEmail(stayDto.getGuestPersonalDetails().getEmail());
-        guest.setPhone(stayDto.getGuestPersonalDetails().getPhone());
-        guest.setPassportId(stayDto.getGuestPersonalDetails().getPassportId());
-
-        return guest;
     }
 }

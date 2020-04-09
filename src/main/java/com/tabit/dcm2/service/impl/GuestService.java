@@ -6,6 +6,7 @@ import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import com.tabit.dcm2.service.util.GuestMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public class GuestService implements IGuestService {
     @Autowired
     private IGuestRepo guestRepo;
+    @Autowired
+    private GuestMapper guestMapper;
 
     @Override
     public List<Guest> getAllGuests(GuestFilterType guestFilterType) {
@@ -29,22 +32,7 @@ public class GuestService implements IGuestService {
     @Override
     public void updatePersonalDetails(GuestPersonalDetailsDto guestPersonalDetailsDto) {
         Guest guest = getGuestById(guestPersonalDetailsDto.getId());
-        updatePersonalDetailsFromDto(guest, guestPersonalDetailsDto);
+        guestMapper.mapPersonalDetailsFromDto(guest, guestPersonalDetailsDto);
         guestRepo.save(guest);
-    }
-
-    @Override
-    public void updatePersonalDetailsFromDto(Guest guestInDb, GuestPersonalDetailsDto guestPersonalDetailsDto) {
-        guestInDb.setFirstName(guestPersonalDetailsDto.getFirstName());
-        guestInDb.setLastName(guestPersonalDetailsDto.getLastName());
-        guestInDb.setBirthDate(guestPersonalDetailsDto.getBirthDate());
-        guestInDb.setEmail(guestPersonalDetailsDto.getEmail());
-        guestInDb.setNationality(guestPersonalDetailsDto.getNationality());
-        guestInDb.setCity(guestPersonalDetailsDto.getCity());
-        guestInDb.setPassportId(guestPersonalDetailsDto.getPassportId());
-        guestInDb.setPhone(guestPersonalDetailsDto.getPhone());
-        guestInDb.setCountry(guestPersonalDetailsDto.getCountry());
-        guestInDb.setPostcode(guestPersonalDetailsDto.getPostcode());
-        guestInDb.setStreet(guestPersonalDetailsDto.getStreet());
     }
 }
