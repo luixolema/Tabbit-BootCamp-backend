@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,5 +72,33 @@ public class GuestRepoDbTest extends AbstractDbTest {
         assertThat(actualGuest.getStays()).hasSize(expectedGuest.getStays().size());
         List<Long> actualStayIds = actualGuest.getStays().stream().map(Stay::getId).collect(Collectors.toList());
         assertThat(actualStayIds).containsExactlyElementsOf(sortedStayIds);
+    }
+
+    @Test
+    public void findById_shall_return_the_guest() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuestWitoutId();
+        guestRule.persist(ImmutableList.of(randomGuest));
+
+        //when
+        Optional<Guest> expectedGuest = guestRepo.findById(randomGuest.getId());
+
+        //then
+        assertThat(expectedGuest.isPresent()).isTrue();
+        assertGuest(randomGuest, expectedGuest.get(), ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
+    }
+
+    @Test
+    public void save_shall_save_the_guest() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuestWitoutId();
+
+        //when
+        guestRepo.save(randomGuest);
+
+        //then
+        Optional<Guest> expectedGuest = guestRepo.findById(randomGuest.getId());
+        assertThat(expectedGuest.isPresent()).isTrue();
+        assertGuest(randomGuest, expectedGuest.get(), ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
     }
 }

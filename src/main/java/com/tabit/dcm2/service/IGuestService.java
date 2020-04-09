@@ -11,6 +11,4 @@ public interface IGuestService {
     Guest getGuestById(Long guestId);
 
     void updatePersonalDetails(GuestPersonalDetailsDto personalDetailsDto);
-
-    void updatePersonalDetailsFromDto(Guest guestInDb, GuestPersonalDetailsDto guestPersonalDetailsDto);
 }

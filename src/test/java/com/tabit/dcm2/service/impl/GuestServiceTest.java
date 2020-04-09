@@ -7,7 +7,7 @@ import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
-import com.tabit.dcm2.testutils.GuestMappingAssertions;
+import com.tabit.dcm2.service.util.GuestMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -27,6 +27,8 @@ import static org.mockito.Mockito.when;
 public class GuestServiceTest {
     @Mock
     private IGuestRepo guestRepo;
+    @Mock
+    private GuestMapper guestMapper;
     @InjectMocks
     private GuestService guestService;
 
@@ -98,9 +100,7 @@ public class GuestServiceTest {
         guestService.updatePersonalDetails(guestPersonalDetailsDto);
 
         // then
-        verify(guestRepo).save(guestArgumentCaptor.capture());
-        Guest expectedGuest = guestArgumentCaptor.getValue();
-
-        GuestMappingAssertions.assertPersonalDetails(expectedGuest, guestPersonalDetailsDto);
+        verify(guestMapper).mapPersonalDetailsFromDto(randomGuest, guestPersonalDetailsDto);
+        verify(guestRepo).save(randomGuest);
     }
 }
