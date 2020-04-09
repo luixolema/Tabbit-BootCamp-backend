@@ -13,7 +13,7 @@ public class StayController {
     @Autowired
     private IStayService stayService;
 
-    @GetMapping(path = "/{stayId}")
+    @GetMapping("/{stayId}")
     public StayDto getStay(@PathVariable() Long stayId) {
         return MapperUtil.mapStayToStayDto(stayService.findById(stayId));
     }

@@ -5,12 +5,14 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.dto.GuestDetailDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WI
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationTest {
+    @Autowired
+    private IGuestService guestService;
 
     private Guest guestCheckedInTrue;
     private Guest guestCheckedInFalse;
@@ -75,7 +79,12 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         HttpEntity<GuestPersonalDetailsDto> entity = createHttpEntity(guestPersonalDetailsDto);
 
         // when
-        ResponseEntity<Void> response = restTemplate.exchange("/api/guests", HttpMethod.POST, entity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange(
+                "/api/guests/",
+                HttpMethod.PUT,
+                entity,
+                Void.class
+        );
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
@@ -85,23 +94,25 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     @Test
     public void updateGuest_shall_update_data() {
         // given
-        GuestPersonalDetailsDto guestPersonalDetailsDto = new GuestPersonalDetailsDto();
-        guestPersonalDetailsDto.setId(guestCheckedInTrue.getId());
-        guestPersonalDetailsDto.setFirstName(guestCheckedInTrue.getFirstName() + "Update");
-        guestPersonalDetailsDto.setBirthDate(guestCheckedInTrue.getBirthDate().minusDays(10));
-//        printJson(guestPersonalDetailsDto);
+        GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
+        guestPersonalDetailsDto.setId(guestCheckedInFalse.getId());
+        printJson(guestPersonalDetailsDto);
 
         HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(guestPersonalDetailsDto);
 
         // when
-        ResponseEntity<Void> response = restTemplate.exchange("/api/guests", HttpMethod.POST, httpEntity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange(
+                "/api/guests/",
+                HttpMethod.PUT,
+                httpEntity,
+                Void.class
+        );
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
         assertThat(response.getBody()).isNull();
 
-        // FIXME DCM2-71
-        // assertThat only the updated fields in the stay have changed and all the other remains the same
-        // if guestpersoneldetails changes also the guest has to be updated because this is the actual stay so there must be the same information as in the guest
+        Guest actualGuest = guestService.getGuestById(guestPersonalDetailsDto.getId());
+        GuestMappingAssertions.assertPersonalDetails(actualGuest, guestPersonalDetailsDto);
     }
 }
