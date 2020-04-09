@@ -5,6 +5,7 @@ import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
+import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.IStayService;
 import com.tabit.dcm2.service.dto.StayDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,10 @@ import java.util.Optional;
 public class StayService implements IStayService {
     @Autowired
     private IStayRepo stayRepo;
-
     @Autowired
     private IGuestRepo guestRepo;
+    @Autowired
+    private IGuestService guestService;
 
     @Override
     public Stay findById(Long stayId) {
@@ -33,7 +35,8 @@ public class StayService implements IStayService {
 
         Guest guest = stay.getGuest();
         if (isPersonalDetailsChanged(guest, stayDto)) {
-            guestRepo.save(updateGuest(guest, stayDto));
+            guestService.updatePersonalDetailsFromDto(guest, stayDto.getGuestPersonalDetails());
+            guestRepo.save(guest);
         }
     }
 

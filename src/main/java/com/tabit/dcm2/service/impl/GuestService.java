@@ -29,11 +29,12 @@ public class GuestService implements IGuestService {
     @Override
     public void updatePersonalDetails(GuestPersonalDetailsDto guestPersonalDetailsDto) {
         Guest guest = getGuestById(guestPersonalDetailsDto.getId());
-        guestPersonalDetailsDtoToGuestMapping(guestPersonalDetailsDto, guest);
+        updatePersonalDetailsFromDto(guest, guestPersonalDetailsDto);
         guestRepo.save(guest);
     }
 
-    private void guestPersonalDetailsDtoToGuestMapping(GuestPersonalDetailsDto guestPersonalDetailsDto, Guest guestInDb) {
+    @Override
+    public void updatePersonalDetailsFromDto(Guest guestInDb, GuestPersonalDetailsDto guestPersonalDetailsDto) {
         guestInDb.setFirstName(guestPersonalDetailsDto.getFirstName());
         guestInDb.setLastName(guestPersonalDetailsDto.getLastName());
         guestInDb.setBirthDate(guestPersonalDetailsDto.getBirthDate());
