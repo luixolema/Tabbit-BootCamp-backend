@@ -1,3 +1,5 @@
+drop table IF EXISTS `bill`;
+drop table IF EXISTS `activity`;
 drop table IF EXISTS `stay`;
 drop table IF EXISTS `guest`;
 drop table IF EXISTS `id_gen`;
