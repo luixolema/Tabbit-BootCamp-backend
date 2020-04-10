@@ -124,7 +124,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     }
 
     @Test
-    public void getBill_shall_throw_respond_404_when_not_resource_found() {
+    public void getBill_shall_respond_404_status_when_not_resource_found() {
         // when
         ResponseEntity<BillDto> responseEntity = restTemplate.getForEntity(getBaseUrl() + "/api/stay/-1/bill", BillDto.class);
 
