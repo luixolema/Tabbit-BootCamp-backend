@@ -7,6 +7,8 @@ import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
+import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.util.GuestMapper;
@@ -20,7 +22,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StayServiceTest {
@@ -112,5 +116,18 @@ public class StayServiceTest {
         guest.setPassportId(stayDto.getGuestPersonalDetails().getPassportId());
 
         return guest;
+    }
+
+    @Test
+    public void updatePersonalDetails_shall_call_save_on_stay_repo() {
+        //given
+        Stay randomStay = RandomStay.createRandomStay();
+        GuestPersonalDetailsDto randomGuestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
+
+        //when
+        stayService.updatePersonalDetails(randomStay, randomGuestPersonalDetailsDto);
+
+        //then
+        verify(stayRepo).save(randomStay);
     }
 }

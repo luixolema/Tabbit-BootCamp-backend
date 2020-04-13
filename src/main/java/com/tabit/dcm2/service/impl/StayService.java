@@ -6,8 +6,10 @@ import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.service.IStayService;
+import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.util.GuestMapper;
+import com.tabit.dcm2.service.util.StayMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class StayService implements IStayService {
     private IGuestRepo guestRepo;
     @Autowired
     private GuestMapper guestMapper;
+    @Autowired
+    private StayMapper stayMapper;
 
     @Override
     public Stay findById(Long stayId) {
@@ -38,6 +42,12 @@ public class StayService implements IStayService {
             guestMapper.mapPersonalDetailsFromDto(guest, stayDto.getGuestPersonalDetails());
             guestRepo.save(guest);
         }
+    }
+
+    @Override
+    public void updatePersonalDetails(Stay stay, GuestPersonalDetailsDto guestPersonalDetailsDto) {
+        stayMapper.updateStay(stay, guestPersonalDetailsDto);
+        stayRepo.save(stay);
     }
 
     private Stay updateStay(Stay stay, StayDto stayDto) {
@@ -81,5 +91,9 @@ public class StayService implements IStayService {
                 !guest.getEmail().equals(stayDto.getGuestPersonalDetails().getEmail()) ||
                 !guest.getPhone().equals(stayDto.getGuestPersonalDetails().getPhone()) ||
                 !guest.getPassportId().equals(stayDto.getGuestPersonalDetails().getPassportId());
+    }
+
+    public void save(Stay stay) {
+        stayRepo.save(stay);
     }
 }

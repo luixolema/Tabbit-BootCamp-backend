@@ -10,6 +10,7 @@ import com.tabit.dcm2.service.dto.GuestDetailDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
+import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,5 +115,41 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
         Guest actualGuest = guestService.getGuestById(guestPersonalDetailsDto.getId());
         GuestMappingAssertions.assertPersonalDetails(actualGuest, guestPersonalDetailsDto);
+    }
+
+    @Test
+    public void updatePersonalDetails_shall_update_guest() {
+        //given
+        GuestPersonalDetailsDto randomGuestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
+        randomGuestPersonalDetailsDto.setId(guestCheckedInFalse.getId());
+
+        HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(randomGuestPersonalDetailsDto);
+
+        //when
+        ResponseEntity<Void> response = restTemplate.exchange(getBaseUrl() + "/api/guests", HttpMethod.PUT, httpEntity, Void.class);
+
+        //then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        Guest actualGuest = guestService.getGuestById(randomGuestPersonalDetailsDto.getId());
+        GuestMappingAssertions.assertPersonalDetails(actualGuest, randomGuestPersonalDetailsDto);
+    }
+
+    @Test
+    public void updatePersonalDetails_shall_update_guest_and_actual_stay_on_checkedIn_guest() {
+        //given
+        GuestPersonalDetailsDto randomGuestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
+        randomGuestPersonalDetailsDto.setId(guestCheckedInTrue.getId());
+
+        HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(randomGuestPersonalDetailsDto);
+
+        //when
+        ResponseEntity<Void> response = restTemplate.exchange(getBaseUrl() + "/api/guests", HttpMethod.PUT, httpEntity, Void.class);
+
+        //then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        Guest actualGuest = guestService.getGuestById(randomGuestPersonalDetailsDto.getId());
+        GuestMappingAssertions.assertPersonalDetails(actualGuest, randomGuestPersonalDetailsDto);
+        Stay currentStay = guestService.getCurrentStay(actualGuest);
+        StayMappingAssertions.assertPersonalDetailDto(currentStay, randomGuestPersonalDetailsDto);
     }
 }

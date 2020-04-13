@@ -16,6 +16,9 @@ public class StaySummaryDto {
         this.active = active;
     }
 
+    public StaySummaryDto() {
+    }
+
     public Long getId() {
         return id;
     }

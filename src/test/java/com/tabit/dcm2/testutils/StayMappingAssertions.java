@@ -1,6 +1,7 @@
 package com.tabit.dcm2.testutils;
 
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.StayDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,5 +33,18 @@ public class StayMappingAssertions {
         assertThat(stayDto.getStayDetails().isNitrox()).isEqualTo(stay.isNitrox());
         assertThat(stayDto.getStayDetails().isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
         assertThat(stayDto.getStayDetails().getPreBooking()).isEqualTo(stay.getPreBooking());
+    }
+
+    public static void assertPersonalDetailDto(Stay actualStay, GuestPersonalDetailsDto expectedGuestPersonalDetailsDto) {
+        assertThat(actualStay.getFirstName()).isEqualTo(expectedGuestPersonalDetailsDto.getFirstName());
+        assertThat(actualStay.getLastName()).isEqualTo(expectedGuestPersonalDetailsDto.getLastName());
+        assertThat(actualStay.getStreet()).isEqualTo(expectedGuestPersonalDetailsDto.getStreet());
+        assertThat(actualStay.getCity()).isEqualTo(expectedGuestPersonalDetailsDto.getCity());
+        assertThat(actualStay.getCountry()).isEqualTo(expectedGuestPersonalDetailsDto.getCountry());
+        assertThat(actualStay.getPostcode()).isEqualTo(expectedGuestPersonalDetailsDto.getPostcode());
+        assertThat(actualStay.getBirthDate()).isEqualTo(expectedGuestPersonalDetailsDto.getBirthDate());
+        assertThat(actualStay.getEmail()).isEqualTo(expectedGuestPersonalDetailsDto.getEmail());
+        assertThat(actualStay.getNationality()).isEqualTo(expectedGuestPersonalDetailsDto.getNationality());
+        assertThat(actualStay.getPhone()).isEqualTo(expectedGuestPersonalDetailsDto.getPhone());
     }
 }

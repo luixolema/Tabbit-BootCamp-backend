@@ -3,6 +3,8 @@ package com.tabit.dcm2.service.impl;
 import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
+import com.tabit.dcm2.entity.RandomStay;
+import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
@@ -31,6 +33,8 @@ public class GuestServiceTest {
     private GuestMapper guestMapper;
     @InjectMocks
     private GuestService guestService;
+    @Mock
+    private StayService stayService;
 
     @Captor
     private ArgumentCaptor<Guest> guestArgumentCaptor;
@@ -102,5 +106,26 @@ public class GuestServiceTest {
         // then
         verify(guestMapper).mapPersonalDetailsFromDto(randomGuest, guestPersonalDetailsDto);
         verify(guestRepo).save(randomGuest);
+    }
+
+    @Test
+    // Fixme: should this test verify that only that the stayService was called or also that the stay was update correctly
+    public void updatePersonalDetails_shall_update_guest_and_stay_when_guest_is_checkedIn() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        Stay randomStay = RandomStay.createRandomStay();
+        randomGuest.setCheckedin(true);
+        randomGuest.setStays(ImmutableList.of(randomStay));
+        GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
+
+        when(guestRepo.findById(guestPersonalDetailsDto.getId())).thenReturn(Optional.of(randomGuest));
+
+        // when
+        guestService.updatePersonalDetails(guestPersonalDetailsDto);
+
+        // then
+        verify(guestMapper).mapPersonalDetailsFromDto(randomGuest, guestPersonalDetailsDto);
+        verify(guestRepo).save(randomGuest);
+        verify(stayService).updatePersonalDetails(randomStay, guestPersonalDetailsDto);
     }
 }

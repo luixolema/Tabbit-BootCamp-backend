@@ -1,14 +1,13 @@
 package com.tabit.dcm2.controller;
 
+import com.tabit.dcm2.controller.requests.StayRequest;
 import com.tabit.dcm2.controller.util.MapperUtil;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IGuestService;
-import com.tabit.dcm2.service.dto.GuestDetailDto;
-import com.tabit.dcm2.service.dto.GuestDto;
-import com.tabit.dcm2.service.dto.GuestOverviewDto;
-import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.*;
+import com.tabit.dcm2.service.util.StayMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +33,8 @@ public class GuestController {
 
     @Autowired
     private IGuestService guestService;
+    @Autowired
+    private StayMapper stayMapper;
 
     @GetMapping
     public GuestOverviewDto getGuests(@RequestParam(required = false, defaultValue = "2") int checkedIn) {
@@ -72,5 +73,13 @@ public class GuestController {
     @PutMapping
     public void updatePersonalDetails(@RequestBody GuestPersonalDetailsDto personalDetailsDto) {
         guestService.updatePersonalDetails(personalDetailsDto);
+    }
+
+    @PostMapping("{guestId}/stay")
+    public StayDto addStay(@RequestParam Long guestId, @RequestBody StayRequest stayRequest) {
+        Guest guest = guestService.getGuestById(guestId);
+        Stay stay = guestService.addStay(guest, stayRequest);
+
+        return stayMapper.toStayDTO(stay);
     }
 }
