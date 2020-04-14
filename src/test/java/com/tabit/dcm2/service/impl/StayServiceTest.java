@@ -1,5 +1,6 @@
 package com.tabit.dcm2.service.impl;
 
+import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
@@ -20,7 +21,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StayServiceTest {
@@ -94,6 +97,21 @@ public class StayServiceTest {
         verify(stayRepo).save(randomStay);
         verify(guestMapper).mapPersonalDetailsFromDto(guestWithChanges, randomStayDto.getGuestPersonalDetails());
         verify(guestRepo).save(guestWithChanges);
+    }
+
+    @Test
+    public void isBoxEmpty_shall_return_the_right_value() {
+        // given
+        Stay stay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
+        when(stayRepo.getBoxNumbers()).thenReturn(ImmutableList.of(stay.getBoxNumber()));
+
+        // when
+        boolean resultTrue = stayService.isBoxEmpty(stay.getBoxNumber() + "Update");
+        boolean resultFalse = stayService.isBoxEmpty(stay.getBoxNumber());
+
+        // then
+        assertThat(resultTrue).isTrue();
+        assertThat(resultFalse).isFalse();
     }
 
     private Guest getGuestFromStayDto(StayDto stayDto) {

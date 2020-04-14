@@ -40,6 +40,11 @@ public class StayService implements IStayService {
         }
     }
 
+    @Override
+    public Boolean isBoxEmpty(String boxNumber) {
+        return !stayRepo.getBoxNumbers().contains(boxNumber);
+    }
+
     private Stay updateStay(Stay stay, StayDto stayDto) {
         stay.setFirstName(stayDto.getGuestPersonalDetails().getFirstName());
         stay.setLastName(stayDto.getGuestPersonalDetails().getLastName());

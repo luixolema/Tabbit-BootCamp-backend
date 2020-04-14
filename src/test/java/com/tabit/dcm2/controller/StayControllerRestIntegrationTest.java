@@ -39,7 +39,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     public void setUp() {
 
         //given
-        stay = RandomStay.createRandomStayWithoutId();
+        stay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
         guest = createGuestFromStayWithoutId(stay);
         guest.addStays(ImmutableList.of(stay));
 
@@ -129,6 +129,23 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         assertThat(guest.getPhone()).isEqualTo(guestInDb.getPhone());
         assertThat(guest.getPostcode()).isEqualTo(guestInDb.getPostcode());
         assertThat(guest.getStreet()).isEqualTo(guestInDb.getStreet());
+    }
+
+    @Test
+    public void isBoxEmpty_shall_return_the_right_value() {
+        // given
+        HttpEntity<String> activeBox = createHttpEntity(stay.getBoxNumber());
+        HttpEntity<String> emptyBox = createHttpEntity(stay.getBoxNumber() + "Update");
+
+        // when
+        ResponseEntity<Boolean> responseFalse = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, activeBox, Boolean.class);
+        ResponseEntity<Boolean> responseTrue = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, emptyBox, Boolean.class);
+        Boolean resultFalse = responseFalse.getBody();
+        Boolean resultTrue = responseTrue.getBody();
+
+        // then
+        assertThat(resultFalse).isFalse();
+        assertThat(resultTrue).isTrue();
     }
 
 }

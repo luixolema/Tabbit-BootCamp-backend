@@ -22,4 +22,9 @@ public class StayController {
     public void updateStay(@RequestBody StayDto stayDto) {
         stayService.updateStay(stayDto);
     }
+
+    @PostMapping(path = "/boxState")
+    public Boolean isBoxEmpty(@RequestBody String boxNumber) {
+        return stayService.isBoxEmpty(boxNumber);
+    }
 }

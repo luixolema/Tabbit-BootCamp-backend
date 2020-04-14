@@ -14,6 +14,9 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static com.tabit.dcm2.testutils.StayMappingAssertions.assertStayDto;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.AdditionalMatchers.not;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,5 +53,21 @@ public class StayControllerTest {
 
         // then
         verify(stayService).updateStay(randomStayDto);
+    }
+
+    @Test
+    public void isBoxEmpty_shall_return_the_right_value() {
+        // given
+        Stay activeStay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
+        when(stayService.isBoxEmpty(activeStay.getBoxNumber())).thenReturn(false);
+        when(stayService.isBoxEmpty(not(eq(activeStay.getBoxNumber())))).thenReturn(true);
+
+        // when
+        boolean resultFalse = stayService.isBoxEmpty(activeStay.getBoxNumber());
+        boolean resultTrue = stayService.isBoxEmpty(activeStay.getBoxNumber() + "Update");
+
+        // then
+        assertThat(resultFalse).isFalse();
+        assertThat(resultTrue).isTrue();
     }
 }

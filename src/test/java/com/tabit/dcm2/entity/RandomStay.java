@@ -10,6 +10,12 @@ public class RandomStay {
         return stay;
     }
 
+    public static Stay createRandomStayWithoutIdGivenActiveState(boolean active) {
+        Stay stay = createRandomStayWithoutId();
+        stay.setActive(active);
+        return stay;
+    }
+
     public static Stay createRandomStay() {
         ValueProvider valueProvider = new ValueProvider();
 
@@ -17,6 +23,7 @@ public class RandomStay {
         stay.setId(valueProvider.randomId());
         stay.setFirstName(valueProvider.randomString("firstname"));
         stay.setLastName(valueProvider.randomString("lastname"));
+        stay.setActive(valueProvider.randomBoolean());
         stay.setBoxNumber(valueProvider.randomInt().toString());
         stay.setBirthDate(valueProvider.randomLocalDate());
         stay.setNationality(valueProvider.randomString("nationality"));
