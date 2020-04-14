@@ -1,8 +1,10 @@
 package com.tabit.dcm2.service.dto;
 
+import com.tabit.dcm2.commons.AbstractBean;
+
 import java.util.List;
 
-public class GuestOverviewDto {
+public class GuestOverviewDto extends AbstractBean {
     private List<GuestDto> guests;
     private int total;
 
