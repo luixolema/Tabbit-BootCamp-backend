@@ -8,6 +8,7 @@ import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
+import com.tabit.dcm2.service.util.GuestMapper;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Before;
@@ -101,21 +102,33 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     public void updateStay_shall_update_only_stay_data_when_guestDetails_is_not_updated() {
         // given
         StayDto stayDto = RandomStayDto.createStayDtoFromStay(stay);
-        stayDto.getStayDetails().setHotel(stay.getHotel() + "Update");
+        GuestMapper guestMapper = new GuestMapper();
+        stayDto.setGuestPersonalDetails(guestMapper.guestPersonalDetailsDtoFromGuest(guest));
 
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.PUT, entity, Void.class);
-        Guest guestInDb = guestRepo.findById(stayDto.getGuestPersonalDetails().getId()).get();
+
         Stay stayInDb = stayRepo.findById(stayDto.getStayDetails().getId()).get();
+        Guest guestInDb = stayInDb.getGuest();
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
         assertThat(response.getBody()).isNull();
 
         StayMappingAssertions.assertStayDto(stayDto, stayInDb);
-        GuestMappingAssertions.assertPersonalDetails(guestInDb, stayDto.getGuestPersonalDetails());
+        assertThat(guest.getFirstName()).isEqualTo(guestInDb.getFirstName());
+        assertThat(guest.getLastName()).isEqualTo(guestInDb.getLastName());
+        assertThat(guest.getCity()).isEqualTo(guestInDb.getCity());
+        assertThat(guest.getBirthDate()).isEqualTo(guestInDb.getBirthDate());
+        assertThat(guest.getCountry()).isEqualTo(guestInDb.getCountry());
+        assertThat(guest.getEmail()).isEqualTo(guestInDb.getEmail());
+        assertThat(guest.getNationality()).isEqualTo(guestInDb.getNationality());
+        assertThat(guest.getPassportId()).isEqualTo(guestInDb.getPassportId());
+        assertThat(guest.getPhone()).isEqualTo(guestInDb.getPhone());
+        assertThat(guest.getPostcode()).isEqualTo(guestInDb.getPostcode());
+        assertThat(guest.getStreet()).isEqualTo(guestInDb.getStreet());
     }
 
 }
