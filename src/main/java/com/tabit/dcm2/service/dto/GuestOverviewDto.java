@@ -6,6 +6,9 @@ public class GuestOverviewDto {
     private List<GuestDto> guests;
     private int total;
 
+    public GuestOverviewDto() {
+    }
+
     public GuestOverviewDto(List<GuestDto> guests) {
         this.guests = guests;
         this.total = guests.size();

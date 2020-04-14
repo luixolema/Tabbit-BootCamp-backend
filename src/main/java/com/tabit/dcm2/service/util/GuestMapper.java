@@ -19,4 +19,23 @@ public class GuestMapper {
         guestInDb.setPostcode(guestPersonalDetailsDto.getPostcode());
         guestInDb.setStreet(guestPersonalDetailsDto.getStreet());
     }
+
+    public GuestPersonalDetailsDto guestPersonalDetailsDtoFromGuest(Guest guest) {
+        GuestPersonalDetailsDto guestPersonalDetailsDto = new GuestPersonalDetailsDto();
+
+        guestPersonalDetailsDto.setId(guest.getId());
+        guestPersonalDetailsDto.setFirstName(guest.getFirstName());
+        guestPersonalDetailsDto.setLastName(guest.getLastName());
+        guestPersonalDetailsDto.setBirthDate(guest.getBirthDate());
+        guestPersonalDetailsDto.setEmail(guest.getEmail());
+        guestPersonalDetailsDto.setNationality(guest.getNationality());
+        guestPersonalDetailsDto.setCity(guest.getCity());
+        guestPersonalDetailsDto.setPassportId(guest.getPassportId());
+        guestPersonalDetailsDto.setPhone(guest.getPhone());
+        guestPersonalDetailsDto.setCountry(guest.getCountry());
+        guestPersonalDetailsDto.setPostcode(guest.getPostcode());
+        guestPersonalDetailsDto.setStreet(guest.getStreet());
+
+        return guestPersonalDetailsDto;
+    }
 }
