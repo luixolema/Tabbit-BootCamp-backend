@@ -1,11 +1,12 @@
 package com.tabit.dcm2.service.dto;
 
+import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.entity.Stay;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GuestDetailDto {
+public class GuestDetailDto extends AbstractBean {
 
     private StayDto stayDto;
     private List<StaySummaryDto> staySummaries = new ArrayList<>();

@@ -1,8 +1,10 @@
 package com.tabit.dcm2.service.dto;
 
+import com.tabit.dcm2.commons.AbstractBean;
+
 import java.util.Objects;
 
-public class GuestDto {
+public class GuestDto extends AbstractBean {
     private Long id;
     private String firstName;
     private String lastName;
