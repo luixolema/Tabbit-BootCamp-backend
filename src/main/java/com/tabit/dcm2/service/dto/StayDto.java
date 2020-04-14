@@ -1,6 +1,8 @@
 package com.tabit.dcm2.service.dto;
 
-public class StayDto {
+import com.tabit.dcm2.commons.AbstractBean;
+
+public class StayDto extends AbstractBean {
 
     private GuestPersonalDetailsDto guestPersonalDetails;
     private StayDetailsDto stayDetails;

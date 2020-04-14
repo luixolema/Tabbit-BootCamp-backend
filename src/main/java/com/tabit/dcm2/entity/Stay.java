@@ -2,7 +2,6 @@ package com.tabit.dcm2.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 public class Stay implements IEntity {
@@ -95,44 +94,6 @@ public class Stay implements IEntity {
 
     @Column(name = "pre_booking", nullable = true)
     private String preBooking;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Stay stay = (Stay) o;
-        return isNitrox() == stay.isNitrox() &&
-                isMedicalStatement() == stay.isMedicalStatement() &&
-                isActive() == stay.isActive() &&
-                Objects.equals(getId(), stay.getId()) &&
-                Objects.equals(getFirstName(), stay.getFirstName()) &&
-                Objects.equals(getLastName(), stay.getLastName()) &&
-                Objects.equals(getBoxNumber(), stay.getBoxNumber()) &&
-                Objects.equals(getBirthDate(), stay.getBirthDate()) &&
-                Objects.equals(getNationality(), stay.getNationality()) &&
-                Objects.equals(getCountry(), stay.getCountry()) &&
-                Objects.equals(getCity(), stay.getCity()) &&
-                Objects.equals(getPostcode(), stay.getPostcode()) &&
-                Objects.equals(getStreet(), stay.getStreet()) &&
-                Objects.equals(getEmail(), stay.getEmail()) &&
-                Objects.equals(getPhone(), stay.getPhone()) &&
-                Objects.equals(getPassportId(), stay.getPassportId()) &&
-                Objects.equals(getCheckInDate(), stay.getCheckInDate()) &&
-                Objects.equals(getCheckOutDate(), stay.getCheckOutDate()) &&
-                Objects.equals(getArriveDate(), stay.getArriveDate()) &&
-                Objects.equals(getLeaveDate(), stay.getLeaveDate()) &&
-                Objects.equals(getHotel(), stay.getHotel()) &&
-                Objects.equals(getRoom(), stay.getRoom()) &&
-                Objects.equals(getLastDiveDate(), stay.getLastDiveDate()) &&
-                Objects.equals(getBrevet(), stay.getBrevet()) &&
-                Objects.equals(getDivesAmount(), stay.getDivesAmount()) &&
-                Objects.equals(getPreBooking(), stay.getPreBooking());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getBoxNumber(), getBirthDate(), getNationality(), getCountry(), getCity(), getPostcode(), getStreet(), getEmail(), getPhone(), getPassportId(), getCheckInDate(), getCheckOutDate(), getArriveDate(), getLeaveDate(), getHotel(), getRoom(), getLastDiveDate(), getBrevet(), getDivesAmount(), isNitrox(), isMedicalStatement(), isActive(), getPreBooking());
-    }
 
     @Override
     public Long getId() {

@@ -4,17 +4,12 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,8 +23,7 @@ public class StayRepoDbTest extends AbstractDbTest {
     public void setUp() {
         // given
         Guest guestForStay = RandomGuest.createRandomGuestWitoutId();
-        stay = RandomStay.createRandomStayWithoutId();
-        stay.setGuest(guestForStay);
+        stay = Iterables.getOnlyElement(guestForStay.getStays());
 
         guestRule.persist(ImmutableList.of(guestForStay));
     }
@@ -40,11 +34,11 @@ public class StayRepoDbTest extends AbstractDbTest {
         stayRule.persist(ImmutableList.of(stay));
 
         //when
-        Optional<Stay> expectedStay = stayRepo.findById(stay.getId());
+        Optional<Stay> actualStay = stayRepo.findById(stay.getId());
 
         //then
-        assertThat(expectedStay.isPresent()).isTrue();
-        assertThat(stay).isEqualTo(expectedStay.get());
+        assertThat(actualStay.isPresent()).isTrue();
+        assertStay(actualStay.get(), stay);
     }
 
     @Test
@@ -54,8 +48,40 @@ public class StayRepoDbTest extends AbstractDbTest {
         stayRepo.save(stay);
 
         //then
-        Optional<Stay> expectedStay = stayRepo.findById(stay.getId());
-        assertThat(expectedStay.isPresent()).isTrue();
-        assertThat(stay).isEqualTo(expectedStay.get());
+        Optional<Stay> actualStay = stayRepo.findById(stay.getId());
+
+        assertThat(actualStay.isPresent()).isTrue();
+        assertStay(actualStay.get(), stay);
+    }
+
+    private void assertStay(Stay actualStay, Stay expectedStay) {
+        assertThat(actualStay.getId()).isEqualTo(stay.getId());
+        assertThat(actualStay.getFirstName()).isEqualTo(stay.getFirstName());
+        assertThat(actualStay.getLastName()).isEqualTo(stay.getLastName());
+        assertThat(actualStay.getBirthDate()).isEqualTo(stay.getBirthDate());
+        assertThat(actualStay.getCity()).isEqualTo(stay.getCity());
+        assertThat(actualStay.getCountry()).isEqualTo(stay.getCountry());
+        assertThat(actualStay.getEmail()).isEqualTo(stay.getEmail());
+        assertThat(actualStay.getNationality()).isEqualTo(stay.getNationality());
+        assertThat(actualStay.getPassportId()).isEqualTo(stay.getPassportId());
+        assertThat(actualStay.getPhone()).isEqualTo(stay.getPhone());
+        assertThat(actualStay.getPostcode()).isEqualTo(stay.getPostcode());
+
+        assertThat(actualStay.getArriveDate()).isEqualTo(stay.getArriveDate());
+        assertThat(actualStay.getBoxNumber()).isEqualTo(stay.getBoxNumber());
+        assertThat(actualStay.getBrevet()).isEqualTo(stay.getBrevet());
+        assertThat(actualStay.getCheckInDate()).isEqualTo(stay.getCheckInDate());
+        assertThat(actualStay.getCheckOutDate()).isEqualTo(stay.getCheckOutDate());
+        assertThat(actualStay.getLastDiveDate()).isEqualTo(stay.getLastDiveDate());
+        assertThat(actualStay.getLeaveDate()).isEqualTo(stay.getLeaveDate());
+        assertThat(actualStay.getDivesAmount()).isEqualTo(stay.getDivesAmount());
+        assertThat(actualStay.getHotel()).isEqualTo(stay.getHotel());
+        assertThat(actualStay.getRoom()).isEqualTo(stay.getRoom());
+        assertThat(actualStay.isNitrox()).isEqualTo(stay.isNitrox());
+        assertThat(actualStay.isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
+        assertThat(actualStay.getPreBooking()).isEqualTo(stay.getPreBooking());
+        assertThat(actualStay.isActive()).isEqualTo(stay.isActive());
+
+        assertThat(actualStay.getGuest().getId()).isEqualTo(expectedStay.getGuest().getId());
     }
 }
