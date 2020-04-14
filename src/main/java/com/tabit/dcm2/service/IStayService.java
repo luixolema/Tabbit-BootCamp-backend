@@ -7,4 +7,6 @@ public interface IStayService {
     Stay findById(Long stayId);
 
     void updateStay(StayDto stayDto);
+
+    Boolean isBoxEmpty(String boxNumber);
 }
