@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Guest implements IEntity {
@@ -21,6 +22,31 @@ public class Guest implements IEntity {
     @OneToMany(mappedBy = "guest", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @OrderBy("arrive_date DESC")
     List<Stay> stays = new ArrayList<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Guest guest = (Guest) o;
+        return isCheckedin() == guest.isCheckedin() &&
+                Objects.equals(getId(), guest.getId()) &&
+                Objects.equals(getFirstName(), guest.getFirstName()) &&
+                Objects.equals(getLastName(), guest.getLastName()) &&
+                Objects.equals(getBirthDate(), guest.getBirthDate()) &&
+                Objects.equals(getNationality(), guest.getNationality()) &&
+                Objects.equals(getCountry(), guest.getCountry()) &&
+                Objects.equals(getCity(), guest.getCity()) &&
+                Objects.equals(getPostcode(), guest.getPostcode()) &&
+                Objects.equals(getStreet(), guest.getStreet()) &&
+                Objects.equals(getEmail(), guest.getEmail()) &&
+                Objects.equals(getPhone(), guest.getPhone()) &&
+                Objects.equals(getPassportId(), guest.getPassportId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getFirstName(), getLastName(), getBirthDate(), getNationality(), getCountry(), getCity(), getPostcode(), getStreet(), getEmail(), getPhone(), getPassportId(), isCheckedin());
+    }
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
