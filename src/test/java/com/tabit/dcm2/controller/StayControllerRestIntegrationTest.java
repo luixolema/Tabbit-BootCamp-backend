@@ -220,4 +220,24 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         assertThat(response.getBody()).isNull();
     }
 
+    @Test
+    public void addActiveStay_shall_throw_exception_if_trying_to_add_active_stay_with_already_used_box_number() {
+        // given
+        guest.setCheckedin(false);
+        stay.setActive(true);
+        guestRule.persist(ImmutableList.of(guest));
+        StayDto stayDto = RandomStayDto.createRandomStayDto();
+        stayDto.getGuestPersonalDetails().setId(guest.getId());
+        stayDto.getStayDetails().setBoxNumber(stay.getBoxNumber());
+
+        HttpEntity<StayDto> entity = createHttpEntity(stayDto);
+
+        // when
+        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.POST, entity, Void.class);
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNull();
+    }
+
 }

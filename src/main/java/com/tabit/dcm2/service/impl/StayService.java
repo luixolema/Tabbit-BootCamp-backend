@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.controller.util.MapperUtil;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.exception.BoxReservationException;
 import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
@@ -49,8 +50,13 @@ public class StayService implements IStayService {
     }
 
     @Override
-    public void addActiveStay(StayDto stayDto) {
+    public synchronized void addActiveStay(StayDto stayDto) {
         Guest guest = guestRepo.findById(stayDto.getGuestPersonalDetails().getId()).orElseThrow(ResourceNotFoundException::new);
+
+        if (!isBoxFree(stayDto.getStayDetails().getBoxNumber())) {
+            throw new BoxReservationException();
+        }
+
         if (!guest.isCheckedin()) {
             guestMapper.mapPersonalDetailsFromDto(guest, stayDto.getGuestPersonalDetails());
             Stay newStay = MapperUtil.mapStayDtoToStayWithoutGuestRef(stayDto);

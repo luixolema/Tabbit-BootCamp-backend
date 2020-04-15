@@ -5,6 +5,7 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.exception.BoxReservationException;
 import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
@@ -153,6 +154,20 @@ public class StayServiceTest {
         checkedInGuest.setCheckedin(true);
 
         when(guestRepo.findById(randomStayDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(checkedInGuest));
+
+        // when
+        stayService.addActiveStay(randomStayDto);
+    }
+
+    @Test(expected = BoxReservationException.class)
+    public void addActiveStay_shall_throw_exception_for_adding_active_stay_for_already_reserved_box() {
+        // given
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+        Guest guest = RandomGuest.createRandomGuest();
+        guest.setCheckedin(false);
+
+        when(guestRepo.findById(randomStayDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(guest));
+        when(stayRepo.getBoxNumbers()).thenReturn(ImmutableList.of(randomStayDto.getStayDetails().getBoxNumber()));
 
         // when
         stayService.addActiveStay(randomStayDto);
