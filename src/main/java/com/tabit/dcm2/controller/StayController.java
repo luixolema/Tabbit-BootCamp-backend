@@ -27,4 +27,9 @@ public class StayController {
     public Boolean isBoxEmpty(@RequestBody String boxNumber) {
         return stayService.isBoxEmpty(boxNumber);
     }
+
+    @PostMapping
+    public void addActiveStay(@RequestBody StayDto stayDto) {
+        stayService.addActiveStay(stayDto);
+    }
 }

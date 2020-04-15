@@ -48,7 +48,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
         guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInTrue.setCheckedin(true);
-        guestCheckedInTrue.addStays(ImmutableList.of(stayActual, stayOld));
+        guestCheckedInTrue.setStays(ImmutableList.of(stayActual, stayOld));
 
         guestCheckedInFalse = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInFalse.setCheckedin(false);

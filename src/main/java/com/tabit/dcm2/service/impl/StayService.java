@@ -1,7 +1,9 @@
 package com.tabit.dcm2.service.impl;
 
+import com.tabit.dcm2.controller.util.MapperUtil;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
@@ -11,6 +13,7 @@ import com.tabit.dcm2.service.util.GuestMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -43,6 +46,21 @@ public class StayService implements IStayService {
     @Override
     public Boolean isBoxEmpty(String boxNumber) {
         return !stayRepo.getBoxNumbers().contains(boxNumber);
+    }
+
+    @Override
+    public void addActiveStay(StayDto stayDto) {
+        Guest guest = guestRepo.findById(stayDto.getGuestPersonalDetails().getId()).orElseThrow(ResourceNotFoundException::new);
+        if (!guest.isCheckedin()) {
+            guestMapper.mapPersonalDetailsFromDto(guest, stayDto.getGuestPersonalDetails());
+            Stay newStay = MapperUtil.mapStayDtoToStayWithoutGuestRef(stayDto);
+            guest.addStays(Collections.singletonList(newStay));
+            guest.setCheckedin(true);
+            stayRepo.save(newStay);
+            guestRepo.save(guest);
+        } else {
+            throw new GuestIllegalStateException();
+        }
     }
 
     private Stay updateStay(Stay stay, StayDto stayDto) {

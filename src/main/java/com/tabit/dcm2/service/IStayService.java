@@ -9,4 +9,6 @@ public interface IStayService {
     void updateStay(StayDto stayDto);
 
     Boolean isBoxEmpty(String boxNumber);
+
+    void addActiveStay(StayDto stayDto);
 }

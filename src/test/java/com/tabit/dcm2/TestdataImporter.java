@@ -79,7 +79,7 @@ public class TestdataImporter {
         guest.setFirstName(firstName);
         guest.setLastName("Banderas With Many Stays And Different Names");
         guest.setCheckedin(true);
-        guest.addStays(ImmutableList.of(stayVeryOld, stayOld, stayActual));
+        guest.setStays(ImmutableList.of(stayVeryOld, stayOld, stayActual));
 
         return guest;
     }
@@ -106,7 +106,7 @@ public class TestdataImporter {
         guest.setFirstName(firstName);
         guest.setLastName("Hopkins With Stays And Different Names");
         guest.setCheckedin(false);
-        guest.addStays(ImmutableList.of(stayVeryOld, stayOld));
+        guest.setStays(ImmutableList.of(stayVeryOld, stayOld));
 
         return guest;
     }
@@ -133,7 +133,7 @@ public class TestdataImporter {
         guest.setFirstName("Keanu");
         guest.setLastName("Reeves");
         guest.setCheckedin(true);
-        guest.addStays(ImmutableList.of(stayActual));
+        guest.setStays(ImmutableList.of(stayActual));
         return guest;
     }
 
@@ -150,7 +150,7 @@ public class TestdataImporter {
         guest.setFirstName("Agent");
         guest.setLastName("Smith Shows Name Always From Stay");
         guest.setCheckedin(true);
-        guest.addStays(ImmutableList.of(stayActual));
+        guest.setStays(ImmutableList.of(stayActual));
 
         return guest;
     }
@@ -203,7 +203,7 @@ public class TestdataImporter {
         guest.setFirstName("Mel");
         guest.setLastName("Gibson Same Names");
         guest.setCheckedin(true);
-        guest.addStays(ImmutableList.of(stayOld, stayActual));
+        guest.setStays(ImmutableList.of(stayOld, stayActual));
         return guest;
     }
 

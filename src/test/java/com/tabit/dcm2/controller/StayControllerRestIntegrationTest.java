@@ -19,7 +19,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
+
 import static com.tabit.dcm2.entity.RandomGuest.createGuestFromStayWithoutId;
+import static com.tabit.dcm2.entity.RandomGuest.createRandomGuestWitoutId;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -41,7 +44,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         //given
         stay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
         guest = createGuestFromStayWithoutId(stay);
-        guest.addStays(ImmutableList.of(stay));
+        guest.setStays(ImmutableList.of(stay));
 
         guestRule.persist(ImmutableList.of(guest));
     }
@@ -145,4 +148,60 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         assertThat(resultFalse).isFalse();
         assertThat(resultTrue).isTrue();
     }
+    @Test
+    public void addActiveStay_shall_create_new_active_stay_and_update_guest_personeldetails_and_set_checked_in_flag_true() {
+        // given
+        Guest notCheckedInGuest = createRandomGuestWitoutId();
+        notCheckedInGuest.setCheckedin(false);
+        notCheckedInGuest.setStays(new ArrayList<>());
+        guestRule.persist(ImmutableList.of(notCheckedInGuest));
+
+        StayDto stayDto = RandomStayDto.createRandomStayDto();
+        stayDto.getStayDetails().setId(null);
+        stayDto.getGuestPersonalDetails().setId(notCheckedInGuest.getId());
+
+        HttpEntity<StayDto> entity = createHttpEntity(stayDto);
+
+        // when
+        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.POST, entity, Void.class);
+
+        Guest guestInDb = guestRepo.findById(notCheckedInGuest.getId()).get();
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThat(response.getBody()).isNull();
+
+        StayMappingAssertions.assertStayDto(stayDto, guestInDb.getStays().get(0));
+        assertThat(stayDto.getGuestPersonalDetails().getFirstName()).isEqualTo(guestInDb.getFirstName());
+        assertThat(stayDto.getGuestPersonalDetails().getLastName()).isEqualTo(guestInDb.getLastName());
+        assertThat(stayDto.getGuestPersonalDetails().getCity()).isEqualTo(guestInDb.getCity());
+        assertThat(stayDto.getGuestPersonalDetails().getBirthDate()).isEqualTo(guestInDb.getBirthDate());
+        assertThat(stayDto.getGuestPersonalDetails().getCountry()).isEqualTo(guestInDb.getCountry());
+        assertThat(stayDto.getGuestPersonalDetails().getEmail()).isEqualTo(guestInDb.getEmail());
+        assertThat(stayDto.getGuestPersonalDetails().getNationality()).isEqualTo(guestInDb.getNationality());
+        assertThat(stayDto.getGuestPersonalDetails().getPassportId()).isEqualTo(guestInDb.getPassportId());
+        assertThat(stayDto.getGuestPersonalDetails().getPhone()).isEqualTo(guestInDb.getPhone());
+        assertThat(stayDto.getGuestPersonalDetails().getPostcode()).isEqualTo(guestInDb.getPostcode());
+        assertThat(stayDto.getGuestPersonalDetails().getStreet()).isEqualTo(guestInDb.getStreet());
+    }
+
+    @Test
+    public void addActiveStay_shall_throw_exception_if_trying_to_add_active_stay_for_checked_in_guest() {
+        // given
+        guest.setCheckedin(true);
+        guestRule.persist(ImmutableList.of(guest));
+        StayDto stayDto = RandomStayDto.createRandomStayDto();
+        stayDto.getGuestPersonalDetails().setId(guest.getId());
+
+        HttpEntity<StayDto> entity = createHttpEntity(stayDto);
+
+        // when
+        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.POST, entity, Void.class);
+
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.INTERNAL_SERVER_ERROR);
+        //assertThat(response.getBody()).isNull();
+    }
+
 }

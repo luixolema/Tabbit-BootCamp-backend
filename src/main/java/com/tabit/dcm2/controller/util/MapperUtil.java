@@ -79,5 +79,36 @@ public class MapperUtil {
         guestDto.setLastName(guest.getLastName());
         guestDto.setCheckedin(guest.isCheckedin());
         return guestDto;
-    };
+    }
+
+    public static Stay mapStayDtoToStayWithoutGuestRef(StayDto stayDto) {
+        Stay stay = new Stay();
+        stay.setFirstName(stayDto.getGuestPersonalDetails().getFirstName());
+        stay.setLastName(stayDto.getGuestPersonalDetails().getLastName());
+        stay.setBirthDate(stayDto.getGuestPersonalDetails().getBirthDate());
+        stay.setNationality(stayDto.getGuestPersonalDetails().getNationality());
+        stay.setCountry(stayDto.getGuestPersonalDetails().getCountry());
+        stay.setCity(stayDto.getGuestPersonalDetails().getCity());
+        stay.setPostcode(stayDto.getGuestPersonalDetails().getPostcode());
+        stay.setStreet(stayDto.getGuestPersonalDetails().getStreet());
+        stay.setEmail(stayDto.getGuestPersonalDetails().getEmail());
+        stay.setPhone(stayDto.getGuestPersonalDetails().getPhone());
+        stay.setPassportId(stayDto.getGuestPersonalDetails().getPassportId());
+        stay.setBoxNumber(stayDto.getStayDetails().getBoxNumber());
+        stay.setCheckInDate(stayDto.getStayDetails().getCheckInDate());
+        stay.setCheckOutDate(stayDto.getStayDetails().getCheckOutDate());
+        stay.setArriveDate(stayDto.getStayDetails().getArriveDate());
+        stay.setLeaveDate(stayDto.getStayDetails().getLeaveDate());
+        stay.setHotel(stayDto.getStayDetails().getHotel());
+        stay.setRoom(stayDto.getStayDetails().getRoom());
+        stay.setLastDiveDate(stayDto.getStayDetails().getLastDiveDate());
+        stay.setBrevet(stayDto.getStayDetails().getBrevet());
+        stay.setDivesAmount(stayDto.getStayDetails().getDivesAmount());
+        stay.setNitrox(stayDto.getStayDetails().isNitrox());
+        stay.setMedicalStatement(stayDto.getStayDetails().isMedicalStatement());
+        stay.setActive(stayDto.getStayDetails().isActive());
+        stay.setPreBooking(stayDto.getStayDetails().getPreBooking());
+
+        return stay;
+    }
 }
