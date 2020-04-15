@@ -6,9 +6,9 @@ import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
+import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
-import com.tabit.dcm2.service.util.GuestMapper;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Before;
@@ -54,8 +54,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
 
         //then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
-        StayMappingAssertions.assertStayDto(response.getBody(),stay);
-
+        StayMappingAssertions.assertStayDto(response.getBody(), stay);
     }
 
     @Test
@@ -102,8 +101,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     public void updateStay_shall_update_only_stay_data_when_guestDetails_is_not_updated() {
         // given
         StayDto stayDto = RandomStayDto.createStayDtoFromStay(stay);
-        GuestMapper guestMapper = new GuestMapper();
-        stayDto.setGuestPersonalDetails(guestMapper.guestPersonalDetailsDtoFromGuest(guest));
+        stayDto.setGuestPersonalDetails(RandomGuestPersonalDetailsDto.createGuestPersonalDetailsDtoFromGuest(guest));
 
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
 
@@ -147,5 +145,4 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         assertThat(resultFalse).isFalse();
         assertThat(resultTrue).isTrue();
     }
-
 }

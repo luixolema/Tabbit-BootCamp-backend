@@ -18,6 +18,7 @@ public class StaySummaryDto extends AbstractBean {
         this.active = active;
     }
 
+    // default Costructor needed for json
     public StaySummaryDto() {
     }
 

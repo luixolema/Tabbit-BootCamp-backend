@@ -69,10 +69,10 @@ public class MapperUtil {
         return stayDto;
     }
 
-    public static GuestDto guestToGuestDTO (Guest guest){
+    public static GuestDto mapGuestToGuestDTO(Guest guest) {
         GuestDto guestDto = new GuestDto();
         guestDto.setId(guest.getId());
-        if(guest.isCheckedin()){
+        if (guest.isCheckedin()) {
             guestDto.setBoxNumber(guest.getStays().get(0).getBoxNumber());
         }
         guestDto.setFirstName(guest.getFirstName());
