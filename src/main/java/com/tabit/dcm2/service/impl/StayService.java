@@ -1,5 +1,6 @@
 package com.tabit.dcm2.service.impl;
 
+import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.controller.util.MapperUtil;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
@@ -13,7 +14,6 @@ import com.tabit.dcm2.service.util.GuestMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -44,7 +44,7 @@ public class StayService implements IStayService {
     }
 
     @Override
-    public Boolean isBoxEmpty(String boxNumber) {
+    public Boolean isBoxFree(String boxNumber) {
         return !stayRepo.getBoxNumbers().contains(boxNumber);
     }
 
@@ -54,7 +54,7 @@ public class StayService implements IStayService {
         if (!guest.isCheckedin()) {
             guestMapper.mapPersonalDetailsFromDto(guest, stayDto.getGuestPersonalDetails());
             Stay newStay = MapperUtil.mapStayDtoToStayWithoutGuestRef(stayDto);
-            guest.addStays(Collections.singletonList(newStay));
+            guest.addStays(ImmutableList.of(newStay));
             guest.setCheckedin(true);
             stayRepo.save(newStay);
             guestRepo.save(guest);

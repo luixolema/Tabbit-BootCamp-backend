@@ -133,7 +133,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     }
 
     @Test
-    public void isBoxEmpty_shall_return_the_right_value() {
+    public void isBoxFree_shall_return_the_right_value() {
         // given
         HttpEntity<String> activeBox = createHttpEntity(stay.getBoxNumber());
         HttpEntity<String> emptyBox = createHttpEntity(stay.getBoxNumber() + "Update");

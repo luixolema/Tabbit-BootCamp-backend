@@ -108,8 +108,8 @@ public class StayServiceTest {
         when(stayRepo.getBoxNumbers()).thenReturn(ImmutableList.of(stay.getBoxNumber()));
 
         // when
-        boolean resultTrue = stayService.isBoxEmpty(stay.getBoxNumber() + "Update");
-        boolean resultFalse = stayService.isBoxEmpty(stay.getBoxNumber());
+        boolean resultTrue = stayService.isBoxFree(stay.getBoxNumber() + "Update");
+        boolean resultFalse = stayService.isBoxFree(stay.getBoxNumber());
 
         // then
         assertThat(resultTrue).isTrue();

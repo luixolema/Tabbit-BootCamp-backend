@@ -8,7 +8,7 @@ public interface IStayService {
 
     void updateStay(StayDto stayDto);
 
-    Boolean isBoxEmpty(String boxNumber);
+    Boolean isBoxFree(String boxNumber);
 
     void addActiveStay(StayDto stayDto);
 }
