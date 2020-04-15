@@ -172,6 +172,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         assertThat(response.getBody()).isNull();
 
         StayMappingAssertions.assertStayDto(stayDto, guestInDb.getStays().get(0));
+        assertThat(guestInDb.isCheckedin()).isTrue();
         assertThat(stayDto.getGuestPersonalDetails().getFirstName()).isEqualTo(guestInDb.getFirstName());
         assertThat(stayDto.getGuestPersonalDetails().getLastName()).isEqualTo(guestInDb.getLastName());
         assertThat(stayDto.getGuestPersonalDetails().getCity()).isEqualTo(guestInDb.getCity());
@@ -201,7 +202,22 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.INTERNAL_SERVER_ERROR);
-        //assertThat(response.getBody()).isNull();
+        assertThat(response.getBody()).isNull();
+    }
+
+    @Test
+    public void addActiveStay_shall_throw_exception_if_trying_to_add_active_stay_for_not_existing_guest() {
+        // given
+        StayDto stayDto = RandomStayDto.createRandomStayDto();
+
+        HttpEntity<StayDto> entity = createHttpEntity(stayDto);
+
+        // when
+        ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.POST, entity, Void.class);
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody()).isNull();
     }
 
 }
