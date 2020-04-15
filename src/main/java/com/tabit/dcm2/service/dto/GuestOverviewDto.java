@@ -8,6 +8,7 @@ public class GuestOverviewDto extends AbstractBean {
     private List<GuestDto> guests;
     private int total;
 
+    // default Costructor needed for json
     public GuestOverviewDto() {
     }
 
@@ -20,18 +21,7 @@ public class GuestOverviewDto extends AbstractBean {
         return guests;
     }
 
-    // TODO in ControllerTask: if we do not need the setter for json, then remove it
-    public void setGuests(List<GuestDto> guests) {
-        this.guests = guests;
-        this.total = guests.size();
-    }
-
     public int getTotal() {
         return total;
-    }
-
-    // TODO in ControllerTask: if we do not need the setter for json, then remove it
-    public void setTotal(int total) {
-        this.total = total;
     }
 }

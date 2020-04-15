@@ -1,5 +1,6 @@
 package com.tabit.dcm2.service.dto;
 
+import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.testutils.ValueProvider;
 
 public class RandomGuestPersonalDetailsDto {
@@ -19,6 +20,25 @@ public class RandomGuestPersonalDetailsDto {
         guestPersonalDetailsDto.setPhone(valueProvider.randomString("phone"));
         guestPersonalDetailsDto.setPostcode(valueProvider.randomString("postcode"));
         guestPersonalDetailsDto.setStreet(valueProvider.randomString("street"));
+
+        return guestPersonalDetailsDto;
+    }
+
+    public static GuestPersonalDetailsDto createGuestPersonalDetailsDtoFromGuest(Guest guest) {
+        GuestPersonalDetailsDto guestPersonalDetailsDto = new GuestPersonalDetailsDto();
+
+        guestPersonalDetailsDto.setId(guest.getId());
+        guestPersonalDetailsDto.setFirstName(guest.getFirstName());
+        guestPersonalDetailsDto.setLastName(guest.getLastName());
+        guestPersonalDetailsDto.setBirthDate(guest.getBirthDate());
+        guestPersonalDetailsDto.setEmail(guest.getEmail());
+        guestPersonalDetailsDto.setNationality(guest.getNationality());
+        guestPersonalDetailsDto.setCity(guest.getCity());
+        guestPersonalDetailsDto.setPassportId(guest.getPassportId());
+        guestPersonalDetailsDto.setPhone(guest.getPhone());
+        guestPersonalDetailsDto.setCountry(guest.getCountry());
+        guestPersonalDetailsDto.setPostcode(guest.getPostcode());
+        guestPersonalDetailsDto.setStreet(guest.getStreet());
 
         return guestPersonalDetailsDto;
     }

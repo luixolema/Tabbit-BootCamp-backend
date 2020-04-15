@@ -2,8 +2,6 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 
-import java.util.Objects;
-
 public class GuestDto extends AbstractBean {
     private Long id;
     private String firstName;
@@ -49,33 +47,5 @@ public class GuestDto extends AbstractBean {
 
     public void setBoxNumber(String boxNumber) {
         this.boxNumber = boxNumber;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        GuestDto guestDto = (GuestDto) o;
-        return isCheckedin() == guestDto.isCheckedin() &&
-                getId().equals(guestDto.getId()) &&
-                Objects.equals(getFirstName(), guestDto.getFirstName()) &&
-                Objects.equals(getLastName(), guestDto.getLastName()) &&
-                Objects.equals(getBoxNumber(), guestDto.getBoxNumber());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastName(), getBoxNumber(), isCheckedin());
-    }
-
-    @Override
-    public String toString() {
-        return "GuestDto{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", boxNumber='" + boxNumber + '\'' +
-                ", checkedin=" + checkedin +
-                '}';
     }
 }

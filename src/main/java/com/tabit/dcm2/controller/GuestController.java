@@ -6,23 +6,18 @@ import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.dto.GuestDetailDto;
-import com.tabit.dcm2.service.dto.GuestDto;
 import com.tabit.dcm2.service.dto.GuestOverviewDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
-import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/api/guests")
 public class GuestController {
-
     @Autowired
     private IGuestService guestService;
 
@@ -41,11 +36,7 @@ public class GuestController {
                 break;
         }
         List<Guest> guests = guestService.getAllGuests(guestFilterType);
-
-        List<GuestDto> guestDtos = new ArrayList<>();
-        for (Guest guest : guests) { guestDtos.add(MapperUtil.guestToGuestDTO(guest)); }
-
-        return new GuestOverviewDto(guestDtos);
+        return new GuestOverviewDto(guests.stream().map(MapperUtil::mapGuestToGuestDTO).collect(Collectors.toList()));
     }
 
     @GetMapping("/{guestId}")

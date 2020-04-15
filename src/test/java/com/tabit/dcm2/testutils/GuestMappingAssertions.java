@@ -1,6 +1,5 @@
 package com.tabit.dcm2.testutils;
 
-import com.tabit.dcm2.controller.util.MapperUtil;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.dto.*;
@@ -116,15 +115,6 @@ public class GuestMappingAssertions {
         assertThat(guest.getCountry()).isEqualTo(guestPersonalDetailsDto.getCountry());
         assertThat(guest.getPostcode()).isEqualTo(guestPersonalDetailsDto.getPostcode());
         assertThat(guest.getStreet()).isEqualTo(guestPersonalDetailsDto.getStreet());
-    }
-
-    public static void assertGuestOverviewDto(List<Guest> guests, GuestOverviewDto guestOverviewDto) {
-        List<GuestDto> guestDtos= guestOverviewDto.getGuests();
-
-        assertThat(guestDtos.size()).isEqualTo(guests.size());
-        for (Guest guest : guests) {
-            assertThat(guestDtos).contains(MapperUtil.guestToGuestDTO(guest));
-        }
     }
 
     public enum GuestDetailType {
