@@ -29,6 +29,11 @@ public class ValueProvider {
         return random.nextInt();
     }
 
+
+    public Integer randomPositiveIntUnder100() {
+        return random.nextInt(100);
+    }
+
     public boolean randomBoolean() {
         return random.nextBoolean();
     }
