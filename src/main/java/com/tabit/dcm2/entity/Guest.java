@@ -168,11 +168,14 @@ public class Guest implements IEntity {
     }
 
     public void setStays(List<Stay> stays) {
+        stays.forEach(s -> s.setGuest(this));
         this.stays = stays;
     }
 
     public void addStays(List<Stay> stays) {
-        setStays(stays);
-        stays.forEach(s -> s.setGuest(this));
+        List<Stay> newStays = new ArrayList<>();
+        newStays.addAll(getStays());
+        newStays.addAll(stays);
+        setStays(newStays);
     }
 }

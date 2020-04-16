@@ -27,12 +27,12 @@ public class StayRepoDbTest extends AbstractDbTest {
         // given
         Guest guestForStay = RandomGuest.createRandomGuestWitoutId();
         activeStay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
-        guestForStay.addStays(ImmutableList.of(activeStay));
+        guestForStay.setStays(ImmutableList.of(activeStay));
 
         Guest guestForStay2 = RandomGuest.createRandomGuestWitoutId();
         activeStay2 = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
         notActiveStay = RandomStay.createRandomStayWithoutIdGivenActiveState(false);
-        guestForStay2.addStays(ImmutableList.of(activeStay2, notActiveStay));
+        guestForStay2.setStays(ImmutableList.of(activeStay2, notActiveStay));
 
         guestRule.persist(ImmutableList.of(guestForStay));
         guestRule.persist(ImmutableList.of(guestForStay2));

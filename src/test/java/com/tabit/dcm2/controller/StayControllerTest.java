@@ -56,18 +56,30 @@ public class StayControllerTest {
     }
 
     @Test
-    public void isBoxEmpty_shall_return_the_right_value() {
+    public void isBoxFree_shall_return_the_right_value() {
         // given
         Stay activeStay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
-        when(stayService.isBoxEmpty(activeStay.getBoxNumber())).thenReturn(false);
-        when(stayService.isBoxEmpty(not(eq(activeStay.getBoxNumber())))).thenReturn(true);
+        when(stayService.isBoxFree(activeStay.getBoxNumber())).thenReturn(false);
+        when(stayService.isBoxFree(not(eq(activeStay.getBoxNumber())))).thenReturn(true);
 
         // when
-        boolean resultFalse = stayService.isBoxEmpty(activeStay.getBoxNumber());
-        boolean resultTrue = stayService.isBoxEmpty(activeStay.getBoxNumber() + "Update");
+        boolean resultFalse = stayService.isBoxFree(activeStay.getBoxNumber());
+        boolean resultTrue = stayService.isBoxFree(activeStay.getBoxNumber() + "Update");
 
         // then
         assertThat(resultFalse).isFalse();
         assertThat(resultTrue).isTrue();
+    }
+
+    @Test
+    public void addActiveStay_shall_add_new_stay() {
+        // given
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+
+        // when
+        stayController.addActiveStay(randomStayDto);
+
+        // then
+        verify(stayService).addActiveStay(randomStayDto);
     }
 }

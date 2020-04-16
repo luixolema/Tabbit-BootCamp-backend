@@ -32,7 +32,7 @@ public class GuestRepoDbTest extends AbstractDbTest {
 
         Guest guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInTrue.setCheckedin(true);
-        guestCheckedInTrue.addStays(ImmutableList.of(stayOld, stayNew));
+        guestCheckedInTrue.setStays(ImmutableList.of(stayOld, stayNew));
 
         Guest guestCheckedInFalse = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInFalse.setCheckedin(false);

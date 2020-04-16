@@ -5,6 +5,8 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.exception.BoxReservationException;
+import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
@@ -18,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -56,7 +59,7 @@ public class StayServiceTest {
     public void findById_shall_throw_exception() {
         // given
         Long randomId = valueProvider.randomId();
-        when(stayRepo.findById(randomId)).thenThrow(ResourceNotFoundException.class);
+        when(stayRepo.findById(randomId)).thenReturn(Optional.empty());
 
         // when
         stayService.findById(randomId);
@@ -106,12 +109,68 @@ public class StayServiceTest {
         when(stayRepo.getBoxNumbers()).thenReturn(ImmutableList.of(stay.getBoxNumber()));
 
         // when
-        boolean resultTrue = stayService.isBoxEmpty(stay.getBoxNumber() + "Update");
-        boolean resultFalse = stayService.isBoxEmpty(stay.getBoxNumber());
+        boolean resultTrue = stayService.isBoxFree(stay.getBoxNumber() + "Update");
+        boolean resultFalse = stayService.isBoxFree(stay.getBoxNumber());
 
         // then
         assertThat(resultTrue).isTrue();
         assertThat(resultFalse).isFalse();
+    }
+
+    @Test
+    public void addActiveStay_shall_create_new_active_stay_and_update_guest_personeldetails_and_set_checked_in_flag_true() {
+        // given
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+        Guest notCheckedInGuest = RandomGuest.createRandomGuest();
+        notCheckedInGuest.setStays(new ArrayList<>());
+        notCheckedInGuest.setCheckedin(false);
+
+        when(guestRepo.findById(randomStayDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(notCheckedInGuest));
+
+        // when
+        stayService.addActiveStay(randomStayDto);
+
+        // then
+        verify(guestMapper).mapPersonalDetailsFromDto(notCheckedInGuest, randomStayDto.getGuestPersonalDetails());
+        verify(guestRepo).save(notCheckedInGuest);
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void addActiveStay_shall_throw_exception_for_not_existing_guest() {
+        // given
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+
+        when(guestRepo.findById(randomStayDto.getGuestPersonalDetails().getId())).thenReturn(Optional.empty());
+
+        // when
+        stayService.addActiveStay(randomStayDto);
+    }
+
+    @Test(expected = GuestIllegalStateException.class)
+    public void addActiveStay_shall_throw_exception_for_adding_active_stay_for_checked_in_guest() {
+        // given
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+        Guest checkedInGuest = RandomGuest.createRandomGuest();
+        checkedInGuest.setCheckedin(true);
+
+        when(guestRepo.findById(randomStayDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(checkedInGuest));
+
+        // when
+        stayService.addActiveStay(randomStayDto);
+    }
+
+    @Test(expected = BoxReservationException.class)
+    public void addActiveStay_shall_throw_exception_for_adding_active_stay_for_already_reserved_box() {
+        // given
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+        Guest guest = RandomGuest.createRandomGuest();
+        guest.setCheckedin(false);
+
+        when(guestRepo.findById(randomStayDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(guest));
+        when(stayRepo.getBoxNumbers()).thenReturn(ImmutableList.of(randomStayDto.getStayDetails().getBoxNumber()));
+
+        // when
+        stayService.addActiveStay(randomStayDto);
     }
 
     private Guest getGuestFromStayDto(StayDto stayDto) {
