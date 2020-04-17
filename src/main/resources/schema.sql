@@ -75,7 +75,7 @@ create TABLE `equipment` (
     `serial_number` varchar(100) NOT NULL,
     `status` varchar(100) NOT NULL,
     FOREIGN KEY (`equipment_type_id`) REFERENCES equipment_type(`id`),
-    CONSTRAINT uni_sety UNIQUE (`serial_number`, `equipment_type_id`),
+    CONSTRAINT unique_serial_type_comb UNIQUE (`serial_number`, `equipment_type_id`),
     PRIMARY KEY (`id`)
   );
 

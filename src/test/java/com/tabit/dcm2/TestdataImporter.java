@@ -19,7 +19,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("mysql")
 public class TestdataImporter {
 
     @Autowired
@@ -54,25 +54,41 @@ public class TestdataImporter {
 
     private void saveLoads() {
         Guest guest1 = guestsInDb.get(0);
-        Stay stay1 = guest1.getStays().get(0);
+        Stay stay1 = guest1.getStays().get(1);
+        Stay stay2 = guest1.getStays().get(2);
         Equipment equipment1 = equipmentsInDb.get(0);
         Equipment equipment2 = equipmentsInDb.get(1);
 
-        // Loans
+        // Loan 1 stay 1
         Loan loan1 = new Loan();
         loan1.setStay(stay1);
-        loan1.setDateReturn(LocalDate.now().minusYears(1));
-        loan1.setDateOut(LocalDate.now().minusYears(1).minusDays(2));
+        loan1.setDateOut(stay1.getCheckInDate().plusDays(1));
+        loan1.setDateReturn(stay1.getCheckOutDate().minusDays(1));
         loan1.setEquipment(equipment1);
 
-        // Loans
+        // Loan 2 stay 1
         Loan loan2 = new Loan();
         loan2.setStay(stay1);
-        loan2.setDateReturn(LocalDate.now().minusYears(1));
-        loan2.setDateOut(LocalDate.now().minusYears(1).minusDays(5));
+        loan2.setDateOut(stay2.getCheckInDate().plusDays(1));
+        loan2.setDateReturn(stay2.getCheckOutDate().minusDays(1));
         loan2.setEquipment(equipment2);
 
-        loanRepo.saveAll(ImmutableList.of(loan1, loan2));
+
+        // Loan 3 stay 2
+        Loan loan3 = new Loan();
+        loan3.setStay(stay2);
+        loan3.setDateOut(stay2.getCheckInDate().plusDays(1));
+        loan3.setDateReturn(stay2.getCheckOutDate().minusDays(1));
+        loan3.setEquipment(equipment1);
+
+        // Loan 3 stay 2
+        Loan loan4 = new Loan();
+        loan4.setStay(stay2);
+        loan4.setDateOut(stay2.getCheckInDate().plusDays(1));
+        loan4.setDateReturn(stay2.getCheckOutDate().minusDays(1));
+        loan4.setEquipment(equipment2);
+
+        loanRepo.saveAll(ImmutableList.of(loan1, loan2, loan3, loan4));
     }
 
     private void saveEquipments() {

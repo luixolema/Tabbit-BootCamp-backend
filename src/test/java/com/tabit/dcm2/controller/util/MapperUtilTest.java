@@ -1,11 +1,11 @@
 package com.tabit.dcm2.controller.util;
 
 
-import com.tabit.dcm2.entity.Equipment;
-import com.tabit.dcm2.entity.EquipmentType;
-import com.tabit.dcm2.entity.Loan;
-import com.tabit.dcm2.entity.RandomLoan;
+import com.google.common.collect.ImmutableList;
+import com.tabit.dcm2.entity.*;
+import com.tabit.dcm2.service.dto.CompleteStayDto;
 import com.tabit.dcm2.service.dto.LoanDto;
+import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -34,10 +34,17 @@ public class MapperUtilTest {
     }
 
     @Test
-    public void mapStayToStayDto_should_match_all_fields() {
-        // fixme do this if there is time enough
+    public void mapStayToCompleteStayDto_should_match_all_fields() {
         //given
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        Stay randomStay = RandomStay.createRandomStay();
+        randomStay.setLoans(ImmutableList.of(RandomLoan.createRandomLoan()));
+        randomStay.setGuest(randomGuest);
+
         //when
+        CompleteStayDto completeStayDto = MapperUtil.mapStayToCompleteStayDto(randomStay);
+
         //then
+        StayMappingAssertions.assertCompleteStayDto(completeStayDto, randomStay);
     }
 }
