@@ -1,9 +1,7 @@
 package com.tabit.dcm2.controller;
 
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.RandomStay;
-import com.tabit.dcm2.entity.Stay;
+import com.google.common.collect.ImmutableList;
+import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.impl.StayService;
@@ -32,8 +30,12 @@ public class StayControllerTest {
     public void getStay_shall_return_stay() {
         // given
         Guest guest = RandomGuest.createRandomGuest();
+        Loan loan = RandomLoan.createRandomLoan();
+
         Stay randomStay = RandomStay.createRandomStay();
         randomStay.setGuest(guest);
+        randomStay.setLoans(ImmutableList.of(loan));
+
         when(stayService.findById(randomStay.getId())).thenReturn(randomStay);
 
         // when

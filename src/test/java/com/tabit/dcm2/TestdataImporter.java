@@ -1,11 +1,11 @@
 package com.tabit.dcm2;
 
 import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.RandomStay;
-import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.entity.*;
+import com.tabit.dcm2.repository.IEquipmentRepo;
+import com.tabit.dcm2.repository.IEquipmentTypeRepo;
 import com.tabit.dcm2.repository.IGuestRepo;
+import com.tabit.dcm2.repository.ILoanRepo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -24,6 +25,20 @@ public class TestdataImporter {
     @Autowired
     private IGuestRepo guestRepo;
 
+    @Autowired
+    private IEquipmentRepo equipmentRepo;
+
+    @Autowired
+    private ILoanRepo loanRepo;
+
+    @Autowired
+    private IEquipmentTypeRepo equipmentTypeRepo;
+
+    private List<Guest> guestsInDb = new ArrayList<>();
+    private List<Equipment> equipmentsInDb = new ArrayList<>();
+
+
+    @Autowired
     /**
      * to import some testdata to the application just set ActiveProfile to mysql.
      * but dont commit it!
@@ -32,7 +47,74 @@ public class TestdataImporter {
      */
     @Test
     public void import_testdata_for_application() {
+//        saveEquipments();
         saveGuests();
+//        saveLoads();
+    }
+
+    private void saveLoads() {
+        Guest guest1 = guestsInDb.get(0);
+        Stay stay1 = guest1.getStays().get(0);
+        Equipment equipment1 = equipmentsInDb.get(0);
+        Equipment equipment2 = equipmentsInDb.get(1);
+
+        // Loans
+        Loan loan = new Loan();
+        loan.setStay(stay1);
+        loan.setDateReturn(LocalDate.now().minusYears(1));
+        loan.setDateOut(LocalDate.now().minusYears(1).minusDays(2));
+        loan.setEquipment(equipment1);
+
+        // Loans
+        Loan loan2 = new Loan();
+        loan.setStay(stay1);
+        loan.setDateReturn(LocalDate.now().minusYears(1));
+        loan.setDateOut(LocalDate.now().minusYears(1).minusDays(5));
+        loan.setEquipment(equipment2);
+    }
+
+    private void saveEquipments() {
+        //equipment types
+        EquipmentType equipmentTypeMask = new EquipmentType();
+        equipmentTypeMask.setType("Mask");
+        equipmentTypeMask.setPrice(12.20);
+        equipmentTypeMask.setDescription("Big mask");
+        equipmentTypeMask.setActive(true);
+
+        EquipmentType equipmentTypeFins = new EquipmentType();
+        equipmentTypeMask.setType("Fins");
+        equipmentTypeMask.setPrice(4.50);
+        equipmentTypeMask.setDescription("Small fins");
+        equipmentTypeMask.setActive(true);
+
+        equipmentTypeRepo.saveAll(ImmutableList.of(equipmentTypeFins, equipmentTypeMask));
+
+        //equipments
+        Equipment equipment1 = new Equipment();
+        equipment1.setStatus(Equipment.EquipmentStatus.AVAILABLE);
+        equipment1.setSerialNumber("QHH123");
+        equipment1.setEquipmentType(equipmentTypeFins);
+
+        Equipment equipment2 = new Equipment();
+        equipment2.setStatus(Equipment.EquipmentStatus.BROKEN);
+        equipment2.setSerialNumber("QHH124");
+        equipment2.setEquipmentType(equipmentTypeMask);
+
+
+        Equipment equipment3 = new Equipment();
+        equipment3.setStatus(Equipment.EquipmentStatus.STOLEN);
+        equipment3.setSerialNumber("QHH125");
+        equipment3.setEquipmentType(equipmentTypeFins);
+
+
+        Equipment equipment4 = new Equipment();
+        equipment4.setStatus(Equipment.EquipmentStatus.IN_REPAIR);
+        equipment4.setSerialNumber("QHH126");
+        equipment4.setEquipmentType(equipmentTypeMask);
+
+        ImmutableList<Equipment> equipments = ImmutableList.of(equipment1, equipment2, equipment3, equipment4);
+        equipmentsInDb.addAll(equipments);
+        equipmentRepo.saveAll(equipments);
     }
 
     private void saveGuests() {
@@ -46,7 +128,9 @@ public class TestdataImporter {
         Guest guest8 = createGuestClintEastwood();
         Guest guest9 = createGuestMelGibson();
 
-        guestRepo.saveAll(ImmutableList.of(guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
+        ImmutableList<Guest> guests = ImmutableList.of(guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9);
+        guestsInDb.addAll(guests);
+        guestRepo.saveAll(guests);
     }
 
     private Guest createGuestAntonioBanderas() {

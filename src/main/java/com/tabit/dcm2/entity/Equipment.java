@@ -4,10 +4,10 @@ import javax.persistence.*;
 
 @Entity
 @Table(
-        name = "equipment_item",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"field_1", "field_2"})}
+        name = "equipment",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"serial_number", "equipment_type_id"})}
 )
-public class EquipmentItem implements IEntity {
+public class Equipment implements IEntity {
     @Id
     @Column(name = "id")
     @TableGenerator(allocationSize = 1,
@@ -15,11 +15,11 @@ public class EquipmentItem implements IEntity {
             table = "id_gen",
             pkColumnName = "id_name",
             valueColumnName = "id_value",
-            pkColumnValue = "equipment_item_id")
+            pkColumnValue = "equipment_id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "IDGenerator")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne
     @JoinColumn(name = "equipment_type_id")
     private EquipmentType equipmentType;
 

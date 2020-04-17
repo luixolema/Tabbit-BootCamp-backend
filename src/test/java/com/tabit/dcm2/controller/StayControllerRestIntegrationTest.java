@@ -1,9 +1,7 @@
 package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomStay;
-import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
@@ -20,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static com.tabit.dcm2.entity.RandomGuest.createGuestFromStayWithoutId;
 import static com.tabit.dcm2.entity.RandomGuest.createRandomGuestWitoutId;
@@ -37,16 +36,30 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
 
     private Stay stay;
     private Guest guest;
+    private Loan loan;
+    private Equipment equipment;
+    private EquipmentType equipmentType;
 
     @Before
     public void setUp() {
-
         //given
         stay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
         guest = createGuestFromStayWithoutId(stay);
         guest.setStays(ImmutableList.of(stay));
 
         guestRule.persist(ImmutableList.of(guest));
+
+        equipmentType = RandomEquipmentType.createRandomEquipmentTypeWitoutId();
+        equipmentTypeRule.persist(ImmutableList.of(equipmentType));
+        equipment = RandomEquipment.createRandomEquipmentWitoutId();
+        equipment.setEquipmentType(equipmentType);
+        equipmentRule.persist(ImmutableList.of(equipment));
+        loan = RandomLoan.createRandomLoanWitoutId();
+        loan.setEquipment(equipment);
+        loan.setStay(stay);
+        loanRule.persist(ImmutableList.of(loan));
+
+        stay.setLoans(ImmutableList.of(loan));
     }
 
     @Test
@@ -157,6 +170,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         guestRule.persist(ImmutableList.of(notCheckedInGuest));
 
         StayDto stayDto = RandomStayDto.createRandomStayDto();
+        stayDto.setLoans(Collections.emptyList());
         stayDto.getStayDetails().setId(null);
         stayDto.getGuestPersonalDetails().setId(notCheckedInGuest.getId());
 

@@ -1,11 +1,12 @@
 package com.tabit.dcm2.controller.util;
 
 import com.tabit.dcm2.entity.Guest;
+import com.tabit.dcm2.entity.Loan;
 import com.tabit.dcm2.entity.Stay;
-import com.tabit.dcm2.service.dto.GuestDto;
-import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
-import com.tabit.dcm2.service.dto.StayDetailsDto;
-import com.tabit.dcm2.service.dto.StayDto;
+import com.tabit.dcm2.service.dto.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MapperUtil {
 
@@ -41,9 +42,12 @@ public class MapperUtil {
         stayDetails.setActive(stay.isActive());
         stayDetails.setPreBooking(stay.getPreBooking());
 
+        List<LoanDto> loans = stay.getLoans().stream().map(MapperUtil::mapLoanToLoanDto).collect(Collectors.toList());
+
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(guestPersonalDetails);
         stayDto.setStayDetails(stayDetails);
+        stayDto.setLoans(loans);
 
         return stayDto;
     }
@@ -110,5 +114,16 @@ public class MapperUtil {
         stay.setPreBooking(stayDto.getStayDetails().getPreBooking());
 
         return stay;
+    }
+
+    public static LoanDto mapLoanToLoanDto(Loan loan) {
+        LoanDto loanDto = new LoanDto();
+        loanDto.setId(loan.getId());
+        loanDto.setDateOut(loan.getDateOut());
+        loanDto.setDateReturn(loan.getDateReturn());
+        loanDto.setSerial(loan.getEquipment().getSerialNumber());
+        loanDto.setType(loan.getEquipment().getEquipmentType().getType());
+
+        return loanDto;
     }
 }

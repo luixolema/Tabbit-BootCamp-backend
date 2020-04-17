@@ -2,6 +2,8 @@ package com.tabit.dcm2.entity;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Stay implements IEntity {
@@ -92,8 +94,12 @@ public class Stay implements IEntity {
     @Column(name = "active", nullable = false)
     private boolean active;
 
-    @Column(name = "pre_booking", nullable = true)
+    @Column(name = "pre_booking")
     private String preBooking;
+
+    @OneToMany(mappedBy = "stay", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OrderBy("date_out DESC")
+    private List<Loan> loans = new ArrayList<>();
 
     @Override
     public Long getId() {
@@ -312,4 +318,11 @@ public class Stay implements IEntity {
         this.preBooking = preBooking;
     }
 
+    public List<Loan> getLoans() {
+        return loans;
+    }
+
+    public void setLoans(List<Loan> loans) {
+        this.loans = loans;
+    }
 }

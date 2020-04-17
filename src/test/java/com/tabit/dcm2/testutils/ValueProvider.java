@@ -46,4 +46,13 @@ public class ValueProvider {
 
         return LocalDate.ofEpochDay(randomDay);
     }
+
+    public Double randomPrice() {
+        double input = randomDouble(10, 1000);
+        return Double.parseDouble(String.format("%.2f", input));
+    }
+
+    public Double randomDouble(double leftLimit, double rightLimit) {
+        return leftLimit + new Random().nextDouble() * (rightLimit - leftLimit);
+    }
 }

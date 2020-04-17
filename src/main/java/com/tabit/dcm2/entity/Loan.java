@@ -16,15 +16,19 @@ public class Loan implements IEntity {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "IDGenerator")
     private Long id;
 
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "equipment_item_id")
-    private EquipmentItem item;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "equipment_id")
+    private Equipment equipment;
 
     @Column(name = "date_out", nullable = false)
     private LocalDate dateOut;
 
     @Column(name = "date_return")
     private LocalDate dateReturn;
+
+    @ManyToOne
+    @JoinColumn(name = "stay_id")
+    private Stay stay;
 
     @Override
     public Long getId() {
@@ -35,12 +39,12 @@ public class Loan implements IEntity {
         this.id = id;
     }
 
-    public EquipmentItem getItem() {
-        return item;
+    public Equipment getEquipment() {
+        return equipment;
     }
 
-    public void setItem(EquipmentItem item) {
-        this.item = item;
+    public void setEquipment(Equipment equipment) {
+        this.equipment = equipment;
     }
 
     public LocalDate getDateOut() {
@@ -57,5 +61,13 @@ public class Loan implements IEntity {
 
     public void setDateReturn(LocalDate dateReturn) {
         this.dateReturn = dateReturn;
+    }
+
+    public Stay getStay() {
+        return stay;
+    }
+
+    public void setStay(Stay stay) {
+        this.stay = stay;
     }
 }
