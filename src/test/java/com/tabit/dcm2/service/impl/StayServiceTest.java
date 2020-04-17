@@ -24,9 +24,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StayServiceTest {
@@ -102,19 +100,26 @@ public class StayServiceTest {
         verify(guestRepo).save(guestWithChanges);
     }
 
+    /**
+     * or even better with theories @see {@link com.tabit.dcm2.controller.StayControllerTest#isBoxFree_shall_return_the_right_value(boolean)}
+     */
     @Test
     public void isBoxEmpty_shall_return_the_right_value() {
         // given
-        Stay stay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
-        when(stayRepo.getBoxNumbers()).thenReturn(ImmutableList.of(stay.getBoxNumber()));
+        Stay stay = RandomStay.createRandomStay();
+        when(stayRepo.getActiveBoxNumbers()).thenReturn(ImmutableList.of(stay.getBoxNumber())).thenReturn(ImmutableList.of("otherboxnumbers"));
 
         // when
-        boolean resultTrue = stayService.isBoxFree(stay.getBoxNumber() + "Update");
-        boolean resultFalse = stayService.isBoxFree(stay.getBoxNumber());
+        boolean isBoxFree = stayService.isBoxFree(stay.getBoxNumber());
 
         // then
-        assertThat(resultTrue).isTrue();
-        assertThat(resultFalse).isFalse();
+        assertThat(isBoxFree).isFalse();
+
+        // when
+        isBoxFree = stayService.isBoxFree(stay.getBoxNumber());
+
+        // then
+        assertThat(isBoxFree).isTrue();
     }
 
     @Test
@@ -167,7 +172,7 @@ public class StayServiceTest {
         guest.setCheckedin(false);
 
         when(guestRepo.findById(randomStayDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(guest));
-        when(stayRepo.getBoxNumbers()).thenReturn(ImmutableList.of(randomStayDto.getStayDetails().getBoxNumber()));
+        when(stayRepo.getActiveBoxNumbers()).thenReturn(ImmutableList.of(randomStayDto.getStayDetails().getBoxNumber()));
 
         // when
         stayService.addActiveStay(randomStayDto);
