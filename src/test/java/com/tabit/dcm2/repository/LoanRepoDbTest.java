@@ -58,8 +58,8 @@ public class LoanRepoDbTest extends AbstractDbTest {
 
     private void assertLoan(Loan actualLoan, Loan expectedLoan) {
         assertThat(actualLoan.getId()).isEqualTo(expectedLoan.getId());
-        assertThat(actualLoan.getDayOut()).isEqualTo(expectedLoan.getDayOut());
-        assertThat(actualLoan.getDayReturn()).isEqualTo(expectedLoan.getDayReturn());
+        assertThat(actualLoan.getDateOut()).isEqualTo(expectedLoan.getDateOut());
+        assertThat(actualLoan.getDateReturn()).isEqualTo(expectedLoan.getDateReturn());
         assertThat(actualLoan.getEquipment().getId()).isEqualTo(expectedLoan.getEquipment().getId());
         assertThat(actualLoan.getPrice()).isEqualTo(expectedLoan.getPrice());
         assertThat(actualLoan.getStay().getId()).isEqualTo(expectedLoan.getStay().getId());

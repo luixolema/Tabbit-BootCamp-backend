@@ -23,7 +23,7 @@ public class Stay implements IEntity {
     private Guest guest;
 
     @OneToMany(mappedBy = "stay", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @OrderBy("day_out ASC")
+    @OrderBy("date_out ASC")
     List<Loan> loans = new ArrayList<>();
 
     @Column(name = "first_name", nullable = false)

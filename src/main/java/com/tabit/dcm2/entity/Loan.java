@@ -24,11 +24,11 @@ public class Loan implements IEntity {
     @JoinColumn(name = "equipment_id")
     private Equipment equipment;
 
-    @Column(name = "day_out", nullable = false)
-    private LocalDate dayOut;
+    @Column(name = "date_out", nullable = false)
+    private LocalDate dateOut;
 
-    @Column(name = "day_return", nullable = true)
-    private LocalDate dayReturn;
+    @Column(name = "date_return", nullable = true)
+    private LocalDate dateReturn;
 
     @Column(name = "price", nullable = false)
     private Double price;
@@ -58,20 +58,20 @@ public class Loan implements IEntity {
         this.equipment = equipment;
     }
 
-    public LocalDate getDayOut() {
-        return dayOut;
+    public LocalDate getDateOut() {
+        return dateOut;
     }
 
-    public void setDayOut(LocalDate dayOut) {
-        this.dayOut = dayOut;
+    public void setDateOut(LocalDate dateOut) {
+        this.dateOut = dateOut;
     }
 
-    public LocalDate getDayReturn() {
-        return dayReturn;
+    public LocalDate getDateReturn() {
+        return dateReturn;
     }
 
-    public void setDayReturn(LocalDate dayReturn) {
-        this.dayReturn = dayReturn;
+    public void setDateReturn(LocalDate dateReturn) {
+        this.dateReturn = dateReturn;
     }
 
     public Double getPrice() {

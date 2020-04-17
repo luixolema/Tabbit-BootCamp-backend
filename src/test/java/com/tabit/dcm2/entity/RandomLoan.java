@@ -17,8 +17,8 @@ public class RandomLoan {
         Loan loan = new Loan();
         loan.setId(valueProvider.randomId());
         loan.setEquipment(RandomEquipment.createRandomEquipment());
-        loan.setDayOut(valueProvider.randomLocalDate());
-        loan.setDayReturn(valueProvider.randomLocalDate());
+        loan.setDateOut(valueProvider.randomLocalDate());
+        loan.setDateReturn(valueProvider.randomLocalDate());
         loan.setPrice(valueProvider.randomDouple());
         return loan;
     }

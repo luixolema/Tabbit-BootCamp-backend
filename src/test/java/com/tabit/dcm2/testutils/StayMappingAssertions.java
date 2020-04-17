@@ -40,13 +40,13 @@ public class StayMappingAssertions {
         assertThat(stayDto.getStayDetails().isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
         assertThat(stayDto.getStayDetails().getPreBooking()).isEqualTo(stay.getPreBooking());
 
-        List<Loan> sortLoansByDayOut = sortLoansByDayOut(stay);
-        assertLoanDetailsDtos(stayDto.getLoanDetails(), sortLoansByDayOut);
+        List<Loan> sortLoansByDateOut = sortLoansByDateOut(stay);
+        assertLoanDetailsDtos(stayDto.getLoanDetails(), sortLoansByDateOut);
     }
 
-    private static List<Loan> sortLoansByDayOut(Stay stay) {
+    private static List<Loan> sortLoansByDateOut(Stay stay) {
         List<Loan> sortedLoans = Lists.newArrayList(stay.getLoans());
-        sortedLoans.sort(comparing(Loan::getDayOut));
+        sortedLoans.sort(comparing(Loan::getDateOut));
         return sortedLoans;
     }
 

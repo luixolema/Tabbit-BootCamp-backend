@@ -71,6 +71,8 @@ public class StayService implements IStayService {
         stay.setActive(stayDto.getStayDetails().isActive());
         stay.setPreBooking(stayDto.getStayDetails().getPreBooking());
 
+        // need to put logic for converting LoanDetailsDto to Loan and update Loans base on incoming stay dto
+
         return stay;
     }
 

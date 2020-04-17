@@ -8,8 +8,8 @@ public class LoanDetailsDto extends AbstractBean {
     private Long id;
     private String type;
     private String serialNumber;
-    private LocalDate dayOut;
-    private LocalDate dayReturn;
+    private LocalDate dateOut;
+    private LocalDate dateReturn;
 
     public Long getId() {
         return id;
@@ -35,19 +35,19 @@ public class LoanDetailsDto extends AbstractBean {
         this.serialNumber = serialNumber;
     }
 
-    public LocalDate getDayOut() {
-        return dayOut;
+    public LocalDate getDateOut() {
+        return dateOut;
     }
 
-    public void setDayOut(LocalDate dayOut) {
-        this.dayOut = dayOut;
+    public void setDateOut(LocalDate dateOut) {
+        this.dateOut = dateOut;
     }
 
-    public LocalDate getDayReturn() {
-        return dayReturn;
+    public LocalDate getDateReturn() {
+        return dateReturn;
     }
 
-    public void setDayReturn(LocalDate dayReturn) {
-        this.dayReturn = dayReturn;
+    public void setDateReturn(LocalDate dateReturn) {
+        this.dateReturn = dateReturn;
     }
 }

@@ -1,10 +1,8 @@
 package com.tabit.dcm2;
 
 import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.RandomStay;
-import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.entity.*;
+import com.tabit.dcm2.repository.IEquipmentRepo;
 import com.tabit.dcm2.repository.IGuestRepo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,6 +22,16 @@ public class TestdataImporter {
     @Autowired
     private IGuestRepo guestRepo;
 
+    @Autowired
+    private IEquipmentRepo equipmentRepo;
+
+    // equipment for Acceptance criteria
+    private Equipment mask_XD_M_16;
+    private Equipment mask_XD_M_17;
+    private Equipment mask_XD_M_15;
+    private Equipment fins_XD_F_12;
+    private Equipment suite_XS_G_13;
+
     /**
      * to import some testdata to the application just set ActiveProfile to mysql.
      * but dont commit it!
@@ -36,6 +44,12 @@ public class TestdataImporter {
     }
 
     private void saveGuests() {
+
+        setupEquipment();
+
+        Guest guestWithGoodLoans1 = createGuestAlex1();
+        Guest guestWithGoodLoans2 = createGuestAlex2();
+
         Guest guest = createGuestAntonioBanderas();
         Guest guest2 = createGuestAntonyHopkins();
         Guest guest3 = createGuestMonicaBellucci();
@@ -46,7 +60,151 @@ public class TestdataImporter {
         Guest guest8 = createGuestClintEastwood();
         Guest guest9 = createGuestMelGibson();
 
-        guestRepo.saveAll(ImmutableList.of(guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
+        guestRepo.saveAll(ImmutableList.of(guestWithGoodLoans1, guestWithGoodLoans2, guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
+    }
+
+    private Guest createGuestAlex1() {
+        LocalDate guestBirthDate = LocalDate.now().minusYears(59);
+        String firstName = "Alex";
+
+        Stay stayOld = RandomStay.createRandomStayWithoutId();
+        stayOld.setArriveDate(LocalDate.now().minusYears(7));
+        stayOld.setLeaveDate(LocalDate.now().minusYears(6));
+        stayOld.setCheckInDate(stayOld.getArriveDate().plusDays(1));
+        stayOld.setCheckOutDate(stayOld.getCheckInDate().plusDays(10));
+        stayOld.setBirthDate(guestBirthDate);
+        stayOld.setFirstName(firstName);
+        stayOld.setLastName("Criteria 1");
+        stayOld.setBoxNumber("12");
+        stayOld.setActive(false);
+
+        Loan loanOld1 = new Loan();
+        loanOld1.setEquipment(suite_XS_G_13);
+        loanOld1.setDateOut(stayOld.getCheckInDate().plusDays(1));
+        loanOld1.setDateReturn(stayOld.getCheckInDate().plusDays(4));
+        loanOld1.setPrice(5.25d);
+
+        Loan loanOld2 = new Loan();
+        loanOld2.setEquipment(mask_XD_M_15);
+        loanOld2.setDateOut(stayOld.getCheckInDate().plusDays(3));
+        loanOld2.setDateReturn(stayOld.getCheckInDate().plusDays(6));
+        loanOld2.setPrice(3.55d);
+
+        Loan loanOld3 = new Loan();
+        loanOld3.setEquipment(fins_XD_F_12);
+        loanOld3.setDateOut(stayOld.getCheckInDate().plusDays(2));
+        loanOld3.setDateReturn(stayOld.getCheckInDate().plusDays(7));
+        loanOld3.setPrice(7.50d);
+
+        stayOld.setLoans(ImmutableList.of(loanOld1, loanOld2, loanOld3));
+
+        Stay stayActual = RandomStay.createRandomStayWithoutId();
+        stayActual.setArriveDate(LocalDate.now().minusDays(3));
+        stayActual.setLeaveDate(LocalDate.now().plusDays(3));
+        stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
+        stayActual.setCheckOutDate(stayActual.getLeaveDate());
+        stayActual.setBirthDate(guestBirthDate);
+        stayActual.setFirstName(firstName);
+        stayActual.setLastName("Criteria 1");
+        stayActual.setBoxNumber("2312312");
+        stayActual.setPreBooking("Smart man.");
+        stayActual.setActive(true);
+
+        Loan loan1 = new Loan();
+        loan1.setEquipment(mask_XD_M_16);
+        loan1.setDateOut(stayActual.getCheckInDate());
+        loan1.setDateReturn(stayActual.getCheckInDate().plusDays(1));
+        loan1.setPrice(5.25d);
+
+        Loan loan2 = new Loan();
+        loan2.setEquipment(mask_XD_M_17);
+        loan2.setDateOut(stayActual.getCheckInDate().plusDays(1));
+        loan2.setPrice(3.55d);
+
+        Loan loan3 = new Loan();
+        loan3.setEquipment(fins_XD_F_12);
+        loan3.setDateOut(stayActual.getCheckInDate());
+        loan3.setPrice(7.50d);
+
+        stayActual.setLoans(ImmutableList.of(loan1, loan2, loan3));
+
+        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        guest.setBirthDate(guestBirthDate);
+        guest.setFirstName(firstName);
+        guest.setLastName("Banderas With Many Stays And Different Names");
+        guest.setCheckedin(true);
+        guest.setStays(ImmutableList.of(stayOld, stayActual));
+
+        return guest;
+    }
+
+    private Guest createGuestAlex2() {
+        LocalDate guestBirthDate = LocalDate.now().minusYears(59);
+        String firstName = "Alex";
+
+        Stay stayOld = RandomStay.createRandomStayWithoutId();
+        stayOld.setArriveDate(LocalDate.now().minusYears(7));
+        stayOld.setLeaveDate(LocalDate.now().minusYears(6));
+        stayOld.setCheckInDate(stayOld.getArriveDate().plusDays(1));
+        stayOld.setCheckOutDate(stayOld.getCheckInDate().plusDays(10));
+        stayOld.setBirthDate(guestBirthDate);
+        stayOld.setFirstName(firstName);
+        stayOld.setLastName("Criteria 1");
+        stayOld.setBoxNumber("12");
+        stayOld.setActive(false);
+
+        Loan loanOld1 = new Loan();
+        loanOld1.setEquipment(suite_XS_G_13);
+        loanOld1.setDateOut(stayOld.getCheckInDate());
+        loanOld1.setDateReturn(stayOld.getCheckOutDate());
+        loanOld1.setPrice(5.25d);
+
+        Loan loanOld2 = new Loan();
+        loanOld2.setEquipment(mask_XD_M_15);
+        loanOld2.setDateOut(stayOld.getCheckInDate());
+        loanOld2.setDateReturn(stayOld.getCheckOutDate());
+        loanOld2.setPrice(3.55d);
+
+        Loan loanOld3 = new Loan();
+        loanOld3.setEquipment(fins_XD_F_12);
+        loanOld3.setDateOut(stayOld.getCheckInDate());
+        loanOld3.setDateReturn(stayOld.getCheckOutDate());
+        loanOld3.setPrice(7.50d);
+
+        stayOld.setLoans(ImmutableList.of(loanOld1, loanOld2, loanOld3));
+
+        Stay stayActual = RandomStay.createRandomStayWithoutId();
+        stayActual.setArriveDate(LocalDate.now().minusDays(3));
+        stayActual.setLeaveDate(LocalDate.now().plusDays(3));
+        stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
+        stayActual.setCheckOutDate(stayActual.getLeaveDate());
+        stayActual.setBirthDate(guestBirthDate);
+        stayActual.setFirstName(firstName);
+        stayActual.setLastName("Criteria 1");
+        stayActual.setBoxNumber("2312312");
+        stayActual.setPreBooking("Smart man.");
+        stayActual.setActive(true);
+
+        Loan loan1 = new Loan();
+        loan1.setEquipment(mask_XD_M_16);
+        loan1.setDateOut(stayActual.getCheckInDate());
+        loan1.setPrice(5.25d);
+
+        Loan loan2 = new Loan();
+        loan2.setEquipment(fins_XD_F_12);
+        loan2.setDateOut(stayActual.getCheckInDate());
+        loan2.setPrice(3.55d);
+
+        stayActual.setLoans(ImmutableList.of(loan1, loan2));
+
+        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        guest.setBirthDate(guestBirthDate);
+        guest.setFirstName(firstName);
+        guest.setLastName("Banderas With Many Stays And Different Names");
+        guest.setCheckedin(true);
+        guest.setStays(ImmutableList.of(stayOld, stayActual));
+
+        return guest;
     }
 
     private Guest createGuestAntonioBanderas() {
@@ -264,5 +422,32 @@ public class TestdataImporter {
         return guest;
     }
 
+    private void setupEquipment() {
+        EquipmentType mask = RandomEquipmentType.createEquipmentTypeWithoutId();
+        mask.setType("Mask");
+        EquipmentType fins = RandomEquipmentType.createEquipmentTypeWithoutId();
+        fins.setType("Fins");
+        EquipmentType suite = RandomEquipmentType.createEquipmentTypeWithoutId();
+        suite.setType("Suite");
 
+        mask_XD_M_16 = RandomEquipment.createRandomEquipmentWithoutId();
+        mask_XD_M_16.setEquipmentType(mask);
+        mask_XD_M_16.setSerialNumber("XD_M_16");
+
+        mask_XD_M_17 = RandomEquipment.createRandomEquipmentWithoutId();
+        mask_XD_M_17.setEquipmentType(mask);
+        mask_XD_M_17.setSerialNumber("XD_M_17");
+
+        mask_XD_M_15 = RandomEquipment.createRandomEquipmentWithoutId();
+        mask_XD_M_15.setEquipmentType(mask);
+        mask_XD_M_15.setSerialNumber("XD_M_15");
+
+        fins_XD_F_12 = RandomEquipment.createRandomEquipmentWithoutId();
+        fins_XD_F_12.setEquipmentType(fins);
+        fins_XD_F_12.setSerialNumber("XD_F_12");
+
+        suite_XS_G_13 = RandomEquipment.createRandomEquipmentWithoutId();
+        suite_XS_G_13.setEquipmentType(suite);
+        suite_XS_G_13.setSerialNumber("XS_G_13");
+    }
 }
