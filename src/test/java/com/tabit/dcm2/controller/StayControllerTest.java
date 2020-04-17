@@ -7,26 +7,35 @@ import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.impl.StayService;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.FromDataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.MockitoAnnotations;
 
 import static com.tabit.dcm2.testutils.StayMappingAssertions.assertStayDto;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.AdditionalMatchers.not;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(Theories.class)
 public class StayControllerTest {
+
     @Mock
     private StayService stayService;
 
     @InjectMocks
     private StayController stayController;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     public void getStay_shall_return_stay() {
@@ -55,20 +64,21 @@ public class StayControllerTest {
         verify(stayService).updateStay(randomStayDto);
     }
 
+    @DataPoints("isBoxFree")
+    public static Boolean[] isBoxFree = new Boolean[]{true, false};
+
+    @Theory
     @Test
-    public void isBoxFree_shall_return_the_right_value() {
+    public void isBoxFree_shall_return_the_right_value(@FromDataPoints("isBoxFree") boolean isBoxFree) {
         // given
-        Stay activeStay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
-        when(stayService.isBoxFree(activeStay.getBoxNumber())).thenReturn(false);
-        when(stayService.isBoxFree(not(eq(activeStay.getBoxNumber())))).thenReturn(true);
+        Stay activeStay = RandomStay.createRandomStay();
+        when(stayService.isBoxFree(activeStay.getBoxNumber())).thenReturn(isBoxFree);
 
         // when
-        boolean resultFalse = stayService.isBoxFree(activeStay.getBoxNumber());
-        boolean resultTrue = stayService.isBoxFree(activeStay.getBoxNumber() + "Update");
+        boolean actualIsBoxFree = stayService.isBoxFree(activeStay.getBoxNumber());
 
         // then
-        assertThat(resultFalse).isFalse();
-        assertThat(resultTrue).isTrue();
+        assertThat(actualIsBoxFree).isEqualTo(isBoxFree);
     }
 
     @Test

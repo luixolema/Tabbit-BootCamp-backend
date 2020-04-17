@@ -46,7 +46,7 @@ public class StayService implements IStayService {
 
     @Override
     public Boolean isBoxFree(String boxNumber) {
-        return !stayRepo.getBoxNumbers().contains(boxNumber);
+        return !stayRepo.getActiveBoxNumbers().contains(boxNumber);
     }
 
     @Override

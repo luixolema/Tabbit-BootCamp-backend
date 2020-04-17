@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface IStayRepo extends JpaRepository<Stay, Long> {
     @Query("SELECT s.boxNumber FROM Stay s WHERE s.active = true")
-    List<String> getBoxNumbers();
+    List<String> getActiveBoxNumbers();
 }

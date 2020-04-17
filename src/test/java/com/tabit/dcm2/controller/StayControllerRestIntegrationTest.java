@@ -136,18 +136,21 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     public void isBoxFree_shall_return_the_right_value() {
         // given
         HttpEntity<String> activeBox = createHttpEntity(stay.getBoxNumber());
-        HttpEntity<String> emptyBox = createHttpEntity(stay.getBoxNumber() + "Update");
+        HttpEntity<String> freeBox = createHttpEntity(stay.getBoxNumber() + "Update");
 
         // when
-        ResponseEntity<Boolean> responseFalse = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, activeBox, Boolean.class);
-        ResponseEntity<Boolean> responseTrue = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, emptyBox, Boolean.class);
-        Boolean resultFalse = responseFalse.getBody();
-        Boolean resultTrue = responseTrue.getBody();
+        ResponseEntity<Boolean> responseForActiveBox = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, activeBox, Boolean.class);
 
         // then
-        assertThat(resultFalse).isFalse();
-        assertThat(resultTrue).isTrue();
+        assertThat(responseForActiveBox.getBody()).isFalse();
+
+        // when
+        ResponseEntity<Boolean> responseForFreeBox = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, freeBox, Boolean.class);
+
+        // then
+        assertThat(responseForFreeBox.getBody()).isTrue();
     }
+
     @Test
     public void addActiveStay_shall_create_new_active_stay_and_update_guest_personeldetails_and_set_checked_in_flag_true() {
         // given

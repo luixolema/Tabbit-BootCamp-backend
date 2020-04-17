@@ -34,8 +34,7 @@ public class StayRepoDbTest extends AbstractDbTest {
         notActiveStay = RandomStay.createRandomStayWithoutIdGivenActiveState(false);
         guestForStay2.setStays(ImmutableList.of(activeStay2, notActiveStay));
 
-        guestRule.persist(ImmutableList.of(guestForStay));
-        guestRule.persist(ImmutableList.of(guestForStay2));
+        guestRule.persist(ImmutableList.of(guestForStay, guestForStay2));
     }
 
     @Test
@@ -68,41 +67,38 @@ public class StayRepoDbTest extends AbstractDbTest {
     public void getBoxNumbers_shall_return_list_of_empty_box_numbers() {
 
         //when
-        List<String> boxNumbers = stayRepo.getBoxNumbers();
+        List<String> boxNumbers = stayRepo.getActiveBoxNumbers();
 
         //then
-        assertThat(boxNumbers).hasSize(2);
-        assertThat(boxNumbers).contains(activeStay.getBoxNumber());
-        assertThat(boxNumbers).contains(activeStay2.getBoxNumber());
-        assertThat(boxNumbers).doesNotContain(notActiveStay.getBoxNumber());
+        assertThat(boxNumbers).containsOnly(activeStay.getBoxNumber(), activeStay2.getBoxNumber());
     }
 
     private void assertStay(Stay actualStay, Stay expectedStay) {
-        assertThat(actualStay.getId()).isEqualTo(activeStay.getId());
-        assertThat(actualStay.getFirstName()).isEqualTo(activeStay.getFirstName());
-        assertThat(actualStay.getLastName()).isEqualTo(activeStay.getLastName());
-        assertThat(actualStay.getBirthDate()).isEqualTo(activeStay.getBirthDate());
-        assertThat(actualStay.getCity()).isEqualTo(activeStay.getCity());
-        assertThat(actualStay.getCountry()).isEqualTo(activeStay.getCountry());
-        assertThat(actualStay.getEmail()).isEqualTo(activeStay.getEmail());
-        assertThat(actualStay.getNationality()).isEqualTo(activeStay.getNationality());
-        assertThat(actualStay.getPassportId()).isEqualTo(activeStay.getPassportId());
-        assertThat(actualStay.getPhone()).isEqualTo(activeStay.getPhone());
-        assertThat(actualStay.getPostcode()).isEqualTo(activeStay.getPostcode());
+        assertThat(actualStay.getId()).isEqualTo(expectedStay.getId());
+        assertThat(actualStay.getFirstName()).isEqualTo(expectedStay.getFirstName());
+        assertThat(actualStay.getLastName()).isEqualTo(expectedStay.getLastName());
+        assertThat(actualStay.getBirthDate()).isEqualTo(expectedStay.getBirthDate());
+        assertThat(actualStay.getCity()).isEqualTo(expectedStay.getCity());
+        assertThat(actualStay.getCountry()).isEqualTo(expectedStay.getCountry());
+        assertThat(actualStay.getEmail()).isEqualTo(expectedStay.getEmail());
+        assertThat(actualStay.getNationality()).isEqualTo(expectedStay.getNationality());
+        assertThat(actualStay.getPassportId()).isEqualTo(expectedStay.getPassportId());
+        assertThat(actualStay.getPhone()).isEqualTo(expectedStay.getPhone());
+        assertThat(actualStay.getPostcode()).isEqualTo(expectedStay.getPostcode());
 
-        assertThat(actualStay.getArriveDate()).isEqualTo(activeStay.getArriveDate());
-        assertThat(actualStay.getBoxNumber()).isEqualTo(activeStay.getBoxNumber());
-        assertThat(actualStay.getBrevet()).isEqualTo(activeStay.getBrevet());
-        assertThat(actualStay.getCheckInDate()).isEqualTo(activeStay.getCheckInDate());
-        assertThat(actualStay.getCheckOutDate()).isEqualTo(activeStay.getCheckOutDate());
-        assertThat(actualStay.getLastDiveDate()).isEqualTo(activeStay.getLastDiveDate());
-        assertThat(actualStay.getLeaveDate()).isEqualTo(activeStay.getLeaveDate());
-        assertThat(actualStay.getDivesAmount()).isEqualTo(activeStay.getDivesAmount());
-        assertThat(actualStay.getHotel()).isEqualTo(activeStay.getHotel());
-        assertThat(actualStay.getRoom()).isEqualTo(activeStay.getRoom());
-        assertThat(actualStay.isNitrox()).isEqualTo(activeStay.isNitrox());
-        assertThat(actualStay.isMedicalStatement()).isEqualTo(activeStay.isMedicalStatement());
-        assertThat(actualStay.getPreBooking()).isEqualTo(activeStay.getPreBooking());
-        assertThat(actualStay.isActive()).isEqualTo(activeStay.isActive());
+        assertThat(actualStay.getArriveDate()).isEqualTo(expectedStay.getArriveDate());
+        assertThat(actualStay.getBoxNumber()).isEqualTo(expectedStay.getBoxNumber());
+        assertThat(actualStay.getBrevet()).isEqualTo(expectedStay.getBrevet());
+        assertThat(actualStay.getCheckInDate()).isEqualTo(expectedStay.getCheckInDate());
+        assertThat(actualStay.getCheckOutDate()).isEqualTo(expectedStay.getCheckOutDate());
+        assertThat(actualStay.getLastDiveDate()).isEqualTo(expectedStay.getLastDiveDate());
+        assertThat(actualStay.getLeaveDate()).isEqualTo(expectedStay.getLeaveDate());
+        assertThat(actualStay.getDivesAmount()).isEqualTo(expectedStay.getDivesAmount());
+        assertThat(actualStay.getHotel()).isEqualTo(expectedStay.getHotel());
+        assertThat(actualStay.getRoom()).isEqualTo(expectedStay.getRoom());
+        assertThat(actualStay.isNitrox()).isEqualTo(expectedStay.isNitrox());
+        assertThat(actualStay.isMedicalStatement()).isEqualTo(expectedStay.isMedicalStatement());
+        assertThat(actualStay.getPreBooking()).isEqualTo(expectedStay.getPreBooking());
+        assertThat(actualStay.isActive()).isEqualTo(expectedStay.isActive());
     }
 }
