@@ -44,6 +44,7 @@ public class RandomStayDto {
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(guestPersonalDetails);
         stayDto.setStayDetails(stayDetails);
+        stay.getLoans().forEach(stayDto::addLoanDetails);
 
         return stayDto;
     }
