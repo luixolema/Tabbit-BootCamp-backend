@@ -2,6 +2,7 @@ package com.tabit.dcm2.controller;
 
 import com.tabit.dcm2.controller.util.MapperUtil;
 import com.tabit.dcm2.service.IStayService;
+import com.tabit.dcm2.service.dto.CompleteStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,8 @@ public class StayController {
     private IStayService stayService;
 
     @GetMapping("/{stayId}")
-    public StayDto getStay(@PathVariable() Long stayId) {
-        return MapperUtil.mapStayToStayDto(stayService.findById(stayId));
+    public CompleteStayDto getStay(@PathVariable() Long stayId) {
+        return MapperUtil.mapStayToCompleteStayDto(stayService.findById(stayId));
     }
 
     @PutMapping

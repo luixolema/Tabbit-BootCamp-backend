@@ -97,7 +97,7 @@ public class Stay implements IEntity {
     @Column(name = "pre_booking")
     private String preBooking;
 
-    @OneToMany(mappedBy = "stay", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "stay", cascade = CascadeType.PERSIST)
     @OrderBy("date_out DESC")
     private List<Loan> loans = new ArrayList<>();
 

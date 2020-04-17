@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
+import com.tabit.dcm2.service.dto.CompleteStayDto;
 import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
@@ -18,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static com.tabit.dcm2.entity.RandomGuest.createGuestFromStayWithoutId;
 import static com.tabit.dcm2.entity.RandomGuest.createRandomGuestWitoutId;
@@ -66,11 +66,11 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     public void getStay_shall_return_stay() {
 
         //when
-        ResponseEntity<StayDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/stay/" + stay.getId(), StayDto.class);
+        ResponseEntity<CompleteStayDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/stay/" + stay.getId(), CompleteStayDto.class);
 
         //then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
-        StayMappingAssertions.assertStayDto(response.getBody(), stay);
+        StayMappingAssertions.assertCompleteStayDto(response.getBody(), stay);
     }
 
     @Test
@@ -170,7 +170,6 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         guestRule.persist(ImmutableList.of(notCheckedInGuest));
 
         StayDto stayDto = RandomStayDto.createRandomStayDto();
-        stayDto.setLoans(Collections.emptyList());
         stayDto.getStayDetails().setId(null);
         stayDto.getGuestPersonalDetails().setId(notCheckedInGuest.getId());
 

@@ -2,10 +2,15 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 
-public class StayDto extends AbstractBean {
+import java.util.ArrayList;
+import java.util.List;
+
+public class CompleteStayDto extends AbstractBean {
 
     private GuestPersonalDetailsDto guestPersonalDetails;
     private StayDetailsDto stayDetails;
+    private List<LoanDto> loans = new ArrayList<>();
+    // the activities now can be added here // todo: remove this line after added the activities dtos
 
     public GuestPersonalDetailsDto getGuestPersonalDetails() {
         return guestPersonalDetails;
@@ -21,6 +26,14 @@ public class StayDto extends AbstractBean {
 
     public void setStayDetails(StayDetailsDto stayDetails) {
         this.stayDetails = stayDetails;
+    }
+
+    public List<LoanDto> getLoans() {
+        return loans;
+    }
+
+    public void setLoanDtos(List<LoanDto> loans) {
+        this.loans = loans;
     }
 }
 

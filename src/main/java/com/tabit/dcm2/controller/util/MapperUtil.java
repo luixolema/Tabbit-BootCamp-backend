@@ -42,14 +42,25 @@ public class MapperUtil {
         stayDetails.setActive(stay.isActive());
         stayDetails.setPreBooking(stay.getPreBooking());
 
-        List<LoanDto> loans = stay.getLoans().stream().map(MapperUtil::mapLoanToLoanDto).collect(Collectors.toList());
-
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(guestPersonalDetails);
         stayDto.setStayDetails(stayDetails);
-        stayDto.setLoans(loans);
 
         return stayDto;
+    }
+
+    public static CompleteStayDto mapStayToCompleteStayDto(Stay stay) {
+        CompleteStayDto completeStayDto = new CompleteStayDto();
+
+        List<LoanDto> loanDtos = stay.getLoans().stream().map(MapperUtil::mapLoanToLoanDto).collect(Collectors.toList());
+
+
+        StayDto stayDto = MapperUtil.mapStayToStayDto(stay);
+        completeStayDto.setGuestPersonalDetails(stayDto.getGuestPersonalDetails());
+        completeStayDto.setStayDetails(stayDto.getStayDetails());
+        completeStayDto.setLoanDtos(loanDtos);
+
+        return completeStayDto;
     }
 
     public static StayDto mapGuestToStayDto(Guest guest) {

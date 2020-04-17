@@ -12,8 +12,18 @@ public class RandomStayDto {
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto());
         stayDto.setStayDetails(RandomStayDetailsDto.createRandomStayDetailsDto());
-        stayDto.setLoans(ImmutableList.of(RandomLoanDto.createRandomLoanDto()));
         return stayDto;
+    }
+
+    public static CompleteStayDto createRandomCompleteStayDto() {
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+        CompleteStayDto completeStayDto = new CompleteStayDto();
+
+        completeStayDto.setStayDetails(randomStayDto.getStayDetails());
+        completeStayDto.setGuestPersonalDetails(randomStayDto.getGuestPersonalDetails());
+        completeStayDto.setLoanDtos((ImmutableList.of(RandomLoanDto.createRandomLoanDto())));
+
+        return completeStayDto;
     }
 
     public static StayDto createStayDtoFromStay(Stay stay) {
@@ -52,7 +62,6 @@ public class RandomStayDto {
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(guestPersonalDetails);
         stayDto.setStayDetails(stayDetails);
-        stayDto.setLoans(loans);
 
         return stayDto;
     }

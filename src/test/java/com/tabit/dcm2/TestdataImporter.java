@@ -19,7 +19,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("mysql")
+@ActiveProfiles("test")
 public class TestdataImporter {
 
     @Autowired
@@ -47,9 +47,9 @@ public class TestdataImporter {
      */
     @Test
     public void import_testdata_for_application() {
-//        saveEquipments();
+        saveEquipments();
         saveGuests();
-//        saveLoads();
+        saveLoads();
     }
 
     private void saveLoads() {
@@ -59,18 +59,20 @@ public class TestdataImporter {
         Equipment equipment2 = equipmentsInDb.get(1);
 
         // Loans
-        Loan loan = new Loan();
-        loan.setStay(stay1);
-        loan.setDateReturn(LocalDate.now().minusYears(1));
-        loan.setDateOut(LocalDate.now().minusYears(1).minusDays(2));
-        loan.setEquipment(equipment1);
+        Loan loan1 = new Loan();
+        loan1.setStay(stay1);
+        loan1.setDateReturn(LocalDate.now().minusYears(1));
+        loan1.setDateOut(LocalDate.now().minusYears(1).minusDays(2));
+        loan1.setEquipment(equipment1);
 
         // Loans
         Loan loan2 = new Loan();
-        loan.setStay(stay1);
-        loan.setDateReturn(LocalDate.now().minusYears(1));
-        loan.setDateOut(LocalDate.now().minusYears(1).minusDays(5));
-        loan.setEquipment(equipment2);
+        loan2.setStay(stay1);
+        loan2.setDateReturn(LocalDate.now().minusYears(1));
+        loan2.setDateOut(LocalDate.now().minusYears(1).minusDays(5));
+        loan2.setEquipment(equipment2);
+
+        loanRepo.saveAll(ImmutableList.of(loan1, loan2));
     }
 
     private void saveEquipments() {
@@ -82,10 +84,10 @@ public class TestdataImporter {
         equipmentTypeMask.setActive(true);
 
         EquipmentType equipmentTypeFins = new EquipmentType();
-        equipmentTypeMask.setType("Fins");
-        equipmentTypeMask.setPrice(4.50);
-        equipmentTypeMask.setDescription("Small fins");
-        equipmentTypeMask.setActive(true);
+        equipmentTypeFins.setType("Fins");
+        equipmentTypeFins.setPrice(4.50);
+        equipmentTypeFins.setDescription("Small fins");
+        equipmentTypeFins.setActive(true);
 
         equipmentTypeRepo.saveAll(ImmutableList.of(equipmentTypeFins, equipmentTypeMask));
 
