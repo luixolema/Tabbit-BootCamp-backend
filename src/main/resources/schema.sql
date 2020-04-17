@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS `equipment`;
+DROP TABLE IF EXISTS `equipment_type`;
+DROP TABLE IF EXISTS `loan`;
 DROP TABLE IF EXISTS `stay`;
 DROP TABLE IF EXISTS `guest`;
 DROP TABLE IF EXISTS `id_gen`;
@@ -50,6 +53,36 @@ DROP TABLE IF EXISTS `id_gen`;
       FOREIGN KEY (`guest_id`) REFERENCES guest(`id`),
       PRIMARY KEY (`id`)
     );
+
+  CREATE TABLE `equipment_type` (
+    `id` bigint(20) NOT NULL,
+    `type` varchar(100) NOT NULL,
+    `description` varchar(400) NOT NULL,
+    `price` double precision NOT NULL,
+    `active` tinyint(1) NOT NULL DEFAULT '1',
+    PRIMARY KEY (`id`)
+  );
+
+   CREATE TABLE `equipment` (
+     `id` bigint(20) NOT NULL,
+     `eq_type_id` bigint(20) NOT NULL,
+     `serial_number` varchar(100) NOT NULL,
+     `status` varchar(100) NOT NULL,
+     FOREIGN KEY (`eq_type_id`) REFERENCES equipment_type(`id`),
+     PRIMARY KEY (`id`)
+   );
+
+   CREATE TABLE `loan` (
+     `id` bigint(20) NOT NULL,
+     `stay_id` bigint(20) NOT NULL,
+     `equipment_id` bigint(20) NOT NULL,
+     `day_out` DATE NOT NULL,
+     `day_return` DATE,
+     `price` double precision NOT NULL,
+     FOREIGN KEY (`stay_id`) REFERENCES stay(`id`),
+     FOREIGN KEY (`equipment_id`) REFERENCES equipment(`id`),
+     PRIMARY KEY (`id`)
+   );
 
   CREATE TABLE `id_gen`(
     `id_value` INTEGER NOT NULL,
