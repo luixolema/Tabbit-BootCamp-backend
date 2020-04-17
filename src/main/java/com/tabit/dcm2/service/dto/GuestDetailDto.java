@@ -8,15 +8,15 @@ import java.util.List;
 
 public class GuestDetailDto extends AbstractBean {
 
-    private StayDto stayDto;
+    private CompleteStayDto stayDto;
     private List<StaySummaryDto> staySummaries = new ArrayList<>();
 
-    public StayDto getStayDto() {
+    public CompleteStayDto getStayDto() {
         return stayDto;
     }
 
-    public void setStayDto(StayDto stayDto) {
-        this.stayDto = stayDto;
+    public void setCompleteStayDto(CompleteStayDto completeStayDto) {
+        this.stayDto = completeStayDto;
     }
 
     public List<StaySummaryDto> getStaySummaries() {

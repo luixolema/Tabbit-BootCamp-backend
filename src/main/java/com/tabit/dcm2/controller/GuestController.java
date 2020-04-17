@@ -46,9 +46,9 @@ public class GuestController {
         Guest guest = guestService.getGuestById(guestId);
         if (guest.isCheckedin()) {
             Stay currentStay = guest.getStays().get(0);
-            resultGuestDetailDto.setStayDto(MapperUtil.mapStayToStayDto(currentStay));
+            resultGuestDetailDto.setCompleteStayDto(MapperUtil.mapStayToCompleteStayDto(currentStay));
         } else {
-            resultGuestDetailDto.setStayDto(MapperUtil.mapGuestToStayDto(guest));
+            resultGuestDetailDto.setCompleteStayDto(MapperUtil.mapGuestToStayDto(guest));
         }
         guest.getStays().forEach(resultGuestDetailDto::addStaySummary);
 

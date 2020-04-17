@@ -26,54 +26,29 @@ public class GuestMappingAssertions {
     }
 
     public static void assertGuestDetailDto(GuestDetailDto expectedGuestDetailDto, Guest guest, GuestDetailType guestDetailType) {
-        StayDto stayDto = expectedGuestDetailDto.getStayDto();
+        CompleteStayDto completeStayDto = expectedGuestDetailDto.getStayDto();
         List<StaySummaryDto> staySummary = expectedGuestDetailDto.getStaySummaries();
         List<Stay> sortedStays = sortStayByArriveDate(guest);
 
         if (guestDetailType == WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY) {
             Stay stay = sortedStays.get(0);
-            assertThat(stayDto.getStayDetails().getId()).isEqualTo(stay.getId());
-            assertThat(stayDto.getStayDetails().getArriveDate()).isEqualTo(stay.getArriveDate());
-            assertThat(stayDto.getStayDetails().getBoxNumber()).isEqualTo(stay.getBoxNumber());
-            assertThat(stayDto.getStayDetails().getBrevet()).isEqualTo(stay.getBrevet());
-            assertThat(stayDto.getStayDetails().getCheckInDate()).isEqualTo(stay.getCheckInDate());
-            assertThat(stayDto.getStayDetails().getCheckOutDate()).isEqualTo(stay.getCheckOutDate());
-            assertThat(stayDto.getStayDetails().getLastDiveDate()).isEqualTo(stay.getLastDiveDate());
-            assertThat(stayDto.getStayDetails().getLeaveDate()).isEqualTo(stay.getLeaveDate());
-            assertThat(stayDto.getStayDetails().getDivesAmount()).isEqualTo(stay.getDivesAmount());
-            assertThat(stayDto.getStayDetails().getHotel()).isEqualTo(stay.getHotel());
-            assertThat(stayDto.getStayDetails().getRoom()).isEqualTo(stay.getRoom());
-            assertThat(stayDto.getStayDetails().isNitrox()).isEqualTo(stay.isNitrox());
-            assertThat(stayDto.getStayDetails().isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
-            assertThat(stayDto.getStayDetails().getPreBooking()).isEqualTo(stay.getPreBooking());
-
-            assertThat(stayDto.getGuestPersonalDetails().getFirstName()).isEqualTo(stay.getFirstName());
-            assertThat(stayDto.getGuestPersonalDetails().getLastName()).isEqualTo(stay.getLastName());
-            assertThat(stayDto.getGuestPersonalDetails().getBirthDate()).isEqualTo(stay.getBirthDate());
-            assertThat(stayDto.getGuestPersonalDetails().getCity()).isEqualTo(stay.getCity());
-            assertThat(stayDto.getGuestPersonalDetails().getCountry()).isEqualTo(stay.getCountry());
-            assertThat(stayDto.getGuestPersonalDetails().getEmail()).isEqualTo(stay.getEmail());
-            assertThat(stayDto.getGuestPersonalDetails().getNationality()).isEqualTo(stay.getNationality());
-            assertThat(stayDto.getGuestPersonalDetails().getPassportId()).isEqualTo(stay.getPassportId());
-            assertThat(stayDto.getGuestPersonalDetails().getPhone()).isEqualTo(stay.getPhone());
-            assertThat(stayDto.getGuestPersonalDetails().getPostcode()).isEqualTo(stay.getPostcode());
-            assertThat(stayDto.getGuestPersonalDetails().getId()).isEqualTo(stay.getGuest().getId());
+            StayMappingAssertions.assertCompleteStayDto(completeStayDto, stay);
 
             assertStaySummaries(staySummary, sortedStays, guestDetailType);
         } else {
-            assertThat(stayDto.getStayDetails()).isNull();
+            assertThat(completeStayDto.getStayDetails()).isNull();
 
-            assertThat(stayDto.getGuestPersonalDetails().getId()).isEqualTo(guest.getId());
-            assertThat(stayDto.getGuestPersonalDetails().getFirstName()).isEqualTo(guest.getFirstName());
-            assertThat(stayDto.getGuestPersonalDetails().getLastName()).isEqualTo(guest.getLastName());
-            assertThat(stayDto.getGuestPersonalDetails().getBirthDate()).isEqualTo(guest.getBirthDate());
-            assertThat(stayDto.getGuestPersonalDetails().getCity()).isEqualTo(guest.getCity());
-            assertThat(stayDto.getGuestPersonalDetails().getCountry()).isEqualTo(guest.getCountry());
-            assertThat(stayDto.getGuestPersonalDetails().getEmail()).isEqualTo(guest.getEmail());
-            assertThat(stayDto.getGuestPersonalDetails().getNationality()).isEqualTo(guest.getNationality());
-            assertThat(stayDto.getGuestPersonalDetails().getPassportId()).isEqualTo(guest.getPassportId());
-            assertThat(stayDto.getGuestPersonalDetails().getPhone()).isEqualTo(guest.getPhone());
-            assertThat(stayDto.getGuestPersonalDetails().getPostcode()).isEqualTo(guest.getPostcode());
+            assertThat(completeStayDto.getGuestPersonalDetails().getId()).isEqualTo(guest.getId());
+            assertThat(completeStayDto.getGuestPersonalDetails().getFirstName()).isEqualTo(guest.getFirstName());
+            assertThat(completeStayDto.getGuestPersonalDetails().getLastName()).isEqualTo(guest.getLastName());
+            assertThat(completeStayDto.getGuestPersonalDetails().getBirthDate()).isEqualTo(guest.getBirthDate());
+            assertThat(completeStayDto.getGuestPersonalDetails().getCity()).isEqualTo(guest.getCity());
+            assertThat(completeStayDto.getGuestPersonalDetails().getCountry()).isEqualTo(guest.getCountry());
+            assertThat(completeStayDto.getGuestPersonalDetails().getEmail()).isEqualTo(guest.getEmail());
+            assertThat(completeStayDto.getGuestPersonalDetails().getNationality()).isEqualTo(guest.getNationality());
+            assertThat(completeStayDto.getGuestPersonalDetails().getPassportId()).isEqualTo(guest.getPassportId());
+            assertThat(completeStayDto.getGuestPersonalDetails().getPhone()).isEqualTo(guest.getPhone());
+            assertThat(completeStayDto.getGuestPersonalDetails().getPostcode()).isEqualTo(guest.getPostcode());
 
             assertStaySummaries(staySummary, sortedStays, guestDetailType);
         }
