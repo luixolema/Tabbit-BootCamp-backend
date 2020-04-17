@@ -55,40 +55,53 @@ public class TestdataImporter {
     private void saveLoads() {
         Guest guest1 = guestsInDb.get(0);
         Stay stay1 = guest1.getStays().get(1);
-        Stay stay2 = guest1.getStays().get(2);
-        Equipment equipment1 = equipmentsInDb.get(0);
-        Equipment equipment2 = equipmentsInDb.get(1);
+        Stay stay2 = guest1.getStays().get(0);
+        Equipment XD_M_15 = equipmentsInDb.get(0);
+        Equipment XD_M_16 = equipmentsInDb.get(1);
+        Equipment XD_M_17 = equipmentsInDb.get(2);
+        Equipment XD_F_12 = equipmentsInDb.get(3);
+        Equipment XS_G_13 = equipmentsInDb.get(4);
 
-        // Loan 1 stay 1
+        // Loans stay 1
         Loan loan1 = new Loan();
         loan1.setStay(stay1);
         loan1.setDateOut(stay1.getCheckInDate().plusDays(1));
         loan1.setDateReturn(stay1.getCheckOutDate().minusDays(1));
-        loan1.setEquipment(equipment1);
+        loan1.setEquipment(XD_M_16);
 
-        // Loan 2 stay 1
         Loan loan2 = new Loan();
         loan2.setStay(stay1);
-        loan2.setDateOut(stay2.getCheckInDate().plusDays(1));
-        loan2.setDateReturn(stay2.getCheckOutDate().minusDays(1));
-        loan2.setEquipment(equipment2);
+        loan2.setDateOut(stay1.getCheckInDate().plusDays(1));
+        loan2.setDateReturn(stay1.getCheckOutDate().minusDays(1));
+        loan2.setEquipment(XD_M_17);
 
-
-        // Loan 3 stay 2
         Loan loan3 = new Loan();
-        loan3.setStay(stay2);
-        loan3.setDateOut(stay2.getCheckInDate().plusDays(1));
-        loan3.setDateReturn(stay2.getCheckOutDate().minusDays(1));
-        loan3.setEquipment(equipment1);
+        loan3.setStay(stay1);
+        loan3.setDateOut(stay1.getCheckInDate().plusDays(1));
+        loan3.setDateReturn(stay1.getCheckOutDate().minusDays(1));
+        loan3.setEquipment(XD_F_12);
 
-        // Loan 3 stay 2
+        // Loans stay 2
         Loan loan4 = new Loan();
         loan4.setStay(stay2);
         loan4.setDateOut(stay2.getCheckInDate().plusDays(1));
         loan4.setDateReturn(stay2.getCheckOutDate().minusDays(1));
-        loan4.setEquipment(equipment2);
+        loan4.setEquipment(XS_G_13);
 
-        loanRepo.saveAll(ImmutableList.of(loan1, loan2, loan3, loan4));
+        Loan loan5 = new Loan();
+        loan5.setStay(stay2);
+        loan5.setDateOut(stay2.getCheckInDate().plusDays(1));
+        loan5.setDateReturn(stay2.getCheckOutDate().minusDays(1));
+        loan5.setEquipment(XD_M_15);
+
+        Loan loan6 = new Loan();
+        loan6.setStay(stay2);
+        loan6.setDateOut(stay2.getCheckInDate().plusDays(1));
+        loan6.setDateReturn(stay2.getCheckOutDate().minusDays(1));
+        loan6.setEquipment(XD_F_12);
+
+
+        loanRepo.saveAll(ImmutableList.of(loan1, loan2, loan3, loan4, loan5, loan6));
     }
 
     private void saveEquipments() {
@@ -105,32 +118,43 @@ public class TestdataImporter {
         equipmentTypeFins.setDescription("Small fins");
         equipmentTypeFins.setActive(true);
 
-        equipmentTypeRepo.saveAll(ImmutableList.of(equipmentTypeFins, equipmentTypeMask));
+        EquipmentType equipmentTypeSuit = new EquipmentType();
+        equipmentTypeSuit.setType("Suite");
+        equipmentTypeSuit.setPrice(4.50);
+        equipmentTypeSuit.setDescription("Small fins");
+        equipmentTypeSuit.setActive(true);
+
+        equipmentTypeRepo.saveAll(ImmutableList.of(equipmentTypeFins, equipmentTypeMask, equipmentTypeSuit));
 
         //equipments
         Equipment equipment1 = new Equipment();
         equipment1.setStatus(Equipment.EquipmentStatus.AVAILABLE);
-        equipment1.setSerialNumber("QHH123");
-        equipment1.setEquipmentType(equipmentTypeFins);
+        equipment1.setSerialNumber("XD_M_15");
+        equipment1.setEquipmentType(equipmentTypeMask);
 
         Equipment equipment2 = new Equipment();
         equipment2.setStatus(Equipment.EquipmentStatus.BROKEN);
-        equipment2.setSerialNumber("QHH124");
+        equipment2.setSerialNumber("XD_M_16");
         equipment2.setEquipmentType(equipmentTypeMask);
 
 
         Equipment equipment3 = new Equipment();
         equipment3.setStatus(Equipment.EquipmentStatus.STOLEN);
-        equipment3.setSerialNumber("QHH125");
-        equipment3.setEquipmentType(equipmentTypeFins);
+        equipment3.setSerialNumber("XD_M_17");
+        equipment3.setEquipmentType(equipmentTypeMask);
 
 
         Equipment equipment4 = new Equipment();
         equipment4.setStatus(Equipment.EquipmentStatus.IN_REPAIR);
-        equipment4.setSerialNumber("QHH126");
-        equipment4.setEquipmentType(equipmentTypeMask);
+        equipment4.setSerialNumber("XD_F_12");
+        equipment4.setEquipmentType(equipmentTypeFins);
 
-        ImmutableList<Equipment> equipments = ImmutableList.of(equipment1, equipment2, equipment3, equipment4);
+        Equipment equipment5 = new Equipment();
+        equipment5.setStatus(Equipment.EquipmentStatus.IN_REPAIR);
+        equipment5.setSerialNumber("XS_G_13");
+        equipment5.setEquipmentType(equipmentTypeSuit);
+
+        ImmutableList<Equipment> equipments = ImmutableList.of(equipment1, equipment2, equipment3, equipment4, equipment5);
         equipmentsInDb.addAll(equipments);
         equipmentRepo.saveAll(equipments);
     }
@@ -145,8 +169,9 @@ public class TestdataImporter {
         Guest guest7 = createGuestSeanConnery();
         Guest guest8 = createGuestClintEastwood();
         Guest guest9 = createGuestMelGibson();
+        Guest guest10 = createGuestAlexander();
 
-        ImmutableList<Guest> guests = ImmutableList.of(guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9);
+        ImmutableList<Guest> guests = ImmutableList.of(guest10, guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9);
         guestsInDb.addAll(guests);
         guestRepo.saveAll(guests);
     }
@@ -361,6 +386,41 @@ public class TestdataImporter {
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName("Mel");
         guest.setLastName("Gibson Same Names");
+        guest.setCheckedin(true);
+        guest.setStays(ImmutableList.of(stayOld, stayActual));
+        return guest;
+    }
+
+    private Guest createGuestAlexander() {
+        LocalDate guestBirthDate = LocalDate.now().minusYears(52);
+
+        Stay stayOld = RandomStay.createRandomStayWithoutId();
+        stayOld.setArriveDate(LocalDate.now().minusYears(6));
+        stayOld.setLeaveDate(LocalDate.now().minusYears(4));
+        stayOld.setCheckInDate(stayOld.getArriveDate().plusDays(1));
+        stayOld.setCheckOutDate(stayOld.getCheckInDate().plusDays(20));
+        stayOld.setBirthDate(guestBirthDate);
+        stayOld.setFirstName("Alexander");
+        stayOld.setLastName("Velonias");
+        stayOld.setBoxNumber(" ");
+        stayOld.setActive(false);
+
+        Stay stayActual = RandomStay.createRandomStayWithoutId();
+        stayActual.setArriveDate(LocalDate.now().minusDays(15));
+        stayActual.setLeaveDate(LocalDate.now().plusDays(15));
+        stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
+        stayActual.setCheckOutDate(stayActual.getLeaveDate());
+        stayActual.setBirthDate(guestBirthDate);
+        stayActual.setFirstName("Alexander");
+        stayActual.setLastName("Velonias");
+        stayActual.setBoxNumber("4567");
+        stayActual.setActive(true);
+        stayActual.setPreBooking("none");
+
+        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        guest.setBirthDate(guestBirthDate);
+        guest.setFirstName("Alexander");
+        guest.setLastName("Velonias");
         guest.setCheckedin(true);
         guest.setStays(ImmutableList.of(stayOld, stayActual));
         return guest;
