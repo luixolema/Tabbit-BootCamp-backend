@@ -80,16 +80,4 @@ public class StayControllerTest {
         // then
         assertThat(actualIsBoxFree).isEqualTo(isBoxFree);
     }
-
-    @Test
-    public void addActiveStay_shall_add_new_stay() {
-        // given
-        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
-
-        // when
-        stayController.addActiveStay(randomStayDto);
-
-        // then
-        verify(stayService).addActiveStay(randomStayDto);
-    }
 }

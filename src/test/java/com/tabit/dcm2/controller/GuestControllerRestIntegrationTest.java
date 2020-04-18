@@ -9,6 +9,7 @@ import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
+import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         stayOld.setArriveDate(LocalDate.now().minusYears(5));
         stayActual = RandomStay.createRandomStayWithoutId();
         stayActual.setArriveDate(LocalDate.now().minusDays(10));
+        stayActual.setActive(true);
 
         guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInTrue.setCheckedin(true);
@@ -186,5 +188,54 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
         Guest actualGuest = guestService.getGuestById(guestPersonalDetailsDto.getId());
         GuestMappingAssertions.assertPersonalDetails(actualGuest, guestPersonalDetailsDto);
+    }
+
+    @Test
+    public void checkIn_shall_create_new_active_stay_and_update_guest_personeldetails_and_set_checked_in_flag_true() {
+        // given
+        CheckInDto checkInDto = RandomCheckInDto.createRandomCheckInDto();
+        checkInDto.getGuestPersonalDetails().setId(guestCheckedInFalseWithoutStay.getId());
+
+        HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
+
+        // when
+        ResponseEntity<Void> response = restTemplate.exchange("/api/guests", HttpMethod.POST, entity, Void.class);
+
+        Guest guestInDb = guestService.getGuestById(guestCheckedInFalseWithoutStay.getId());
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThat(response.getBody()).isNull();
+
+        StayMappingAssertions.assertNewStayFromCheckInDto(guestInDb.getStays().get(0), checkInDto);
+        assertThat(checkInDto.getGuestPersonalDetails().getFirstName()).isEqualTo(guestInDb.getFirstName());
+        assertThat(checkInDto.getGuestPersonalDetails().getLastName()).isEqualTo(guestInDb.getLastName());
+        assertThat(checkInDto.getGuestPersonalDetails().getCity()).isEqualTo(guestInDb.getCity());
+        assertThat(checkInDto.getGuestPersonalDetails().getBirthDate()).isEqualTo(guestInDb.getBirthDate());
+        assertThat(checkInDto.getGuestPersonalDetails().getCountry()).isEqualTo(guestInDb.getCountry());
+        assertThat(checkInDto.getGuestPersonalDetails().getEmail()).isEqualTo(guestInDb.getEmail());
+        assertThat(checkInDto.getGuestPersonalDetails().getNationality()).isEqualTo(guestInDb.getNationality());
+        assertThat(checkInDto.getGuestPersonalDetails().getPassportId()).isEqualTo(guestInDb.getPassportId());
+        assertThat(checkInDto.getGuestPersonalDetails().getPhone()).isEqualTo(guestInDb.getPhone());
+        assertThat(checkInDto.getGuestPersonalDetails().getPostcode()).isEqualTo(guestInDb.getPostcode());
+        assertThat(checkInDto.getGuestPersonalDetails().getStreet()).isEqualTo(guestInDb.getStreet());
+    }
+
+    @Test
+    public void checkIn_shall_throw_exception_if_boxnumber_is_already_used() {
+        // given
+        CheckInDto checkInDto = RandomCheckInDto.createRandomCheckInDto();
+        checkInDto.getGuestPersonalDetails().setId(guestCheckedInFalseWithoutStay.getId());
+        checkInDto.getStayDetails().setBoxNumber(stayActual.getBoxNumber());
+
+        HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
+
+        // when
+        ResponseEntity<Void> response = restTemplate.exchange("/api/guests", HttpMethod.POST, entity, Void.class);
+
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNull();
     }
 }

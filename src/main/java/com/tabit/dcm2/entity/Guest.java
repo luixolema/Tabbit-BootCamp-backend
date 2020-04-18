@@ -173,9 +173,9 @@ public class Guest implements IEntity {
     }
 
     public void addStays(List<Stay> stays) {
-        List<Stay> newStays = new ArrayList<>();
-        newStays.addAll(getStays());
-        newStays.addAll(stays);
-        setStays(newStays);
+        List<Stay> allStays = new ArrayList<>();
+        allStays.addAll(getStays());
+        allStays.addAll(stays);
+        setStays(allStays);
     }
 }
