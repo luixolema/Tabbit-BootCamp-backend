@@ -2,7 +2,7 @@ package com.tabit.dcm2.service.dto;
 
 public class CheckInDto {
     private GuestPersonalDetailsDto guestPersonalDetails;
-    private StayDetailsWithoutIdDto stayDetails;
+    private StayDetailsForCheckInDto stayDetails;
 
     public GuestPersonalDetailsDto getGuestPersonalDetails() {
         return guestPersonalDetails;
@@ -12,11 +12,11 @@ public class CheckInDto {
         this.guestPersonalDetails = guestPersonalDetailsDto;
     }
 
-    public StayDetailsWithoutIdDto getStayDetails() {
+    public StayDetailsForCheckInDto getStayDetails() {
         return stayDetails;
     }
 
-    public void setStayDetails(StayDetailsWithoutIdDto stayDetails) {
+    public void setStayDetails(StayDetailsForCheckInDto stayDetails) {
         this.stayDetails = stayDetails;
     }
 }

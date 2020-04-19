@@ -49,7 +49,6 @@ public class StayMappingAssertions {
         assertThat(newStay.getPassportId()).isEqualTo(checkInDto.getGuestPersonalDetails().getPassportId());
         assertThat(newStay.getBoxNumber()).isEqualTo(checkInDto.getStayDetails().getBoxNumber());
         assertThat(newStay.getCheckInDate()).isEqualTo(checkInDto.getStayDetails().getCheckInDate());
-        assertThat(newStay.getCheckOutDate()).isEqualTo(checkInDto.getStayDetails().getCheckOutDate());
         assertThat(newStay.getArriveDate()).isEqualTo(checkInDto.getStayDetails().getArriveDate());
         assertThat(newStay.getLeaveDate()).isEqualTo(checkInDto.getStayDetails().getLeaveDate());
         assertThat(newStay.getHotel()).isEqualTo(checkInDto.getStayDetails().getHotel());

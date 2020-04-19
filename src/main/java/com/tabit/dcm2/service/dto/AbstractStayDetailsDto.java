@@ -4,10 +4,9 @@ import com.tabit.dcm2.commons.AbstractBean;
 
 import java.time.LocalDate;
 
-public class StayDetailsWithoutIdDto extends AbstractBean {
+public abstract class AbstractStayDetailsDto extends AbstractBean {
     private String boxNumber;
     private LocalDate checkInDate;
-    private LocalDate checkOutDate;
     private LocalDate arriveDate;
     private LocalDate leaveDate;
     private String hotel;
@@ -17,8 +16,15 @@ public class StayDetailsWithoutIdDto extends AbstractBean {
     private Integer divesAmount;
     private boolean nitrox;
     private boolean medicalStatement;
-    private boolean active;
     private String preBooking;
+
+    public String getBoxNumber() {
+        return boxNumber;
+    }
+
+    public void setBoxNumber(String boxNumber) {
+        this.boxNumber = boxNumber;
+    }
 
     public LocalDate getCheckInDate() {
         return checkInDate;
@@ -26,14 +32,6 @@ public class StayDetailsWithoutIdDto extends AbstractBean {
 
     public void setCheckInDate(LocalDate checkInDate) {
         this.checkInDate = checkInDate;
-    }
-
-    public LocalDate getCheckOutDate() {
-        return checkOutDate;
-    }
-
-    public void setCheckOutDate(LocalDate checkOutDate) {
-        this.checkOutDate = checkOutDate;
     }
 
     public LocalDate getArriveDate() {
@@ -106,22 +104,6 @@ public class StayDetailsWithoutIdDto extends AbstractBean {
 
     public void setMedicalStatement(boolean medicalStatement) {
         this.medicalStatement = medicalStatement;
-    }
-
-    public String getBoxNumber() {
-        return boxNumber;
-    }
-
-    public void setBoxNumber(String boxNumber) {
-        this.boxNumber = boxNumber;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public String getPreBooking() {
