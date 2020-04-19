@@ -1,13 +1,22 @@
 package com.tabit.dcm2.service.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
+import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.exception.BoxReservationException;
+import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.repository.IGuestRepo;
+import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.service.GuestFilterType;
+import com.tabit.dcm2.service.IStayService;
+import com.tabit.dcm2.service.dto.CheckInDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.RandomCheckInDto;
 import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
 import com.tabit.dcm2.service.util.GuestMapper;
+import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -29,6 +38,12 @@ public class GuestServiceTest {
     private IGuestRepo guestRepo;
     @Mock
     private GuestMapper guestMapper;
+    @Mock
+    private IStayService stayService;
+    @Mock
+    private IStayRepo stayRepo;
+    @Captor
+    private ArgumentCaptor<Stay> stayArgumentCaptor;
     @InjectMocks
     private GuestService guestService;
 
@@ -102,5 +117,59 @@ public class GuestServiceTest {
         // then
         verify(guestMapper).mapPersonalDetailsFromDto(randomGuest, guestPersonalDetailsDto);
         verify(guestRepo).save(randomGuest);
+    }
+
+    @Test
+    public void checkIn_shall_update_guest_and_add_new_active_stay() {
+        // given
+        CheckInDto randomCheckInDto = RandomCheckInDto.createRandomCheckInDto();
+        Guest notCheckedInGuest = RandomGuest.createRandomGuest();
+        notCheckedInGuest.setCheckedin(false);
+        Stay oldStay = Iterables.getOnlyElement(notCheckedInGuest.getStays());
+
+        when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(notCheckedInGuest));
+        when(stayService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
+
+        // when
+        guestService.checkIn(randomCheckInDto);
+
+        // then
+        verify(guestMapper).mapPersonalDetailsFromDto(notCheckedInGuest, randomCheckInDto.getGuestPersonalDetails());
+
+        verify(guestRepo).save(notCheckedInGuest);
+        assertThat(notCheckedInGuest.isCheckedin()).isTrue();
+
+        verify(stayRepo).save(stayArgumentCaptor.capture());
+        Stay newStay = stayArgumentCaptor.getValue();
+        StayMappingAssertions.assertNewStayFromCheckInDto(newStay, randomCheckInDto);
+        assertThat(notCheckedInGuest.getStays()).containsExactly(oldStay, newStay);
+    }
+
+    @Test(expected = GuestIllegalStateException.class)
+    public void checkIn_shall_throw_exception_if_guest_is_already_checked_in() {
+        // given
+        CheckInDto randomCheckInDto = RandomCheckInDto.createRandomCheckInDto();
+        Guest checkedInGuest = RandomGuest.createRandomGuest();
+        checkedInGuest.setCheckedin(true);
+
+        when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(checkedInGuest));
+        when(stayService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
+
+        // when
+        guestService.checkIn(randomCheckInDto);
+    }
+
+    @Test(expected = BoxReservationException.class)
+    public void checkIn_shall_throw_exception_if_box_is_already_reserved() {
+        // given
+        CheckInDto randomCheckInDto = RandomCheckInDto.createRandomCheckInDto();
+        Guest guest = RandomGuest.createRandomGuest();
+        guest.setCheckedin(false);
+
+        when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(guest));
+        when(stayService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(false);
+
+        // when
+        guestService.checkIn(randomCheckInDto);
     }
 }

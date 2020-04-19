@@ -1,6 +1,7 @@
 package com.tabit.dcm2.testutils;
 
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.service.dto.CheckInDto;
 import com.tabit.dcm2.service.dto.StayDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,5 +33,32 @@ public class StayMappingAssertions {
         assertThat(stayDto.getStayDetails().isNitrox()).isEqualTo(stay.isNitrox());
         assertThat(stayDto.getStayDetails().isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
         assertThat(stayDto.getStayDetails().getPreBooking()).isEqualTo(stay.getPreBooking());
+    }
+
+    public static void assertNewStayFromCheckInDto(Stay newStay, CheckInDto checkInDto) {
+        assertThat(newStay.getFirstName()).isEqualTo(checkInDto.getGuestPersonalDetails().getFirstName());
+        assertThat(newStay.getLastName()).isEqualTo(checkInDto.getGuestPersonalDetails().getLastName());
+        assertThat(newStay.getBirthDate()).isEqualTo(checkInDto.getGuestPersonalDetails().getBirthDate());
+        assertThat(newStay.getNationality()).isEqualTo(checkInDto.getGuestPersonalDetails().getNationality());
+        assertThat(newStay.getCountry()).isEqualTo(checkInDto.getGuestPersonalDetails().getCountry());
+        assertThat(newStay.getCity()).isEqualTo(checkInDto.getGuestPersonalDetails().getCity());
+        assertThat(newStay.getPostcode()).isEqualTo(checkInDto.getGuestPersonalDetails().getPostcode());
+        assertThat(newStay.getStreet()).isEqualTo(checkInDto.getGuestPersonalDetails().getStreet());
+        assertThat(newStay.getEmail()).isEqualTo(checkInDto.getGuestPersonalDetails().getEmail());
+        assertThat(newStay.getPhone()).isEqualTo(checkInDto.getGuestPersonalDetails().getPhone());
+        assertThat(newStay.getPassportId()).isEqualTo(checkInDto.getGuestPersonalDetails().getPassportId());
+        assertThat(newStay.getBoxNumber()).isEqualTo(checkInDto.getStayDetails().getBoxNumber());
+        assertThat(newStay.getCheckInDate()).isEqualTo(checkInDto.getStayDetails().getCheckInDate());
+        assertThat(newStay.getArriveDate()).isEqualTo(checkInDto.getStayDetails().getArriveDate());
+        assertThat(newStay.getLeaveDate()).isEqualTo(checkInDto.getStayDetails().getLeaveDate());
+        assertThat(newStay.getHotel()).isEqualTo(checkInDto.getStayDetails().getHotel());
+        assertThat(newStay.getRoom()).isEqualTo(checkInDto.getStayDetails().getRoom());
+        assertThat(newStay.getLastDiveDate()).isEqualTo(checkInDto.getStayDetails().getLastDiveDate());
+        assertThat(newStay.getBrevet()).isEqualTo(checkInDto.getStayDetails().getBrevet());
+        assertThat(newStay.getDivesAmount()).isEqualTo(checkInDto.getStayDetails().getDivesAmount());
+        assertThat(newStay.isNitrox()).isEqualTo(checkInDto.getStayDetails().isNitrox());
+        assertThat(newStay.isMedicalStatement()).isEqualTo(checkInDto.getStayDetails().isMedicalStatement());
+        assertThat(newStay.isActive()).isTrue();
+        assertThat(newStay.getPreBooking()).isEqualTo(checkInDto.getStayDetails().getPreBooking());
     }
 }

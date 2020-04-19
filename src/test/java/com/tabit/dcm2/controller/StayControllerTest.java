@@ -75,21 +75,9 @@ public class StayControllerTest {
         when(stayService.isBoxFree(activeStay.getBoxNumber())).thenReturn(isBoxFree);
 
         // when
-        boolean actualIsBoxFree = stayService.isBoxFree(activeStay.getBoxNumber());
+        boolean actualIsBoxFree = stayController.isBoxFree(activeStay.getBoxNumber());
 
         // then
         assertThat(actualIsBoxFree).isEqualTo(isBoxFree);
-    }
-
-    @Test
-    public void addActiveStay_shall_add_new_stay() {
-        // given
-        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
-
-        // when
-        stayController.addActiveStay(randomStayDto);
-
-        // then
-        verify(stayService).addActiveStay(randomStayDto);
     }
 }

@@ -5,9 +5,7 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IGuestService;
-import com.tabit.dcm2.service.dto.GuestDetailDto;
-import com.tabit.dcm2.service.dto.GuestDto;
-import com.tabit.dcm2.service.dto.GuestOverviewDto;
+import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +18,7 @@ import java.util.List;
 
 import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -127,5 +126,17 @@ public class GuestControllerTest {
 
         // then
         GuestMappingAssertions.assertGuestDetailDto(guestDetailDto, randomGuest, WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY);
+    }
+
+    @Test
+    public void checkIn_shall_checkIn_correctly() {
+        // given
+        CheckInDto randomCheckInDto = RandomCheckInDto.createRandomCheckInDto();
+
+        // when
+        guestController.checkIn(randomCheckInDto);
+
+        // then
+        verify(guestService).checkIn(randomCheckInDto);
     }
 }

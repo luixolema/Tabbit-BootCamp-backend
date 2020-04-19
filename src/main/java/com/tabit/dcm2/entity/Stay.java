@@ -47,7 +47,7 @@ public class Stay implements IEntity {
     @Column(name = "street", nullable = false)
     private String street;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
     @Column(name = "phone", nullable = false)
@@ -59,7 +59,7 @@ public class Stay implements IEntity {
     @Column(name = "check_in_date", nullable = false)
     private LocalDate checkInDate;
 
-    @Column(name = "check_out_date", nullable = false)
+    @Column(name = "check_out_date")
     private LocalDate checkOutDate;
 
     @Column(name = "arrive_date", nullable = false)
@@ -92,7 +92,7 @@ public class Stay implements IEntity {
     @Column(name = "active", nullable = false)
     private boolean active;
 
-    @Column(name = "pre_booking", nullable = true)
+    @Column(name = "pre_booking")
     private String preBooking;
 
     @Override

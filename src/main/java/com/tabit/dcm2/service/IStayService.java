@@ -9,6 +9,4 @@ public interface IStayService {
     void updateStay(StayDto stayDto);
 
     Boolean isBoxFree(String boxNumber);
-
-    void addActiveStay(StayDto stayDto);
 }
