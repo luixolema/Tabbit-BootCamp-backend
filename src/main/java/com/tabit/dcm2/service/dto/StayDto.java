@@ -4,8 +4,8 @@ import com.tabit.dcm2.commons.AbstractBean;
 
 public class StayDto extends AbstractBean {
 
-    private GuestPersonalDetailsDto guestPersonalDetails;
-    private StayDetailsDto stayDetails;
+    protected GuestPersonalDetailsDto guestPersonalDetails;
+    protected StayDetailsDto stayDetails;
 
     public GuestPersonalDetailsDto getGuestPersonalDetails() {
         return guestPersonalDetails;

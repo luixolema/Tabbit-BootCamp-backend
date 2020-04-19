@@ -63,7 +63,7 @@ public class MapperUtil {
         return completeStayDto;
     }
 
-    public static CompleteStayDto mapGuestToStayDto(Guest guest) {
+    public static CompleteStayDto mapGuestToCompleteStayDto(Guest guest) {
         GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto();
         guestPersonalDetails.setId(guest.getId());
         guestPersonalDetails.setFirstName(guest.getFirstName());

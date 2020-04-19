@@ -1,14 +1,10 @@
 package com.tabit.dcm2.service.dto;
 
-import com.tabit.dcm2.commons.AbstractBean;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompleteStayDto extends AbstractBean {
+public class CompleteStayDto extends StayDto {
 
-    private GuestPersonalDetailsDto guestPersonalDetails;
-    private StayDetailsDto stayDetails;
     private List<LoanDto> loans = new ArrayList<>();
     // the activities now can be added here // todo: remove this line after added the activities dtos
 

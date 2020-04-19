@@ -35,7 +35,27 @@ public class TestdataImporter {
     private IEquipmentTypeRepo equipmentTypeRepo;
 
     private List<Guest> guestsInDb = new ArrayList<>();
-    private List<Equipment> equipmentsInDb = new ArrayList<>();
+
+    private EquipmentType equipmentTypeMask;
+    private EquipmentType equipmentTypeSuit;
+    private EquipmentType equipmentTypeFins;
+
+    private Equipment equipmentMask_XD_M_15;
+    private Equipment equipmentMask_XD_M_16;
+    private Equipment equipmentMask_XD_M_17;
+    private Equipment equipmentFins_XD_F_12;
+    private Equipment equipmentSuit_XS_G_13;
+
+    private Guest guest0;
+    private Guest guest1;
+    private Guest guest2;
+    private Guest guest3;
+    private Guest guest4;
+    private Guest guest5;
+    private Guest guest6;
+    private Guest guest7;
+    private Guest guest8;
+    private Guest guest9;
 
 
     @Autowired
@@ -47,133 +67,26 @@ public class TestdataImporter {
      */
     @Test
     public void import_testdata_for_application() {
-        saveEquipments();
         saveGuests();
+        saveEquipments();
         saveLoads();
     }
 
-    private void saveLoads() {
-        Guest guest1 = guestsInDb.get(0);
-        Stay stay1 = guest1.getStays().get(1);
-        Stay stay2 = guest1.getStays().get(0);
-        Equipment XD_M_15 = equipmentsInDb.get(0);
-        Equipment XD_M_16 = equipmentsInDb.get(1);
-        Equipment XD_M_17 = equipmentsInDb.get(2);
-        Equipment XD_F_12 = equipmentsInDb.get(3);
-        Equipment XS_G_13 = equipmentsInDb.get(4);
-
-        // Loans stay 1
-        Loan loan1 = new Loan();
-        loan1.setStay(stay1);
-        loan1.setDateOut(stay1.getCheckInDate().plusDays(1));
-        loan1.setDateReturn(stay1.getCheckOutDate().minusDays(1));
-        loan1.setEquipment(XD_M_16);
-
-        Loan loan2 = new Loan();
-        loan2.setStay(stay1);
-        loan2.setDateOut(stay1.getCheckInDate().plusDays(1));
-        loan2.setDateReturn(stay1.getCheckOutDate().minusDays(1));
-        loan2.setEquipment(XD_M_17);
-
-        Loan loan3 = new Loan();
-        loan3.setStay(stay1);
-        loan3.setDateOut(stay1.getCheckInDate().plusDays(1));
-        loan3.setDateReturn(stay1.getCheckOutDate().minusDays(1));
-        loan3.setEquipment(XD_F_12);
-
-        // Loans stay 2
-        Loan loan4 = new Loan();
-        loan4.setStay(stay2);
-        loan4.setDateOut(stay2.getCheckInDate().plusDays(1));
-        loan4.setDateReturn(stay2.getCheckOutDate().minusDays(1));
-        loan4.setEquipment(XS_G_13);
-
-        Loan loan5 = new Loan();
-        loan5.setStay(stay2);
-        loan5.setDateOut(stay2.getCheckInDate().plusDays(1));
-        loan5.setDateReturn(stay2.getCheckOutDate().minusDays(1));
-        loan5.setEquipment(XD_M_15);
-
-        Loan loan6 = new Loan();
-        loan6.setStay(stay2);
-        loan6.setDateOut(stay2.getCheckInDate().plusDays(1));
-        loan6.setDateReturn(stay2.getCheckOutDate().minusDays(1));
-        loan6.setEquipment(XD_F_12);
-
-
-        loanRepo.saveAll(ImmutableList.of(loan1, loan2, loan3, loan4, loan5, loan6));
-    }
-
-    private void saveEquipments() {
-        //equipment types
-        EquipmentType equipmentTypeMask = new EquipmentType();
-        equipmentTypeMask.setType("Mask");
-        equipmentTypeMask.setPrice(12.20);
-        equipmentTypeMask.setDescription("Big mask");
-        equipmentTypeMask.setActive(true);
-
-        EquipmentType equipmentTypeFins = new EquipmentType();
-        equipmentTypeFins.setType("Fins");
-        equipmentTypeFins.setPrice(4.50);
-        equipmentTypeFins.setDescription("Small fins");
-        equipmentTypeFins.setActive(true);
-
-        EquipmentType equipmentTypeSuit = new EquipmentType();
-        equipmentTypeSuit.setType("Suite");
-        equipmentTypeSuit.setPrice(4.50);
-        equipmentTypeSuit.setDescription("Small fins");
-        equipmentTypeSuit.setActive(true);
-
-        equipmentTypeRepo.saveAll(ImmutableList.of(equipmentTypeFins, equipmentTypeMask, equipmentTypeSuit));
-
-        //equipments
-        Equipment equipment1 = new Equipment();
-        equipment1.setStatus(Equipment.EquipmentStatus.AVAILABLE);
-        equipment1.setSerialNumber("XD_M_15");
-        equipment1.setEquipmentType(equipmentTypeMask);
-
-        Equipment equipment2 = new Equipment();
-        equipment2.setStatus(Equipment.EquipmentStatus.BROKEN);
-        equipment2.setSerialNumber("XD_M_16");
-        equipment2.setEquipmentType(equipmentTypeMask);
-
-
-        Equipment equipment3 = new Equipment();
-        equipment3.setStatus(Equipment.EquipmentStatus.STOLEN);
-        equipment3.setSerialNumber("XD_M_17");
-        equipment3.setEquipmentType(equipmentTypeMask);
-
-
-        Equipment equipment4 = new Equipment();
-        equipment4.setStatus(Equipment.EquipmentStatus.IN_REPAIR);
-        equipment4.setSerialNumber("XD_F_12");
-        equipment4.setEquipmentType(equipmentTypeFins);
-
-        Equipment equipment5 = new Equipment();
-        equipment5.setStatus(Equipment.EquipmentStatus.IN_REPAIR);
-        equipment5.setSerialNumber("XS_G_13");
-        equipment5.setEquipmentType(equipmentTypeSuit);
-
-        ImmutableList<Equipment> equipments = ImmutableList.of(equipment1, equipment2, equipment3, equipment4, equipment5);
-        equipmentsInDb.addAll(equipments);
-        equipmentRepo.saveAll(equipments);
-    }
-
     private void saveGuests() {
-        Guest guest = createGuestAntonioBanderas();
-        Guest guest2 = createGuestAntonyHopkins();
-        Guest guest3 = createGuestMonicaBellucci();
-        Guest guest4 = createGuestKeanuReeves();
-        Guest guest5 = createGuestAgentSmith();
-        Guest guest6 = createGuestHarrisonFord();
-        Guest guest7 = createGuestSeanConnery();
-        Guest guest8 = createGuestClintEastwood();
-        Guest guest9 = createGuestMelGibson();
-        Guest guest10 = createGuestAlexander();
+        guest0 = createGuestAlexander();
+        guest1 = createGuestAntonioBanderas();
+        guest2 = createGuestAntonyHopkins();
+        guest3 = createGuestMonicaBellucci();
+        guest4 = createGuestKeanuReeves();
+        guest5 = createGuestAgentSmith();
+        guest6 = createGuestHarrisonFord();
+        guest7 = createGuestSeanConnery();
+        guest8 = createGuestClintEastwood();
+        guest9 = createGuestMelGibson();
 
-        ImmutableList<Guest> guests = ImmutableList.of(guest10, guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9);
-        guestsInDb.addAll(guests);
-        guestRepo.saveAll(guests);
+        guestRepo.saveAll(ImmutableList.of(
+                guest0, guest1, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9
+        ));
     }
 
     private Guest createGuestAntonioBanderas() {
@@ -426,5 +339,107 @@ public class TestdataImporter {
         return guest;
     }
 
+    private void saveEquipments() {
+        //equipment types
+        equipmentTypeMask = new EquipmentType();
+        equipmentTypeMask.setType("Mask");
+        equipmentTypeMask.setPrice(12.20);
+        equipmentTypeMask.setDescription("Big mask");
+        equipmentTypeMask.setActive(true);
+
+        equipmentTypeFins = new EquipmentType();
+        equipmentTypeFins.setType("Fins");
+        equipmentTypeFins.setPrice(4.50);
+        equipmentTypeFins.setDescription("Small fins");
+        equipmentTypeFins.setActive(true);
+
+        equipmentTypeSuit = new EquipmentType();
+        equipmentTypeSuit.setType("Suite");
+        equipmentTypeSuit.setPrice(4.50);
+        equipmentTypeSuit.setDescription("Small fins");
+        equipmentTypeSuit.setActive(true);
+
+        equipmentTypeRepo.saveAll(ImmutableList.of(equipmentTypeFins, equipmentTypeMask, equipmentTypeSuit));
+
+        //equipments
+        equipmentMask_XD_M_15 = new Equipment();
+        equipmentMask_XD_M_15.setStatus(Equipment.EquipmentStatus.AVAILABLE);
+        equipmentMask_XD_M_15.setSerialNumber("XD_M_15");
+        equipmentMask_XD_M_15.setEquipmentType(equipmentTypeMask);
+
+        equipmentMask_XD_M_16 = new Equipment();
+        equipmentMask_XD_M_16.setStatus(Equipment.EquipmentStatus.BROKEN);
+        equipmentMask_XD_M_16.setSerialNumber("XD_M_16");
+        equipmentMask_XD_M_16.setEquipmentType(equipmentTypeMask);
+
+
+        equipmentMask_XD_M_17 = new Equipment();
+        equipmentMask_XD_M_17.setStatus(Equipment.EquipmentStatus.STOLEN);
+        equipmentMask_XD_M_17.setSerialNumber("XD_M_17");
+        equipmentMask_XD_M_17.setEquipmentType(equipmentTypeMask);
+
+
+        equipmentFins_XD_F_12 = new Equipment();
+        equipmentFins_XD_F_12.setStatus(Equipment.EquipmentStatus.IN_REPAIR);
+        equipmentFins_XD_F_12.setSerialNumber("XD_F_12");
+        equipmentFins_XD_F_12.setEquipmentType(equipmentTypeFins);
+
+        equipmentSuit_XS_G_13 = new Equipment();
+        equipmentSuit_XS_G_13.setStatus(Equipment.EquipmentStatus.IN_REPAIR);
+        equipmentSuit_XS_G_13.setSerialNumber("XS_G_13");
+        equipmentSuit_XS_G_13.setEquipmentType(equipmentTypeSuit);
+
+        equipmentRepo.saveAll(ImmutableList.of(
+                equipmentMask_XD_M_15,
+                equipmentMask_XD_M_16,
+                equipmentMask_XD_M_17,
+                equipmentFins_XD_F_12,
+                equipmentSuit_XS_G_13
+        ));
+    }
+
+    private void saveLoads() {
+        Stay stay1 = guest0.getStays().get(1);
+        Stay stay2 = guest0.getStays().get(0);
+
+        // Loans stay 1
+        Loan loan1 = new Loan();
+        loan1.setStay(stay1);
+        loan1.setDateOut(stay1.getCheckInDate());
+        loan1.setDateReturn(stay1.getCheckInDate().plusDays(1));
+        loan1.setEquipment(equipmentMask_XD_M_16);
+
+        Loan loan2 = new Loan();
+        loan2.setStay(stay1);
+        loan2.setDateOut(stay1.getCheckInDate().plusDays(1));
+        loan2.setEquipment(equipmentMask_XD_M_17);
+
+        Loan loan3 = new Loan();
+        loan3.setStay(stay1);
+        loan3.setDateOut(stay1.getCheckInDate());
+        loan3.setEquipment(equipmentFins_XD_F_12);
+
+        // Loans stay 2
+        Loan loan4 = new Loan();
+        loan4.setStay(stay2);
+        loan4.setDateOut(stay2.getCheckInDate().plusDays(1));
+        loan4.setDateReturn(stay2.getCheckOutDate().minusDays(1));
+        loan4.setEquipment(equipmentSuit_XS_G_13);
+
+        Loan loan5 = new Loan();
+        loan5.setStay(stay2);
+        loan5.setDateOut(stay2.getCheckInDate().plusDays(1));
+        loan5.setDateReturn(stay2.getCheckOutDate().minusDays(1));
+        loan5.setEquipment(equipmentMask_XD_M_17);
+
+        Loan loan6 = new Loan();
+        loan6.setStay(stay2);
+        loan6.setDateOut(stay2.getCheckInDate().plusDays(1));
+        loan6.setDateReturn(stay2.getCheckOutDate().minusDays(1));
+        loan6.setEquipment(equipmentFins_XD_F_12);
+
+
+        loanRepo.saveAll(ImmutableList.of(loan1, loan2, loan3, loan4, loan5, loan6));
+    }
 
 }

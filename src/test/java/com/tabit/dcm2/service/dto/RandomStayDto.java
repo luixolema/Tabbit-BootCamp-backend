@@ -4,9 +4,6 @@ import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.Loan;
 import com.tabit.dcm2.entity.Stay;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class RandomStayDto {
     public static StayDto createRandomStayDto() {
         StayDto stayDto = new StayDto();
@@ -56,8 +53,6 @@ public class RandomStayDto {
         stayDetails.setNitrox(stay.isNitrox());
         stayDetails.setMedicalStatement(stay.isMedicalStatement());
         stayDetails.setPreBooking(stay.getPreBooking());
-
-        List<LoanDto> loans = stay.getLoans().stream().map(RandomStayDto::mapLoanToLoanDto).collect(Collectors.toList());
 
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(guestPersonalDetails);

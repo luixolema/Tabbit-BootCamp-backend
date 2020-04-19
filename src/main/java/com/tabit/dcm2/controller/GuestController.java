@@ -48,7 +48,7 @@ public class GuestController {
             Stay currentStay = guest.getStays().get(0);
             resultGuestDetailDto.setCompleteStayDto(MapperUtil.mapStayToCompleteStayDto(currentStay));
         } else {
-            resultGuestDetailDto.setCompleteStayDto(MapperUtil.mapGuestToStayDto(guest));
+            resultGuestDetailDto.setCompleteStayDto(MapperUtil.mapGuestToCompleteStayDto(guest));
         }
         guest.getStays().forEach(resultGuestDetailDto::addStaySummary);
 
