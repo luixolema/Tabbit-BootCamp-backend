@@ -134,15 +134,15 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         HttpEntity<String> freeBox = createHttpEntity(stay.getBoxNumber() + "Update");
 
         // when
-        ResponseEntity<Boolean> responseForActiveBox = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, activeBox, Boolean.class);
+        ResponseEntity<Boolean> responseIsBoxFree = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, activeBox, Boolean.class);
 
         // then
-        assertThat(responseForActiveBox.getBody()).isFalse();
+        assertThat(responseIsBoxFree.getBody()).isFalse();
 
         // when
-        ResponseEntity<Boolean> responseForFreeBox = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, freeBox, Boolean.class);
+        responseIsBoxFree = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, freeBox, Boolean.class);
 
         // then
-        assertThat(responseForFreeBox.getBody()).isTrue();
+        assertThat(responseIsBoxFree.getBody()).isTrue();
     }
 }

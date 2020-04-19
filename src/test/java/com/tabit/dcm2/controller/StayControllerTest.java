@@ -75,7 +75,7 @@ public class StayControllerTest {
         when(stayService.isBoxFree(activeStay.getBoxNumber())).thenReturn(isBoxFree);
 
         // when
-        boolean actualIsBoxFree = stayService.isBoxFree(activeStay.getBoxNumber());
+        boolean actualIsBoxFree = stayController.isBoxFree(activeStay.getBoxNumber());
 
         // then
         assertThat(actualIsBoxFree).isEqualTo(isBoxFree);
