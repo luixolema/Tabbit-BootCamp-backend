@@ -100,5 +100,8 @@ public class StayRepoDbTest extends AbstractDbTest {
         assertThat(actualStay.isMedicalStatement()).isEqualTo(expectedStay.isMedicalStatement());
         assertThat(actualStay.getPreBooking()).isEqualTo(expectedStay.getPreBooking());
         assertThat(actualStay.isActive()).isEqualTo(expectedStay.isActive());
+
+        // REVIEW: loans should be checked here also (ordered by date_out)
+        // also add the lost guest assert
     }
 }
