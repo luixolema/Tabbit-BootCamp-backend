@@ -26,7 +26,6 @@ public class EquipmentRepoDbTest extends AbstractDbTest {
         equipment = RandomEquipment.createRandomEquipmentWithoutId();
         equipmentType = equipment.getEquipmentType();
 
-//        equipmentTypeRule.persist(ImmutableList.of(equipmentType)); // REVIEW: not necessary cascadetype
         equipmentRule.persist(ImmutableList.of(equipment));
     }
 

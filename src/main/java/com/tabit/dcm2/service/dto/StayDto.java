@@ -1,11 +1,11 @@
 package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
-import com.tabit.dcm2.controller.util.MapperUtil;
 import com.tabit.dcm2.entity.Loan;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class StayDto extends AbstractBean {
 
@@ -38,7 +38,17 @@ public class StayDto extends AbstractBean {
     }
 
     public void addLoanDetails(Loan loan) {
-        loanDetails.add(MapperUtil.mapLoanToLoanDetailsDto(loan));
+        loanDetails.add(MAP_LOAN_TO_LOAN_DETAILS_DTO.apply(loan));
     }
+
+    private Function<Loan, LoanDetailsDto> MAP_LOAN_TO_LOAN_DETAILS_DTO = loan -> {
+        LoanDetailsDto loanDetailsDto = new LoanDetailsDto();
+        loanDetailsDto.setId(loan.getId());
+        loanDetailsDto.setDateOut(loan.getDateOut());
+        loanDetailsDto.setDateReturn(loan.getDateReturn());
+        loanDetailsDto.setSerialNumber(loan.getEquipment().getSerialNumber());
+        loanDetailsDto.setType(loan.getEquipment().getEquipmentType().getType());
+        return loanDetailsDto;
+    };
 }
 
