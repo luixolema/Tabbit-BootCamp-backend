@@ -38,7 +38,6 @@ public class TestdataImporter {
     private List<Equipment> equipmentsInDb = new ArrayList<>();
 
 
-    @Autowired
     /**
      * to import some testdata to the application just set ActiveProfile to mysql.
      * but dont commit it!
