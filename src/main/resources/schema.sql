@@ -56,3 +56,11 @@ DROP TABLE IF EXISTS `id_gen`;
     `id_name` VARCHAR(24) NOT NULL,
     PRIMARY KEY(`id_name`)
   );
+
+
+  CREATE TABLE `box_management`(
+    `id` bigint(20) NOT NULL,
+    `box_number` VARCHAR(24) NOT NULL,
+    UNIQUE (box_number),
+    PRIMARY KEY(`id`)
+  );
