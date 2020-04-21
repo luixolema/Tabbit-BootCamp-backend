@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -237,5 +239,25 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.BAD_REQUEST);
         assertThat(response.getBody()).isNull();
+    }
+
+    @Test
+    public void getGuestPersonalDetails_return_the_correct_GuestPersonalDetailDto() {
+        // given
+        String url = String.format("/api/guests/%s/personal-details", guestCheckedInTrue.getId());
+
+        // when
+        ResponseEntity<GuestPersonalDetailsDto> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                GuestPersonalDetailsDto.class
+        );
+
+        // then
+        GuestPersonalDetailsDto guestPersonalDetailsDto = response.getBody();
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThat(guestPersonalDetailsDto).isNotNull();
+        GuestMappingAssertions.assertPersonalDetails(guestCheckedInTrue, guestPersonalDetailsDto);
     }
 }

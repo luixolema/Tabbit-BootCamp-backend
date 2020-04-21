@@ -105,7 +105,21 @@ public class GuestController {
         return mapGuestToGuestPersonalDetailsDto(guest);
     }
 
-    private GuestPersonalDetailsDto mapGuestToGuestPersonalDetailsDto(Guest guest) {
-        return null;
+    private static GuestPersonalDetailsDto mapGuestToGuestPersonalDetailsDto(Guest guest) {
+        GuestPersonalDetailsDto guestPersonalDetailsDto = new GuestPersonalDetailsDto();
+        guestPersonalDetailsDto.setId(guest.getId());
+        guestPersonalDetailsDto.setPostcode(guest.getPostcode());
+        guestPersonalDetailsDto.setStreet(guest.getStreet());
+        guestPersonalDetailsDto.setPhone(guest.getPhone());
+        guestPersonalDetailsDto.setPassportId(guest.getPassportId());
+        guestPersonalDetailsDto.setLastName(guest.getLastName());
+        guestPersonalDetailsDto.setNationality(guest.getNationality());
+        guestPersonalDetailsDto.setFirstName(guest.getFirstName());
+        guestPersonalDetailsDto.setEmail(guest.getEmail());
+        guestPersonalDetailsDto.setCountry(guest.getCountry());
+        guestPersonalDetailsDto.setCity(guest.getCity());
+        guestPersonalDetailsDto.setBirthDate(guest.getBirthDate());
+
+        return guestPersonalDetailsDto;
     }
 }
