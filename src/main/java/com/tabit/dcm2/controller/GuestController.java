@@ -98,4 +98,14 @@ public class GuestController {
     public void checkIn(@RequestBody CheckInDto checkInDto) {
         guestService.checkIn(checkInDto);
     }
+
+    @GetMapping("/{guestId}/personal-details")
+    public GuestPersonalDetailsDto getGuestPersonalDetails(@PathVariable long guestId) {
+        Guest guest = guestService.getGuestById(guestId);
+        return mapGuestToGuestPersonalDetailsDto(guest);
+    }
+
+    private GuestPersonalDetailsDto mapGuestToGuestPersonalDetailsDto(Guest guest) {
+        return null;
+    }
 }
