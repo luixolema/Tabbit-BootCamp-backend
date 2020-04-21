@@ -89,7 +89,24 @@ public class GuestRepoDbTest extends AbstractDbTest {
     }
 
     @Test
-    public void save_shall_save_the_guest() {
+    public void save_shall_update_the_guest() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuestWitoutId();
+        guestRule.persist(ImmutableList.of(randomGuest));
+        randomGuest.setFirstName(randomGuest.getFirstName() + "Update");
+        randomGuest.setBirthDate(randomGuest.getBirthDate().minusYears(5));
+
+        // when
+        guestRepo.save(randomGuest);
+
+        // then
+        Optional<Guest> actualGuest = guestRepo.findById(randomGuest.getId());
+        assertThat(actualGuest.isPresent()).isTrue();
+        assertGuest(actualGuest.get(), randomGuest, ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
+    }
+
+    @Test
+    public void save_shall_create_the_guest() {
         // given
         Guest randomGuest = RandomGuest.createRandomGuestWitoutId();
 
@@ -97,8 +114,8 @@ public class GuestRepoDbTest extends AbstractDbTest {
         guestRepo.save(randomGuest);
 
         //then
-        Optional<Guest> expectedGuest = guestRepo.findById(randomGuest.getId());
-        assertThat(expectedGuest.isPresent()).isTrue();
-        assertGuest(randomGuest, expectedGuest.get(), ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
+        Optional<Guest> actualGuest = guestRepo.findById(randomGuest.getId());
+        assertThat(actualGuest.isPresent()).isTrue();
+        assertGuest(randomGuest, actualGuest.get(), ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
     }
 }

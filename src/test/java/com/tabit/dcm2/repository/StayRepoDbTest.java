@@ -51,16 +51,36 @@ public class StayRepoDbTest extends AbstractDbTest {
     }
 
     @Test
-    public void save_shall_save_the_stay() {
+    public void save_shall_update_the_stay() {
+        // given
+        activeStay.setFirstName(activeStay.getFirstName() + "Update");
+        activeStay.setBirthDate(activeStay.getBirthDate().minusYears(5));
+        activeStay.setHotel(activeStay.getHotel() + "Update");
 
-        //when
+        // when
         stayRepo.save(activeStay);
 
-        //then
-        Optional<Stay> actualStay = stayRepo.findById(activeStay.getId());
+        // then
+        Stay actualStay = stayRepo.findById(activeStay.getId()).get();
+        assertStay(actualStay, activeStay);
+    }
+
+    @Test
+    public void save_shall_create_the_stay() {
+        // given
+        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        guestRule.persist(ImmutableList.of(guest));
+        Stay stay = RandomStay.createRandomStayWithoutId();
+        guest.setStays(ImmutableList.of(stay));
+
+        // when
+        stayRepo.save(stay);
+
+        // then
+        Optional<Stay> actualStay = stayRepo.findById(stay.getId());
 
         assertThat(actualStay.isPresent()).isTrue();
-        assertStay(actualStay.get(), activeStay);
+        assertStay(actualStay.get(), stay);
     }
 
     @Test
