@@ -16,8 +16,9 @@ public class RandomLoan {
         return loan;
     }
 
-    public static Loan createRandomLoanWitoutId() {
+    public static Loan createRandomLoanWithoutId() {
         Loan randomLoan = createRandomLoan();
+        randomLoan.setEquipment(null);
         randomLoan.setId(null);
 
         return randomLoan;

@@ -16,8 +16,9 @@ public class RandomEquipment {
         return equipment;
     }
 
-    public static Equipment createRandomEquipmentWitoutId() {
+    public static Equipment createRandomEquipmentWithoutId() {
         Equipment equipment = createRandomEquipment();
+        equipment.setEquipmentType(null);
         equipment.setId(null);
 
         return equipment;

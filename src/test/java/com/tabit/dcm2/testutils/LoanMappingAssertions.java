@@ -18,4 +18,16 @@ public class LoanMappingAssertions {
         assertThat(loanDto.getSerial()).isEqualTo(equipment.getSerialNumber());
         assertThat(loanDto.getType()).isEqualTo(equipmentType.getType());
     }
+
+
+    public static void assertLoan(Loan actualLoan, Loan expectedLoan) {
+        Equipment expectedEquipment = expectedLoan.getEquipment();
+        EquipmentType expectedEquipmentType = expectedEquipment.getEquipmentType();
+
+        assertThat(actualLoan.getId()).isEqualTo(expectedLoan.getId());
+        assertThat(actualLoan.getDateOut()).isEqualTo(expectedLoan.getDateOut());
+        assertThat(actualLoan.getDateReturn()).isEqualTo(expectedLoan.getDateReturn());
+        assertThat(actualLoan.getEquipment().getSerialNumber()).isEqualTo(expectedEquipment.getSerialNumber());
+        assertThat(actualLoan.getEquipment().getEquipmentType().getType()).isEqualTo(expectedEquipmentType.getType());
+    }
 }

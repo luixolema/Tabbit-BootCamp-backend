@@ -49,12 +49,12 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
 
         guestRule.persist(ImmutableList.of(guest));
 
-        equipmentType = RandomEquipmentType.createRandomEquipmentTypeWitoutId();
+        equipmentType = RandomEquipmentType.createRandomEquipmentTypeWithoutId();
         equipmentTypeRule.persist(ImmutableList.of(equipmentType));
-        equipment = RandomEquipment.createRandomEquipmentWitoutId();
+        equipment = RandomEquipment.createRandomEquipmentWithoutId();
         equipment.setEquipmentType(equipmentType);
         equipmentRule.persist(ImmutableList.of(equipment));
-        loan = RandomLoan.createRandomLoanWitoutId();
+        loan = RandomLoan.createRandomLoanWithoutId();
         loan.setEquipment(equipment);
         loan.setStay(stay);
         loanRule.persist(ImmutableList.of(loan));
