@@ -1,5 +1,6 @@
 package com.tabit.dcm2.repository;
 
+import com.tabit.dcm2.entity.BoxManagementRule;
 import com.tabit.dcm2.entity.GuestRule;
 import com.tabit.dcm2.entity.StayRule;
 import org.junit.Rule;
@@ -25,8 +26,13 @@ public abstract class AbstractDbTest {
 
     protected GuestRule guestRule = new GuestRule();
     protected StayRule stayRule = new StayRule();
+    protected BoxManagementRule boxManagementRule = new BoxManagementRule();
+
     @Rule
     public RuleChain ruleChain = RuleChain.outerRule(stayRule).around(guestRule);
+
+    @Rule
+    public RuleChain ruleChain2 = RuleChain.outerRule(boxManagementRule);
 
     @Autowired
     public final void setEntityManager(EntityManagerFactory factory) {
@@ -35,5 +41,6 @@ public abstract class AbstractDbTest {
         }
         guestRule.setEntityManager(entityManager);
         stayRule.setEntityManager(entityManager);
+        boxManagementRule.setEntityManager(entityManager);
     }
 }

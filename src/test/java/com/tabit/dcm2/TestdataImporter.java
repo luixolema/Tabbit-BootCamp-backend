@@ -1,10 +1,8 @@
 package com.tabit.dcm2;
 
 import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.RandomStay;
-import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.entity.*;
+import com.tabit.dcm2.repository.IBoxManagementRepo;
 import com.tabit.dcm2.repository.IGuestRepo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,11 +16,14 @@ import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("mysql")
 public class TestdataImporter {
 
     @Autowired
     private IGuestRepo guestRepo;
+
+    @Autowired
+    private IBoxManagementRepo boxManagementRepo;
 
     /**
      * to import some testdata to the application just set ActiveProfile to mysql.
@@ -33,6 +34,7 @@ public class TestdataImporter {
     @Test
     public void import_testdata_for_application() {
         saveGuests();
+        saveBoxNumbers();
     }
 
     private void saveGuests() {
@@ -47,6 +49,23 @@ public class TestdataImporter {
         Guest guest9 = createGuestMelGibson();
 
         guestRepo.saveAll(ImmutableList.of(guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
+    }
+
+
+    private void saveBoxNumbers() {
+        BoxManagement boxManagement1 = new BoxManagement();
+        boxManagement1.setBoxNumber("123AB");
+
+        BoxManagement boxManagement2 = new BoxManagement();
+        boxManagement2.setBoxNumber("666");
+
+        BoxManagement boxManagement3 = new BoxManagement();
+        boxManagement3.setBoxNumber("98765");
+
+        BoxManagement boxManagement4 = new BoxManagement();
+        boxManagement4.setBoxNumber("4567");
+
+        boxManagementRepo.saveAll(ImmutableList.of(boxManagement1,boxManagement2,boxManagement3,boxManagement4));
     }
 
     private Guest createGuestAntonioBanderas() {

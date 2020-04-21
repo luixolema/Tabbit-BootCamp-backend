@@ -40,11 +40,6 @@ public class StayService implements IStayService {
         }
     }
 
-    @Override
-    public Boolean isBoxFree(String boxNumber) {
-        return !stayRepo.getActiveBoxNumbers().contains(boxNumber);
-    }
-
     private Stay mapStayFromStayDto(Stay stay, StayDto stayDto) {
         stay.setFirstName(stayDto.getGuestPersonalDetails().getFirstName());
         stay.setLastName(stayDto.getGuestPersonalDetails().getLastName());

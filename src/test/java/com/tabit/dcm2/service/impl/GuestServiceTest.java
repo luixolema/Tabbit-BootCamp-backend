@@ -10,7 +10,7 @@ import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.service.GuestFilterType;
-import com.tabit.dcm2.service.IStayService;
+import com.tabit.dcm2.service.IBoxManagementService;
 import com.tabit.dcm2.service.dto.CheckInDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.RandomCheckInDto;
@@ -39,7 +39,7 @@ public class GuestServiceTest {
     @Mock
     private GuestMapper guestMapper;
     @Mock
-    private IStayService stayService;
+    private IBoxManagementService boxManagementService;
     @Mock
     private IStayRepo stayRepo;
     @Captor
@@ -128,7 +128,7 @@ public class GuestServiceTest {
         Stay oldStay = Iterables.getOnlyElement(notCheckedInGuest.getStays());
 
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(notCheckedInGuest));
-        when(stayService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
+        when(boxManagementService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
 
         // when
         guestService.checkIn(randomCheckInDto);
@@ -153,7 +153,7 @@ public class GuestServiceTest {
         checkedInGuest.setCheckedin(true);
 
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(checkedInGuest));
-        when(stayService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
+        when(boxManagementService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
 
         // when
         guestService.checkIn(randomCheckInDto);
@@ -167,7 +167,7 @@ public class GuestServiceTest {
         guest.setCheckedin(false);
 
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(guest));
-        when(stayService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(false);
+        when(boxManagementService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(false);
 
         // when
         guestService.checkIn(randomCheckInDto);

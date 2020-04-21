@@ -1,6 +1,8 @@
 DROP TABLE IF EXISTS `stay`;
 DROP TABLE IF EXISTS `guest`;
 DROP TABLE IF EXISTS `id_gen`;
+DROP TABLE IF EXISTS `box_management`;
+
 
   CREATE TABLE `guest` (
     `id` bigint(20) NOT NULL,

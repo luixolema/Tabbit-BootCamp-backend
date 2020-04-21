@@ -9,17 +9,13 @@ import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.impl.StayService;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.FromDataPoints;
 import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static com.tabit.dcm2.testutils.StayMappingAssertions.assertStayDto;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -64,20 +60,4 @@ public class StayControllerTest {
         verify(stayService).updateStay(randomStayDto);
     }
 
-    @DataPoints("isBoxFree")
-    public static Boolean[] isBoxFree = new Boolean[]{true, false};
-
-    @Theory
-    @Test
-    public void isBoxFree_shall_return_the_right_value(@FromDataPoints("isBoxFree") boolean isBoxFree) {
-        // given
-        Stay activeStay = RandomStay.createRandomStay();
-        when(stayService.isBoxFree(activeStay.getBoxNumber())).thenReturn(isBoxFree);
-
-        // when
-        boolean actualIsBoxFree = stayController.isBoxFree(activeStay.getBoxNumber());
-
-        // then
-        assertThat(actualIsBoxFree).isEqualTo(isBoxFree);
-    }
 }
