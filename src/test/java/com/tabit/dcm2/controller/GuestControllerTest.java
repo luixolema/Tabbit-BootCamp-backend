@@ -16,7 +16,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -138,5 +140,19 @@ public class GuestControllerTest {
 
         // then
         verify(guestService).checkIn(randomCheckInDto);
+    }
+
+    @Test
+    public void getGuestPersonalDetails_return_the_correct_GuestPersonalDetailDto() {
+        // given
+        Guest randomGuest = RandomGuest.createRandomGuest();
+
+        // when
+        when(guestService.getGuestById(randomGuest.getId())).thenReturn(randomGuest);
+        GuestPersonalDetailsDto guestPersonalDetailsDto = guestController.getGuestPersonalDetails(randomGuest.getId());
+
+        // then
+        verify(guestService).getGuestById(randomGuest.getId());
+        GuestMappingAssertions.assertPersonalDetails(randomGuest, guestPersonalDetailsDto);
     }
 }
