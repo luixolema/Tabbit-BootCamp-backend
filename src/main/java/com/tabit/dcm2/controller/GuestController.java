@@ -52,6 +52,24 @@ public class GuestController {
         return stayDto;
     };
 
+    private static Function<Guest, GuestPersonalDetailsDto> MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO = guest -> {
+        GuestPersonalDetailsDto guestPersonalDetailsDto = new GuestPersonalDetailsDto();
+        guestPersonalDetailsDto.setId(guest.getId());
+        guestPersonalDetailsDto.setPostcode(guest.getPostcode());
+        guestPersonalDetailsDto.setStreet(guest.getStreet());
+        guestPersonalDetailsDto.setPhone(guest.getPhone());
+        guestPersonalDetailsDto.setPassportId(guest.getPassportId());
+        guestPersonalDetailsDto.setLastName(guest.getLastName());
+        guestPersonalDetailsDto.setNationality(guest.getNationality());
+        guestPersonalDetailsDto.setFirstName(guest.getFirstName());
+        guestPersonalDetailsDto.setEmail(guest.getEmail());
+        guestPersonalDetailsDto.setCountry(guest.getCountry());
+        guestPersonalDetailsDto.setCity(guest.getCity());
+        guestPersonalDetailsDto.setBirthDate(guest.getBirthDate());
+
+        return guestPersonalDetailsDto;
+    };
+
     @Autowired
     private IGuestService guestService;
 
@@ -102,24 +120,6 @@ public class GuestController {
     @GetMapping("/{guestId}/personal-details")
     public GuestPersonalDetailsDto getGuestPersonalDetails(@PathVariable long guestId) {
         Guest guest = guestService.getGuestById(guestId);
-        return mapGuestToGuestPersonalDetailsDto(guest);
-    }
-
-    private static GuestPersonalDetailsDto mapGuestToGuestPersonalDetailsDto(Guest guest) {
-        GuestPersonalDetailsDto guestPersonalDetailsDto = new GuestPersonalDetailsDto();
-        guestPersonalDetailsDto.setId(guest.getId());
-        guestPersonalDetailsDto.setPostcode(guest.getPostcode());
-        guestPersonalDetailsDto.setStreet(guest.getStreet());
-        guestPersonalDetailsDto.setPhone(guest.getPhone());
-        guestPersonalDetailsDto.setPassportId(guest.getPassportId());
-        guestPersonalDetailsDto.setLastName(guest.getLastName());
-        guestPersonalDetailsDto.setNationality(guest.getNationality());
-        guestPersonalDetailsDto.setFirstName(guest.getFirstName());
-        guestPersonalDetailsDto.setEmail(guest.getEmail());
-        guestPersonalDetailsDto.setCountry(guest.getCountry());
-        guestPersonalDetailsDto.setCity(guest.getCity());
-        guestPersonalDetailsDto.setBirthDate(guest.getBirthDate());
-
-        return guestPersonalDetailsDto;
+        return MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO.apply(guest);
     }
 }
