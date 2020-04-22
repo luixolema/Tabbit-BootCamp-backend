@@ -1,9 +1,15 @@
 package com.tabit.dcm2.testutils;
 
+import com.tabit.dcm2.entity.Loan;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.service.dto.LoanDetailsDto;
 import com.tabit.dcm2.service.dto.CheckInDto;
 import com.tabit.dcm2.service.dto.StayDto;
+import org.assertj.core.util.Lists;
 
+import java.util.List;
+
+import static java.util.Comparator.comparing;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class StayMappingAssertions {
@@ -33,6 +39,24 @@ public class StayMappingAssertions {
         assertThat(stayDto.getStayDetails().isNitrox()).isEqualTo(stay.isNitrox());
         assertThat(stayDto.getStayDetails().isMedicalStatement()).isEqualTo(stay.isMedicalStatement());
         assertThat(stayDto.getStayDetails().getPreBooking()).isEqualTo(stay.getPreBooking());
+
+        List<Loan> sortLoansByDateOut = sortLoansByDateOut(stay);
+        assertLoanDetailsDtos(stayDto.getLoanDetails(), sortLoansByDateOut);
+    }
+
+    private static List<Loan> sortLoansByDateOut(Stay stay) {
+        List<Loan> sortedLoans = Lists.newArrayList(stay.getLoans());
+        sortedLoans.sort(comparing(Loan::getDateOut));
+        return sortedLoans;
+    }
+
+    private static void assertLoanDetailsDtos(List<LoanDetailsDto> loanDetailsDtos, List<Loan> sortedLoans) {
+        assertThat(loanDetailsDtos).hasSize(sortedLoans.size());
+        for (int i = 0; i < loanDetailsDtos.size(); i++) {
+            LoanDetailsDto loanDetailsDto = loanDetailsDtos.get(i);
+            Loan loan = sortedLoans.get(i);
+            LoanMappingAssertions.assertLoanDto(loanDetailsDto, loan);
+        }
     }
 
     public static void assertNewStayFromCheckInDto(Stay newStay, CheckInDto checkInDto) {

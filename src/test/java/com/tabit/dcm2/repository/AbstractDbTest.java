@@ -1,7 +1,6 @@
 package com.tabit.dcm2.repository;
 
-import com.tabit.dcm2.entity.GuestRule;
-import com.tabit.dcm2.entity.StayRule;
+import com.tabit.dcm2.entity.*;
 import org.junit.Rule;
 import org.junit.rules.RuleChain;
 import org.junit.runner.RunWith;
@@ -25,8 +24,11 @@ public abstract class AbstractDbTest {
 
     protected GuestRule guestRule = new GuestRule();
     protected StayRule stayRule = new StayRule();
+    protected LoanRule loanRule = new LoanRule();
+    protected EquipmentTypeRule equipmentTypeRule = new EquipmentTypeRule();
+    protected EquipmentRule equipmentRule = new EquipmentRule();
     @Rule
-    public RuleChain ruleChain = RuleChain.outerRule(stayRule).around(guestRule);
+    public RuleChain ruleChain = RuleChain.outerRule(loanRule).around(equipmentRule).around(equipmentTypeRule).around(stayRule).around(guestRule);
 
     @Autowired
     public final void setEntityManager(EntityManagerFactory factory) {
@@ -35,5 +37,8 @@ public abstract class AbstractDbTest {
         }
         guestRule.setEntityManager(entityManager);
         stayRule.setEntityManager(entityManager);
+        loanRule.setEntityManager(entityManager);
+        equipmentRule.setEntityManager(entityManager);
+        equipmentTypeRule.setEntityManager(entityManager);
     }
 }
