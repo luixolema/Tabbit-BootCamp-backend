@@ -1,5 +1,6 @@
 package com.tabit.dcm2.entity;
 
+import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.testutils.ValueProvider;
 
 public class RandomStay {
@@ -7,6 +8,7 @@ public class RandomStay {
     public static Stay createRandomStayWithoutId() {
         Stay stay = createRandomStay();
         stay.setId(null);
+        stay.setLoans(ImmutableList.of(RandomLoan.createRandomLoanWithoutId()));
         return stay;
     }
 
@@ -46,6 +48,7 @@ public class RandomStay {
         stay.setNitrox(valueProvider.randomBoolean());
         stay.setMedicalStatement(valueProvider.randomBoolean());
         stay.setPreBooking(valueProvider.randomString("pre-booking"));
+        stay.setLoans(ImmutableList.of(RandomLoan.createRandomLoan()));
 
         return stay;
     }

@@ -153,7 +153,6 @@ public class GuestServiceTest {
         checkedInGuest.setCheckedin(true);
 
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(checkedInGuest));
-        when(boxManagementService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
 
         // when
         guestService.checkIn(randomCheckInDto);
