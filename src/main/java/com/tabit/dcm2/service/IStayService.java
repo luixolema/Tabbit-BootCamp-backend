@@ -7,6 +7,4 @@ public interface IStayService {
     Stay findById(Long stayId);
 
     void updateStay(StayDto stayDto);
-
-    Boolean isBoxFree(String boxNumber);
 }

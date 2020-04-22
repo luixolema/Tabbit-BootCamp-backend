@@ -2,6 +2,7 @@ package com.tabit.dcm2;
 
 import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.*;
+import com.tabit.dcm2.repository.IBoxManagementRepo;
 import com.tabit.dcm2.repository.IEquipmentRepo;
 import com.tabit.dcm2.repository.IGuestRepo;
 import org.junit.Test;
@@ -23,6 +24,9 @@ public class TestdataImporter {
     private IGuestRepo guestRepo;
 
     @Autowired
+    private IBoxManagementRepo boxManagementRepo;
+
+    @Autowired
     private IEquipmentRepo equipmentRepo;
 
     // equipment for Acceptance criteria
@@ -41,6 +45,7 @@ public class TestdataImporter {
     @Test
     public void import_testdata_for_application() {
         saveGuests();
+        saveBoxNumbers();
     }
 
     private void saveGuests() {
@@ -449,5 +454,21 @@ public class TestdataImporter {
         suite_XS_G_13 = RandomEquipment.createRandomEquipmentWithoutId();
         suite_XS_G_13.setEquipmentType(suite);
         suite_XS_G_13.setSerialNumber("XS_G_13");
+    }
+
+    private void saveBoxNumbers() {
+        BoxManagement boxManagement1 = new BoxManagement();
+        boxManagement1.setBoxNumber("123AB");
+
+        BoxManagement boxManagement2 = new BoxManagement();
+        boxManagement2.setBoxNumber("666");
+
+        BoxManagement boxManagement3 = new BoxManagement();
+        boxManagement3.setBoxNumber("98765");
+
+        BoxManagement boxManagement4 = new BoxManagement();
+        boxManagement4.setBoxNumber("4567");
+
+        boxManagementRepo.saveAll(ImmutableList.of(boxManagement1, boxManagement2, boxManagement3, boxManagement4));
     }
 }

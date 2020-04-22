@@ -4,6 +4,8 @@ DROP TABLE IF EXISTS `equipment_type`;
 DROP TABLE IF EXISTS `stay`;
 DROP TABLE IF EXISTS `guest`;
 DROP TABLE IF EXISTS `id_gen`;
+DROP TABLE IF EXISTS `box_management`;
+
 
   CREATE TABLE `guest` (
     `id` bigint(20) NOT NULL,
@@ -88,4 +90,12 @@ DROP TABLE IF EXISTS `id_gen`;
     `id_value` INTEGER NOT NULL,
     `id_name` VARCHAR(24) NOT NULL,
     PRIMARY KEY(`id_name`)
+  );
+
+
+  CREATE TABLE `box_management`(
+    `id` bigint(20) NOT NULL,
+    `box_number` VARCHAR(24) NOT NULL,
+    UNIQUE (box_number),
+    PRIMARY KEY(`id`)
   );

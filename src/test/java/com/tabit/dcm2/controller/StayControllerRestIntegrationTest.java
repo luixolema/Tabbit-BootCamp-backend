@@ -126,23 +126,4 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         assertThat(guest.getPostcode()).isEqualTo(guestInDb.getPostcode());
         assertThat(guest.getStreet()).isEqualTo(guestInDb.getStreet());
     }
-
-    @Test
-    public void isBoxFree_shall_return_the_right_value() {
-        // given
-        HttpEntity<String> activeBox = createHttpEntity(stay.getBoxNumber());
-        HttpEntity<String> freeBox = createHttpEntity(stay.getBoxNumber() + "Update");
-
-        // when
-        ResponseEntity<Boolean> responseIsBoxFree = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, activeBox, Boolean.class);
-
-        // then
-        assertThat(responseIsBoxFree.getBody()).isFalse();
-
-        // when
-        responseIsBoxFree = restTemplate.exchange("/api/stay/boxState", HttpMethod.POST, freeBox, Boolean.class);
-
-        // then
-        assertThat(responseIsBoxFree.getBody()).isTrue();
-    }
 }

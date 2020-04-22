@@ -27,8 +27,13 @@ public abstract class AbstractDbTest {
     protected LoanRule loanRule = new LoanRule();
     protected EquipmentTypeRule equipmentTypeRule = new EquipmentTypeRule();
     protected EquipmentRule equipmentRule = new EquipmentRule();
+    protected BoxManagementRule boxManagementRule = new BoxManagementRule();
+
     @Rule
     public RuleChain ruleChain = RuleChain.outerRule(loanRule).around(equipmentRule).around(equipmentTypeRule).around(stayRule).around(guestRule);
+
+    @Rule
+    public RuleChain ruleChain2 = RuleChain.outerRule(boxManagementRule);
 
     @Autowired
     public final void setEntityManager(EntityManagerFactory factory) {
@@ -37,6 +42,7 @@ public abstract class AbstractDbTest {
         }
         guestRule.setEntityManager(entityManager);
         stayRule.setEntityManager(entityManager);
+        boxManagementRule.setEntityManager(entityManager);
         loanRule.setEntityManager(entityManager);
         equipmentRule.setEntityManager(entityManager);
         equipmentTypeRule.setEntityManager(entityManager);

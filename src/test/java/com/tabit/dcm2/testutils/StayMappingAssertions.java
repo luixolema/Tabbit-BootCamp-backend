@@ -2,8 +2,8 @@ package com.tabit.dcm2.testutils;
 
 import com.tabit.dcm2.entity.Loan;
 import com.tabit.dcm2.entity.Stay;
-import com.tabit.dcm2.service.dto.LoanDetailsDto;
 import com.tabit.dcm2.service.dto.CheckInDto;
+import com.tabit.dcm2.service.dto.LoanDetailsDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import org.assertj.core.util.Lists;
 

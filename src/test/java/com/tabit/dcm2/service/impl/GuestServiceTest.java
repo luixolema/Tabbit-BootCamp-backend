@@ -10,7 +10,7 @@ import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.service.GuestFilterType;
-import com.tabit.dcm2.service.IStayService;
+import com.tabit.dcm2.service.IBoxManagementService;
 import com.tabit.dcm2.service.dto.CheckInDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.RandomCheckInDto;
@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,7 +40,7 @@ public class GuestServiceTest {
     @Mock
     private GuestMapper guestMapper;
     @Mock
-    private IStayService stayService;
+    private IBoxManagementService boxManagementService;
     @Mock
     private IStayRepo stayRepo;
     @Captor
@@ -128,7 +129,6 @@ public class GuestServiceTest {
         Stay oldStay = Iterables.getOnlyElement(notCheckedInGuest.getStays());
 
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(notCheckedInGuest));
-        when(stayService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
 
         // when
         guestService.checkIn(randomCheckInDto);
@@ -153,7 +153,6 @@ public class GuestServiceTest {
         checkedInGuest.setCheckedin(true);
 
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(checkedInGuest));
-        when(stayService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
 
         // when
         guestService.checkIn(randomCheckInDto);
@@ -166,8 +165,9 @@ public class GuestServiceTest {
         Guest guest = RandomGuest.createRandomGuest();
         guest.setCheckedin(false);
 
+        String boxNumber = randomCheckInDto.getStayDetails().getBoxNumber();
+        doThrow(BoxReservationException.class).when(boxManagementService).reserveBox(boxNumber);
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(guest));
-        when(stayService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(false);
 
         // when
         guestService.checkIn(randomCheckInDto);

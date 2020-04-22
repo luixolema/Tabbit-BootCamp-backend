@@ -68,8 +68,4 @@ public class StayController {
         stayService.updateStay(stayDto);
     }
 
-    @PostMapping(path = "/boxState")
-    public Boolean isBoxFree(@RequestBody String boxNumber) {
-        return stayService.isBoxFree(boxNumber);
-    }
 }
