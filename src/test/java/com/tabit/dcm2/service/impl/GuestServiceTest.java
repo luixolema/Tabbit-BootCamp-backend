@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -128,7 +129,6 @@ public class GuestServiceTest {
         Stay oldStay = Iterables.getOnlyElement(notCheckedInGuest.getStays());
 
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(notCheckedInGuest));
-        when(boxManagementService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(true);
 
         // when
         guestService.checkIn(randomCheckInDto);
@@ -166,8 +166,9 @@ public class GuestServiceTest {
         Guest guest = RandomGuest.createRandomGuest();
         guest.setCheckedin(false);
 
+        String boxNumber = randomCheckInDto.getStayDetails().getBoxNumber();
+        doThrow(BoxReservationException.class).when(boxManagementService).reserveBox(boxNumber);
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(guest));
-        when(boxManagementService.isBoxFree(randomCheckInDto.getStayDetails().getBoxNumber())).thenReturn(false);
 
         // when
         guestService.checkIn(randomCheckInDto);

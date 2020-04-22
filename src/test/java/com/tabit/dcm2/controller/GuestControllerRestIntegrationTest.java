@@ -2,10 +2,7 @@ package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.RandomStay;
-import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
@@ -40,6 +37,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     private Guest guestCheckedInFalseWithoutStay;
     private Stay stayOld;
     private Stay stayActual;
+    private BoxManagement boxManagement;
 
     @Before
     public void setUp() {
@@ -49,6 +47,10 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         stayActual = RandomStay.createRandomStayWithoutId();
         stayActual.setArriveDate(LocalDate.now().minusDays(10));
         stayActual.setActive(true);
+
+        boxManagement = new BoxManagement();
+        boxManagement.setBoxNumber(stayActual.getBoxNumber());
+        boxManagementRule.persist(ImmutableList.of(boxManagement));
 
         guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
         guestCheckedInTrue.setCheckedin(true);
@@ -223,10 +225,9 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         assertThat(checkInDto.getGuestPersonalDetails().getStreet()).isEqualTo(guestInDb.getStreet());
     }
 
-    //TODO: this test gotta be fixed as in the last version the box managing changed significally and the implementation gotta be redone
-    /*
+
     @Test
-    public void checkIn_shall_throw_exception_if_boxnumber_is_already_used() {
+    public void checkIn_shall_return_a_conflict_response_if_boxnumber_is_already_used() {
         // given
         CheckInDto checkInDto = RandomCheckInDto.createRandomCheckInDto();
         checkInDto.getGuestPersonalDetails().setId(guestCheckedInFalseWithoutStay.getId());
@@ -239,11 +240,9 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
 
         // then
-        assertThat(response.getStatusCode()).isSameAs(HttpStatus.BAD_REQUEST);
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.CONFLICT);
         assertThat(response.getBody()).isNull();
     }
-
-     */
 
     @Test
     public void getGuestPersonalDetails_return_the_correct_GuestPersonalDetailDto() {

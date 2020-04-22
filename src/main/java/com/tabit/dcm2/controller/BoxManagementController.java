@@ -11,8 +11,8 @@ public class BoxManagementController {
     @Autowired
     private IBoxManagementService boxManagementService;
 
-    @PostMapping(path = "/isFree")
-    public Boolean isBoxFree(@RequestBody String boxNumber) {
+    @GetMapping(path = "/{boxNumber}/isFree")
+    public Boolean isBoxFree(@PathVariable String boxNumber) {
         return boxManagementService.isBoxFree(boxNumber);
     }
 }

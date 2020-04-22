@@ -1,14 +1,12 @@
 package com.tabit.dcm2.repository;
 
 import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.*;
-import org.hibernate.exception.ConstraintViolationException;
+import com.tabit.dcm2.entity.BoxManagement;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,7 +63,7 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
         assertBoxManagement(expectedBoxManagement.get(), boxManagement);
     }
 
-    @Test(expected = DataIntegrityViolationException.class) //then
+    @Test(expected = DataIntegrityViolationException.class)
     public void save_shall_fail_on_duplication_of_box_number() {
         // given
         boxManagementRule.persist(ImmutableList.of(boxManagement));

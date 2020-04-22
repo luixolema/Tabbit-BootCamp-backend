@@ -3,8 +3,6 @@ package com.tabit.dcm2.service.impl;
 import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
-import com.tabit.dcm2.exception.BoxReservationException;
-import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
@@ -85,12 +83,7 @@ public class GuestService implements IGuestService {
     public void checkIn(CheckInDto checkInDto) {
         Guest guest = getGuestById(checkInDto.getGuestPersonalDetails().getId());
 
-        if (!boxManagementService.isBoxFree(checkInDto.getStayDetails().getBoxNumber())) {
-            throw new BoxReservationException();
-        }
-        if (guest.isCheckedin()) {
-            throw new GuestIllegalStateException();
-        }
+        boxManagementService.reserveBox(checkInDto.getStayDetails().getBoxNumber());
 
         guestMapper.mapPersonalDetailsFromDto(guest, checkInDto.getGuestPersonalDetails());
         Stay newStay = MAP_CHECKIN_DTO_TO_STAY.apply(checkInDto);

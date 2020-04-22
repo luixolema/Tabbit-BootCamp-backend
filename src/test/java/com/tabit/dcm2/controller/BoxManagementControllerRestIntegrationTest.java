@@ -5,7 +5,6 @@ import com.tabit.dcm2.entity.BoxManagement;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
@@ -15,33 +14,43 @@ public class BoxManagementControllerRestIntegrationTest extends AbstractRestInte
     @Autowired
     private BoxManagementController boxManagementController;
 
-    private BoxManagement boxManagement;
+    private BoxManagement reservedBoxManager;
 
     @Before
     public void setUp() {
 
         //given
-        boxManagement = new BoxManagement();
-        boxManagement.setBoxNumber("test");
+        reservedBoxManager = new BoxManagement();
+        reservedBoxManager.setBoxNumber("test");
 
-        boxManagementRule.persist(ImmutableList.of(boxManagement));
+        boxManagementRule.persist(ImmutableList.of(reservedBoxManager));
     }
 
 
     @Test
     public void isBoxFree_shall_return_the_right_value() {
         // given
-        HttpEntity<String> activeBox = createHttpEntity(boxManagement.getBoxNumber());
-        HttpEntity<String> freeBox = createHttpEntity(boxManagement.getBoxNumber() + "Update");
+        String reservedBoxNumber = reservedBoxManager.getBoxNumber();
+        String freeBoxNumber = "no_reserved";
 
         // when
-        ResponseEntity<Boolean> responseIsBoxFree = restTemplate.exchange("/api/box/isFree", HttpMethod.POST, activeBox, Boolean.class);
+        ResponseEntity<Boolean> responseIsBoxFree = restTemplate.exchange(
+                "/api/box/" + reservedBoxNumber + "/isFree",
+                HttpMethod.GET,
+                null,
+                Boolean.class
+        );
 
         // then
         assertThat(responseIsBoxFree.getBody()).isFalse();
 
         // when
-        responseIsBoxFree = restTemplate.exchange("/api/box/isFree", HttpMethod.POST, freeBox, Boolean.class);
+        responseIsBoxFree = restTemplate.exchange(
+                "/api/box/" + freeBoxNumber + "/isFree",
+                HttpMethod.GET,
+                null,
+                Boolean.class
+        );
 
         // then
         assertThat(responseIsBoxFree.getBody()).isTrue();
