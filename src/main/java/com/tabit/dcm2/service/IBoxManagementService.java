@@ -4,4 +4,7 @@ public interface IBoxManagementService {
     Boolean isBoxFree(String boxNumber);
 
     void reserveBox(String boxNumber);
+
+    void releaseBox(String boxNumber);
+
 }

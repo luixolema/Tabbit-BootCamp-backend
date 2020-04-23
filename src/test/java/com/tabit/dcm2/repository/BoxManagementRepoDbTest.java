@@ -23,13 +23,11 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
         boxManagement = new BoxManagement();
         boxManagement.setBoxNumber("test");
 
+        boxManagementRule.persist(ImmutableList.of(boxManagement));
     }
 
     @Test
     public void findById_shall_return_the_box_management() {
-        // given
-        boxManagementRule.persist(ImmutableList.of(boxManagement));
-
         //when
         Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findById(boxManagement.getId());
 
@@ -38,11 +36,22 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
         assertBoxManagement(boxManagement, expectedBoxManagement.get());
     }
 
+
+    @Test
+    public void delete_shall_remove_the_box_management() {
+        // given
+        Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
+        boxManagementRepo.delete(expectedBoxManagement.get());
+
+        //when
+        expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
+
+        //then
+        assertThat(expectedBoxManagement.isPresent()).isFalse();
+    }
+
     @Test
     public void findByBoxNumber_shall_return_the_box_management() {
-        // given
-        boxManagementRule.persist(ImmutableList.of(boxManagement));
-
         //when
         Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
 
@@ -54,6 +63,8 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
     @Test
     public void save_shall_create_the_box_management() {
         // when
+        BoxManagement boxManagement = new BoxManagement();
+        boxManagement.setBoxNumber("box number");
         boxManagementRepo.save(boxManagement);
 
         // then
@@ -66,7 +77,6 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
     @Test(expected = DataIntegrityViolationException.class)
     public void save_shall_fail_on_duplication_of_box_number() {
         // given
-        boxManagementRule.persist(ImmutableList.of(boxManagement));
         BoxManagement duplicatedBoxManagement = new BoxManagement();
         duplicatedBoxManagement.setBoxNumber(boxManagement.getBoxNumber());
 

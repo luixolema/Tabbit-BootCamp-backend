@@ -16,7 +16,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.AdditionalMatchers.not;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -52,7 +54,7 @@ public class BoxManagementServiceTest {
         assertThat(isBoxFree).isFalse();
 
         // when
-        isBoxFree = boxManagementService.isBoxFree(boxManagement.getBoxNumber()+"otherBox");
+        isBoxFree = boxManagementService.isBoxFree(boxManagement.getBoxNumber() + "otherBox");
 
         // then
         assertThat(isBoxFree).isTrue();
@@ -61,7 +63,7 @@ public class BoxManagementServiceTest {
     @Test(expected = BoxReservationException.class)
     public void reserveBox_shall_throw_an_exception_if_the_boxNumber_is_already_in_use() {
         // given
-        when(boxManagementRepo.save(Mockito.any(BoxManagement.class))).thenThrow(DataIntegrityViolationException.class);
+        when(boxManagementRepo.save(any(BoxManagement.class))).thenThrow(DataIntegrityViolationException.class);
 
         // when
         boxManagementService.reserveBox(boxManagement.getBoxNumber());
@@ -77,4 +79,28 @@ public class BoxManagementServiceTest {
         verify(boxManagementRepo).save(Mockito.any(BoxManagement.class));
     }
 
+
+    @Test
+    public void releaseBox_shall_delete_box() {
+        // given
+        when(boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber())).thenReturn(Optional.of(boxManagement));
+
+        // when
+        boxManagementService.releaseBox(boxManagement.getBoxNumber());
+
+        //then
+        verify(boxManagementRepo).delete(boxManagement);
+    }
+
+    @Test
+    public void releaseBox_shall_not_delete_box_non_existing_box() {
+        // given
+        when(boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber())).thenReturn(Optional.empty());
+
+        // when
+        boxManagementService.releaseBox(boxManagement.getBoxNumber());
+
+        //then
+        verify(boxManagementRepo, never()).delete(any(BoxManagement.class));
+    }
 }

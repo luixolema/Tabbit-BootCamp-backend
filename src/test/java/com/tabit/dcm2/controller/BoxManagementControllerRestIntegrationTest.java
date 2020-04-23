@@ -30,12 +30,11 @@ public class BoxManagementControllerRestIntegrationTest extends AbstractRestInte
     @Test
     public void isBoxFree_shall_return_the_right_value() {
         // given
-        String reservedBoxNumber = reservedBoxManager.getBoxNumber();
         String freeBoxNumber = "no_reserved";
 
         // when
         ResponseEntity<Boolean> responseIsBoxFree = restTemplate.exchange(
-                "/api/box/" + reservedBoxNumber + "/isFree",
+                "/api/box/" + reservedBoxManager.getBoxNumber() + "/isFree",
                 HttpMethod.GET,
                 null,
                 Boolean.class

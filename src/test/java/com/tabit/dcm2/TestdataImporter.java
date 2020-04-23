@@ -53,7 +53,6 @@ public class TestdataImporter {
         setupEquipment();
 
         Guest guestWithGoodLoans1 = createGuestAlex1();
-        Guest guestWithGoodLoans2 = createGuestAlex2();
 
         Guest guest = createGuestAntonioBanderas();
         Guest guest2 = createGuestAntonyHopkins();
@@ -65,7 +64,7 @@ public class TestdataImporter {
         Guest guest8 = createGuestClintEastwood();
         Guest guest9 = createGuestMelGibson();
 
-        guestRepo.saveAll(ImmutableList.of(guestWithGoodLoans1, guestWithGoodLoans2, guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
+        guestRepo.saveAll(ImmutableList.of(guestWithGoodLoans1, guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
     }
 
     private Guest createGuestAlex1() {
@@ -132,75 +131,6 @@ public class TestdataImporter {
         loan3.setPrice(7.50d);
 
         stayActual.setLoans(ImmutableList.of(loan1, loan2, loan3));
-
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
-        guest.setBirthDate(guestBirthDate);
-        guest.setFirstName(firstName);
-        guest.setLastName("Banderas With Many Stays And Different Names");
-        guest.setCheckedin(true);
-        guest.setStays(ImmutableList.of(stayOld, stayActual));
-
-        return guest;
-    }
-
-    private Guest createGuestAlex2() {
-        LocalDate guestBirthDate = LocalDate.now().minusYears(59);
-        String firstName = "Alex";
-
-        Stay stayOld = RandomStay.createRandomStayWithoutId();
-        stayOld.setArriveDate(LocalDate.now().minusYears(7));
-        stayOld.setLeaveDate(LocalDate.now().minusYears(6));
-        stayOld.setCheckInDate(stayOld.getArriveDate().plusDays(1));
-        stayOld.setCheckOutDate(stayOld.getCheckInDate().plusDays(10));
-        stayOld.setBirthDate(guestBirthDate);
-        stayOld.setFirstName(firstName);
-        stayOld.setLastName("Criteria 1");
-        stayOld.setBoxNumber("12");
-        stayOld.setActive(false);
-
-        Loan loanOld1 = new Loan();
-        loanOld1.setEquipment(suite_XS_G_13);
-        loanOld1.setDateOut(stayOld.getCheckInDate());
-        loanOld1.setDateReturn(stayOld.getCheckOutDate());
-        loanOld1.setPrice(5.25d);
-
-        Loan loanOld2 = new Loan();
-        loanOld2.setEquipment(mask_XD_M_15);
-        loanOld2.setDateOut(stayOld.getCheckInDate());
-        loanOld2.setDateReturn(stayOld.getCheckOutDate());
-        loanOld2.setPrice(3.55d);
-
-        Loan loanOld3 = new Loan();
-        loanOld3.setEquipment(fins_XD_F_12);
-        loanOld3.setDateOut(stayOld.getCheckInDate());
-        loanOld3.setDateReturn(stayOld.getCheckOutDate());
-        loanOld3.setPrice(7.50d);
-
-        stayOld.setLoans(ImmutableList.of(loanOld1, loanOld2, loanOld3));
-
-        Stay stayActual = RandomStay.createRandomStayWithoutId();
-        stayActual.setArriveDate(LocalDate.now().minusDays(3));
-        stayActual.setLeaveDate(LocalDate.now().plusDays(3));
-        stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
-        stayActual.setCheckOutDate(stayActual.getLeaveDate());
-        stayActual.setBirthDate(guestBirthDate);
-        stayActual.setFirstName(firstName);
-        stayActual.setLastName("Criteria 1");
-        stayActual.setBoxNumber("2312312");
-        stayActual.setPreBooking("Smart man.");
-        stayActual.setActive(true);
-
-        Loan loan1 = new Loan();
-        loan1.setEquipment(mask_XD_M_16);
-        loan1.setDateOut(stayActual.getCheckInDate());
-        loan1.setPrice(5.25d);
-
-        Loan loan2 = new Loan();
-        loan2.setEquipment(fins_XD_F_12);
-        loan2.setDateOut(stayActual.getCheckInDate());
-        loan2.setPrice(3.55d);
-
-        stayActual.setLoans(ImmutableList.of(loan1, loan2));
 
         Guest guest = RandomGuest.createRandomGuestWitoutId();
         guest.setBirthDate(guestBirthDate);
@@ -469,6 +399,9 @@ public class TestdataImporter {
         BoxManagement boxManagement4 = new BoxManagement();
         boxManagement4.setBoxNumber("4567");
 
-        boxManagementRepo.saveAll(ImmutableList.of(boxManagement1, boxManagement2, boxManagement3, boxManagement4));
+        BoxManagement boxManagement5 = new BoxManagement();
+        boxManagement5.setBoxNumber("2312312");
+
+        boxManagementRepo.saveAll(ImmutableList.of(boxManagement1, boxManagement2, boxManagement3, boxManagement4, boxManagement5));
     }
 }
