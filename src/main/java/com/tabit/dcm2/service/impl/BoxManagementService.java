@@ -24,11 +24,11 @@ public class BoxManagementService implements IBoxManagementService {
 
     @Override
     public void reserveBox(String boxNumber) {
-        BoxManagement boxManagement1 = new BoxManagement();
-        boxManagement1.setBoxNumber(boxNumber);
+        BoxManagement boxManagement = new BoxManagement();
+        boxManagement.setBoxNumber(boxNumber);
 
         try {
-            boxManagementRepo.save(boxManagement1);
+            boxManagementRepo.save(boxManagement);
         } catch (DataIntegrityViolationException ex) {
             throw new BoxReservationException();
         }
@@ -38,8 +38,6 @@ public class BoxManagementService implements IBoxManagementService {
     @Override
     public void releaseBox(String boxNumber) {
         Optional<BoxManagement> boxManagement = boxManagementRepo.findByBoxNumber(boxNumber);
-        if(boxManagement.isPresent()) {
-            boxManagementRepo.delete(boxManagement.get());
-        }
+        boxManagement.ifPresent(management -> boxManagementRepo.delete(management));
     }
 }

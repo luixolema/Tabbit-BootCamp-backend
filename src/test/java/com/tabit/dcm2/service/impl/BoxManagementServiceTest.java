@@ -54,7 +54,7 @@ public class BoxManagementServiceTest {
         assertThat(isBoxFree).isFalse();
 
         // when
-        isBoxFree = boxManagementService.isBoxFree(boxManagement.getBoxNumber()+"otherBox");
+        isBoxFree = boxManagementService.isBoxFree(boxManagement.getBoxNumber() + "otherBox");
 
         // then
         assertThat(isBoxFree).isTrue();
@@ -63,7 +63,7 @@ public class BoxManagementServiceTest {
     @Test(expected = BoxReservationException.class)
     public void reserveBox_shall_throw_an_exception_if_the_boxNumber_is_already_in_use() {
         // given
-        when(boxManagementRepo.save(Mockito.any(BoxManagement.class))).thenThrow(DataIntegrityViolationException.class);
+        when(boxManagementRepo.save(any(BoxManagement.class))).thenThrow(DataIntegrityViolationException.class);
 
         // when
         boxManagementService.reserveBox(boxManagement.getBoxNumber());
@@ -103,7 +103,4 @@ public class BoxManagementServiceTest {
         //then
         verify(boxManagementRepo, never()).delete(any(BoxManagement.class));
     }
-
-
-
 }
