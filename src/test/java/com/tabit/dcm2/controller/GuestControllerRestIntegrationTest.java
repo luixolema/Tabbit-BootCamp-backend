@@ -203,7 +203,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
 
         // when
-        ResponseEntity<Void> response = restTemplate.exchange("/api/guests", HttpMethod.POST, entity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange("/api/guests/check-in", HttpMethod.POST, entity, Void.class);
 
         Guest guestInDb = guestService.getGuestById(guestCheckedInFalseWithoutStay.getId());
 
@@ -236,7 +236,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
 
         // when
-        ResponseEntity<Void> response = restTemplate.exchange("/api/guests", HttpMethod.POST, entity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange("/api/guests/check-in", HttpMethod.POST, entity, Void.class);
 
 
         // then
@@ -263,4 +263,25 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         assertThat(guestPersonalDetailsDto).isNotNull();
         GuestMappingAssertions.assertPersonalDetails(guestCheckedInTrue, guestPersonalDetailsDto);
     }
+
+    @Test
+    public void create_can_serialize_all_fields_in_json_object() {
+        // given
+        GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
+
+        HttpEntity<GuestPersonalDetailsDto> entity = createHttpEntity(guestPersonalDetailsDto);
+
+        // when
+        ResponseEntity<Long> response = restTemplate.exchange(
+                "/api/guests",
+                HttpMethod.POST,
+                entity,
+                Long.class
+        );
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+    }
+
 }

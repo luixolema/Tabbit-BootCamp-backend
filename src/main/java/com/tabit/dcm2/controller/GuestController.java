@@ -112,7 +112,7 @@ public class GuestController {
         guestService.updatePersonalDetails(personalDetailsDto);
     }
 
-    @PostMapping
+    @PostMapping("/check-in")
     public void checkIn(@RequestBody CheckInDto checkInDto) {
         guestService.checkIn(checkInDto);
     }
@@ -121,5 +121,10 @@ public class GuestController {
     public GuestPersonalDetailsDto getGuestPersonalDetails(@PathVariable long guestId) {
         Guest guest = guestService.getGuestById(guestId);
         return MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO.apply(guest);
+    }
+
+    @PostMapping
+    public long create(@RequestBody GuestPersonalDetailsDto guestPersonalDetailsDto) {
+        return 1L;
     }
 }
