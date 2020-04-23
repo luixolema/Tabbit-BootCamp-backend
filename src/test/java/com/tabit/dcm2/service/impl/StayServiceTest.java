@@ -4,9 +4,11 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.exception.BoxReservationException;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
+import com.tabit.dcm2.service.IBoxManagementService;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.util.GuestMapper;
@@ -20,6 +22,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
@@ -32,6 +35,8 @@ public class StayServiceTest {
     private IGuestRepo guestRepo;
     @Mock
     private GuestMapper guestMapper;
+    @Mock
+    private IBoxManagementService boxManagementService;
 
     @InjectMocks
     private StayService stayService;
@@ -96,6 +101,22 @@ public class StayServiceTest {
         verify(stayRepo).save(randomStay);
         verify(guestMapper).mapPersonalDetailsFromDto(guestWithChanges, randomStayDto.getGuestPersonalDetails());
         verify(guestRepo).save(guestWithChanges);
+    }
+
+
+    @Test (expected = BoxReservationException.class)
+    public void updateStay_shall_throw_exception_if_reserving_non_free_box() {
+        // given
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+        Stay randomStay = RandomStay.createRandomStay();
+        Guest guestWithChanges = RandomGuest.createRandomGuest();
+        randomStay.setGuest(guestWithChanges);
+
+        when(stayRepo.findById(randomStayDto.getStayDetails().getId())).thenReturn(Optional.of(randomStay));
+        doThrow(BoxReservationException.class).when(boxManagementService).reserveBox(randomStayDto.getStayDetails().getBoxNumber());
+
+        // when
+        stayService.updateStay(randomStayDto);
     }
 
     private Guest getGuestFromStayDto(StayDto stayDto) {

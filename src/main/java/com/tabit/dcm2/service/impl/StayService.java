@@ -5,6 +5,7 @@ import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
+import com.tabit.dcm2.service.IBoxManagementService;
 import com.tabit.dcm2.service.IStayService;
 import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.util.GuestMapper;
@@ -21,6 +22,8 @@ public class StayService implements IStayService {
     private IGuestRepo guestRepo;
     @Autowired
     private GuestMapper guestMapper;
+    @Autowired
+    private IBoxManagementService boxManagementService;
 
     @Override
     public Stay findById(Long stayId) {
@@ -30,7 +33,14 @@ public class StayService implements IStayService {
 
     @Override
     public void updateStay(StayDto stayDto) {
+
         Stay stay = findById(stayDto.getStayDetails().getId());
+
+        if(!stayDto.getStayDetails().getBoxNumber().equals(stay.getBoxNumber())){ //if box updated
+            boxManagementService.reserveBox(stayDto.getStayDetails().getBoxNumber());
+            boxManagementService.releaseBox(stay.getBoxNumber());
+        }
+
         stayRepo.save(mapStayFromStayDto(stay, stayDto));
 
         Guest guest = stay.getGuest();

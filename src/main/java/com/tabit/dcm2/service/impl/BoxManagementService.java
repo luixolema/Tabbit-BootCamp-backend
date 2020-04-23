@@ -33,4 +33,13 @@ public class BoxManagementService implements IBoxManagementService {
             throw new BoxReservationException();
         }
     }
+
+
+    @Override
+    public void releaseBox(String boxNumber) {
+        Optional<BoxManagement> boxManagement = boxManagementRepo.findByBoxNumber(boxNumber);
+        if(boxManagement.isPresent()) {
+            boxManagementRepo.delete(boxManagement.get());
+        }
+    }
 }

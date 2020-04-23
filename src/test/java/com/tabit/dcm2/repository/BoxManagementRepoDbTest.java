@@ -38,6 +38,21 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
         assertBoxManagement(boxManagement, expectedBoxManagement.get());
     }
 
+
+    @Test
+    public void delete_shall_remove_the_box_management() {
+        // given
+        boxManagementRule.persist(ImmutableList.of(boxManagement));
+        Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
+        boxManagementRepo.delete(expectedBoxManagement.get());
+
+        //when
+        expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
+
+        //then
+        assertThat(expectedBoxManagement.isPresent()).isFalse();
+    }
+
     @Test
     public void findByBoxNumber_shall_return_the_box_management() {
         // given
