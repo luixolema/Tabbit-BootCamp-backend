@@ -12,9 +12,12 @@ import com.tabit.dcm2.service.IBoxManagementService;
 import com.tabit.dcm2.service.dto.RandomStayDto;
 import com.tabit.dcm2.service.dto.StayDto;
 import com.tabit.dcm2.service.util.GuestMapper;
+import com.tabit.dcm2.testutils.StayMappingAssertions;
 import com.tabit.dcm2.testutils.ValueProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -22,10 +25,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StayServiceTest {
@@ -37,6 +37,8 @@ public class StayServiceTest {
     private GuestMapper guestMapper;
     @Mock
     private IBoxManagementService boxManagementService;
+    @Captor
+    private ArgumentCaptor<Stay> stayArgumentCaptor;
 
     @InjectMocks
     private StayService stayService;
@@ -80,7 +82,9 @@ public class StayServiceTest {
         stayService.updateStay(randomStayDto);
 
         // then
-        verify(stayRepo).save(randomStay);
+        verify(stayRepo).save(stayArgumentCaptor.capture());
+        Stay updateStay = stayArgumentCaptor.getValue();
+        StayMappingAssertions.assertUpdatedStayFromStayDto(updateStay, randomStayDto);
         verifyZeroInteractions(guestRepo, guestMapper);
     }
 
@@ -98,7 +102,10 @@ public class StayServiceTest {
         stayService.updateStay(randomStayDto);
 
         // then
-        verify(stayRepo).save(randomStay);
+        verify(stayRepo).save(stayArgumentCaptor.capture());
+        Stay updateStay = stayArgumentCaptor.getValue();
+        StayMappingAssertions.assertUpdatedStayFromStayDto(updateStay, randomStayDto);
+
         verify(guestMapper).mapPersonalDetailsFromDto(guestWithChanges, randomStayDto.getGuestPersonalDetails());
         verify(guestRepo).save(guestWithChanges);
     }

@@ -9,6 +9,8 @@ import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -16,9 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,6 +26,10 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class GuestControllerTest {
 
+    @Captor
+    ArgumentCaptor<CheckInDto> checkInDtoArgumentCaptor;
+    @Captor
+    ArgumentCaptor<GuestPersonalDetailsDto> guestPersonalDetailsDtoArgumentCaptor;
     @Mock
     private IGuestService guestService;
 
@@ -131,7 +135,7 @@ public class GuestControllerTest {
     }
 
     @Test
-    public void checkIn_shall_checkIn_correctly() {
+    public void checkIn_shall_call_guestServie_with_validated_checkInDto() {
         // given
         CheckInDto randomCheckInDto = RandomCheckInDto.createRandomCheckInDto();
 
@@ -139,7 +143,25 @@ public class GuestControllerTest {
         guestController.checkIn(randomCheckInDto);
 
         // then
-        verify(guestService).checkIn(randomCheckInDto);
+        verify(guestService).checkIn(checkInDtoArgumentCaptor.capture());
+        CheckInDto validatedCheckInDto = checkInDtoArgumentCaptor.getValue();
+        assertThat(validatedCheckInDto).isEqualTo(randomCheckInDto);
+        assertThat(validatedCheckInDto).isNotSameAs(randomCheckInDto);
+    }
+
+    @Test
+    public void updatePersonalDetails_shall_call_guestServie_with_validated_GuestPersonalDetailsDto() {
+        // given
+        GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
+
+        // when
+        guestController.updatePersonalDetails(guestPersonalDetailsDto);
+
+        // then
+        verify(guestService).updatePersonalDetails(guestPersonalDetailsDtoArgumentCaptor.capture());
+        GuestPersonalDetailsDto validatedGuestPersonalDetailsDto = guestPersonalDetailsDtoArgumentCaptor.getValue();
+        assertThat(validatedGuestPersonalDetailsDto).isEqualTo(guestPersonalDetailsDto);
+        assertThat(validatedGuestPersonalDetailsDto).isNotSameAs(guestPersonalDetailsDto);
     }
 
     @Test

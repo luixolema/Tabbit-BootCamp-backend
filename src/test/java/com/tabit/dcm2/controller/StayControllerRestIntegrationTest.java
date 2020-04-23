@@ -60,7 +60,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         // given
         StayDto stayDto = RandomStayDto.createRandomStayDto();
         stayDto.getStayDetails().setId(stay.getId());
-        stayDto.getGuestPersonalDetails().setId(guest.getId());
+        stayDto.setGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withId(guest.getId()).build());
 
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
 
@@ -76,8 +76,11 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     public void updateStay_shall_update_also_guest_data_when_guestDetails_is_updated() {
         // given
         StayDto stayDto = RandomStayDto.createStayDtoFromStay(stay);
-        stayDto.getGuestPersonalDetails().setFirstName(stay.getFirstName() + "Update");
-        stayDto.getGuestPersonalDetails().setBirthDate(stay.getBirthDate().minusDays(10));
+        stayDto.setGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder()
+                .withId(guest.getId())
+                .withFirstName(stay.getFirstName() + "Update")
+                .withBirthDate(stay.getBirthDate().minusDays(10))
+                .build());
         stayDto.getStayDetails().setHotel(stay.getHotel() + "Update");
 
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);

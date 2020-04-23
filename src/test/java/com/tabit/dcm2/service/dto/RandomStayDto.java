@@ -11,19 +11,20 @@ public class RandomStayDto {
     }
 
     public static StayDto createStayDtoFromStay(Stay stay) {
-        GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto();
-        guestPersonalDetails.setId(stay.getGuest().getId());
-        guestPersonalDetails.setFirstName(stay.getFirstName());
-        guestPersonalDetails.setLastName(stay.getLastName());
-        guestPersonalDetails.setBirthDate(stay.getBirthDate());
-        guestPersonalDetails.setNationality(stay.getNationality());
-        guestPersonalDetails.setCountry(stay.getCountry());
-        guestPersonalDetails.setCity(stay.getCity());
-        guestPersonalDetails.setPostcode(stay.getPostcode());
-        guestPersonalDetails.setStreet(stay.getStreet());
-        guestPersonalDetails.setEmail(stay.getEmail());
-        guestPersonalDetails.setPhone(stay.getPhone());
-        guestPersonalDetails.setPassportId(stay.getPassportId());
+        GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto.Builder()
+                .withId(stay.getGuest().getId())
+                .withFirstName(stay.getFirstName())
+                .withLastName(stay.getLastName())
+                .withBirthDate(stay.getBirthDate())
+                .withNationality(stay.getNationality())
+                .withCountry(stay.getCountry())
+                .withCity(stay.getCity())
+                .withPostcode(stay.getPostcode())
+                .withStreet(stay.getStreet())
+                .withEmail(stay.getEmail())
+                .withPhone(stay.getPhone())
+                .withPassportId(stay.getPassportId())
+                .build();
 
         StayDetailsDto stayDetails = new StayDetailsDto();
         stayDetails.setId(stay.getId());

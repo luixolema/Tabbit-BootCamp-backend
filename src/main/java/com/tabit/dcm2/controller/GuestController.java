@@ -4,22 +4,9 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IGuestService;
-import com.tabit.dcm2.service.dto.CheckInDto;
-import com.tabit.dcm2.service.dto.GuestDetailDto;
-import com.tabit.dcm2.service.dto.GuestDto;
-import com.tabit.dcm2.service.dto.GuestOverviewDto;
-import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
-import com.tabit.dcm2.service.dto.StayDto;
+import com.tabit.dcm2.service.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.function.Function;
@@ -45,19 +32,20 @@ public class GuestController {
     };
 
     private static Function<Guest, StayDto> MAP_GUEST_TO_STAY_DTO = guest -> {
-        GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto();
-        guestPersonalDetails.setId(guest.getId());
-        guestPersonalDetails.setFirstName(guest.getFirstName());
-        guestPersonalDetails.setLastName(guest.getLastName());
-        guestPersonalDetails.setBirthDate(guest.getBirthDate());
-        guestPersonalDetails.setNationality(guest.getNationality());
-        guestPersonalDetails.setCountry(guest.getCountry());
-        guestPersonalDetails.setCity(guest.getCity());
-        guestPersonalDetails.setPostcode(guest.getPostcode());
-        guestPersonalDetails.setStreet(guest.getStreet());
-        guestPersonalDetails.setEmail(guest.getEmail());
-        guestPersonalDetails.setPhone(guest.getPhone());
-        guestPersonalDetails.setPassportId(guest.getPassportId());
+        GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto.Builder()
+                .withId(guest.getId())
+                .withFirstName(guest.getFirstName())
+                .withLastName(guest.getLastName())
+                .withBirthDate(guest.getBirthDate())
+                .withNationality(guest.getNationality())
+                .withCountry(guest.getCountry())
+                .withCity(guest.getCity())
+                .withPostcode(guest.getPostcode())
+                .withStreet(guest.getStreet())
+                .withEmail(guest.getEmail())
+                .withPhone(guest.getPhone())
+                .withPassportId(guest.getPassportId())
+                .build();
 
         StayDto stayDto = new StayDto();
         stayDto.setGuestPersonalDetails(guestPersonalDetails);
@@ -65,23 +53,21 @@ public class GuestController {
         return stayDto;
     };
 
-    private static Function<Guest, GuestPersonalDetailsDto> MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO = guest -> {
-        GuestPersonalDetailsDto guestPersonalDetailsDto = new GuestPersonalDetailsDto();
-        guestPersonalDetailsDto.setId(guest.getId());
-        guestPersonalDetailsDto.setPostcode(guest.getPostcode());
-        guestPersonalDetailsDto.setStreet(guest.getStreet());
-        guestPersonalDetailsDto.setPhone(guest.getPhone());
-        guestPersonalDetailsDto.setPassportId(guest.getPassportId());
-        guestPersonalDetailsDto.setLastName(guest.getLastName());
-        guestPersonalDetailsDto.setNationality(guest.getNationality());
-        guestPersonalDetailsDto.setFirstName(guest.getFirstName());
-        guestPersonalDetailsDto.setEmail(guest.getEmail());
-        guestPersonalDetailsDto.setCountry(guest.getCountry());
-        guestPersonalDetailsDto.setCity(guest.getCity());
-        guestPersonalDetailsDto.setBirthDate(guest.getBirthDate());
-
-        return guestPersonalDetailsDto;
-    };
+    private static Function<Guest, GuestPersonalDetailsDto> MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO = guest ->
+            new GuestPersonalDetailsDto.Builder()
+                    .withId(guest.getId())
+                    .withPostcode(guest.getPostcode())
+                    .withStreet(guest.getStreet())
+                    .withPhone(guest.getPhone())
+                    .withPassportId(guest.getPassportId())
+                    .withLastName(guest.getLastName())
+                    .withNationality(guest.getNationality())
+                    .withFirstName(guest.getFirstName())
+                    .withEmail(guest.getEmail())
+                    .withCountry(guest.getCountry())
+                    .withCity(guest.getCity())
+                    .withBirthDate(guest.getBirthDate())
+                    .build();
 
     @Autowired
     private IGuestService guestService;
@@ -122,12 +108,14 @@ public class GuestController {
 
     @PutMapping
     public void updatePersonalDetails(@RequestBody GuestPersonalDetailsDto personalDetailsDto) {
-        guestService.updatePersonalDetails(personalDetailsDto);
+        GuestPersonalDetailsDto validated = personalDetailsDto.copy();
+        guestService.updatePersonalDetails(validated);
     }
 
     @PostMapping("/check-in")
     public void checkIn(@RequestBody CheckInDto checkInDto) {
-        guestService.checkIn(checkInDto);
+        CheckInDto validated = checkInDto.copy();
+        guestService.checkIn(validated);
     }
 
     @GetMapping("/{guestId}/personal-details")

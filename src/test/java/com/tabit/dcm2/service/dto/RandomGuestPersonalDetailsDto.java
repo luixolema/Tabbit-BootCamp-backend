@@ -5,41 +5,41 @@ import com.tabit.dcm2.testutils.ValueProvider;
 
 public class RandomGuestPersonalDetailsDto {
     public static GuestPersonalDetailsDto createRandomGuestPersonalDetailsDto() {
+        return createRandomGuestPersonalDetailsDtoBuilder().build();
+    }
+
+    public static GuestPersonalDetailsDto.Builder createRandomGuestPersonalDetailsDtoBuilder() {
         ValueProvider valueProvider = new ValueProvider();
 
-        GuestPersonalDetailsDto guestPersonalDetailsDto = new GuestPersonalDetailsDto();
-        guestPersonalDetailsDto.setId(valueProvider.randomId());
-        guestPersonalDetailsDto.setBirthDate(valueProvider.randomLocalDate());
-        guestPersonalDetailsDto.setFirstName(valueProvider.randomString("firstName"));
-        guestPersonalDetailsDto.setCity(valueProvider.randomString("city"));
-        guestPersonalDetailsDto.setCountry(valueProvider.randomString("country"));
-        guestPersonalDetailsDto.setEmail(valueProvider.randomString("email"));
-        guestPersonalDetailsDto.setLastName(valueProvider.randomString("lastName"));
-        guestPersonalDetailsDto.setNationality(valueProvider.randomString("nationality"));
-        guestPersonalDetailsDto.setPassportId(valueProvider.randomString("passportId"));
-        guestPersonalDetailsDto.setPhone(valueProvider.randomString("phone"));
-        guestPersonalDetailsDto.setPostcode(valueProvider.randomString("postcode"));
-        guestPersonalDetailsDto.setStreet(valueProvider.randomString("street"));
-
-        return guestPersonalDetailsDto;
+        return new GuestPersonalDetailsDto.Builder()
+                .withId(valueProvider.randomId())
+                .withBirthDate(valueProvider.randomLocalDate())
+                .withFirstName(valueProvider.randomString("firstName"))
+                .withCity(valueProvider.randomString("city"))
+                .withCountry(valueProvider.randomString("country"))
+                .withEmail(valueProvider.randomEmail())
+                .withLastName(valueProvider.randomString("lastName"))
+                .withNationality(valueProvider.randomString("nationality"))
+                .withPassportId(valueProvider.randomString("passportId"))
+                .withPhone(valueProvider.randomString("phone"))
+                .withPostcode(valueProvider.randomString("postcode"))
+                .withStreet(valueProvider.randomString("street"));
     }
 
     public static GuestPersonalDetailsDto createGuestPersonalDetailsDtoFromGuest(Guest guest) {
-        GuestPersonalDetailsDto guestPersonalDetailsDto = new GuestPersonalDetailsDto();
-
-        guestPersonalDetailsDto.setId(guest.getId());
-        guestPersonalDetailsDto.setFirstName(guest.getFirstName());
-        guestPersonalDetailsDto.setLastName(guest.getLastName());
-        guestPersonalDetailsDto.setBirthDate(guest.getBirthDate());
-        guestPersonalDetailsDto.setEmail(guest.getEmail());
-        guestPersonalDetailsDto.setNationality(guest.getNationality());
-        guestPersonalDetailsDto.setCity(guest.getCity());
-        guestPersonalDetailsDto.setPassportId(guest.getPassportId());
-        guestPersonalDetailsDto.setPhone(guest.getPhone());
-        guestPersonalDetailsDto.setCountry(guest.getCountry());
-        guestPersonalDetailsDto.setPostcode(guest.getPostcode());
-        guestPersonalDetailsDto.setStreet(guest.getStreet());
-
-        return guestPersonalDetailsDto;
+        return new GuestPersonalDetailsDto.Builder()
+                .withId(guest.getId())
+                .withFirstName(guest.getFirstName())
+                .withLastName(guest.getLastName())
+                .withBirthDate(guest.getBirthDate())
+                .withEmail(guest.getEmail())
+                .withNationality(guest.getNationality())
+                .withCity(guest.getCity())
+                .withPassportId(guest.getPassportId())
+                .withPhone(guest.getPhone())
+                .withCountry(guest.getCountry())
+                .withPostcode(guest.getPostcode())
+                .withStreet(guest.getStreet())
+                .build();
     }
 }

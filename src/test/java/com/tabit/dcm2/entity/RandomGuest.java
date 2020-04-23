@@ -15,7 +15,7 @@ public class RandomGuest {
         guest.setBirthDate(valueProvider.randomLocalDate());
         guest.setCity(valueProvider.randomString("city"));
         guest.setCountry(valueProvider.randomCountry());
-        guest.setEmail(valueProvider.randomString("email@").concat(".test"));
+        guest.setEmail(valueProvider.randomEmail());
         guest.setNationality(valueProvider.randomNationality());
         guest.setPassportId(valueProvider.randomString("passport"));
         guest.setPhone(valueProvider.randomString("phone"));
