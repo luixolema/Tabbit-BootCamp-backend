@@ -2,9 +2,19 @@ package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.tabit.dcm2.entity.*;
+import com.tabit.dcm2.entity.BoxManagement;
+import com.tabit.dcm2.entity.Guest;
+import com.tabit.dcm2.entity.RandomGuest;
+import com.tabit.dcm2.entity.RandomStay;
+import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.IGuestService;
-import com.tabit.dcm2.service.dto.*;
+import com.tabit.dcm2.service.dto.CheckInDto;
+import com.tabit.dcm2.service.dto.GuestDetailDto;
+import com.tabit.dcm2.service.dto.GuestDto;
+import com.tabit.dcm2.service.dto.GuestOverviewDto;
+import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.RandomCheckInDto;
+import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Before;
@@ -203,7 +213,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
 
         // when
-        ResponseEntity<Void> response = restTemplate.exchange("/api/guests", HttpMethod.POST, entity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange("/api/guests/check-in", HttpMethod.POST, entity, Void.class);
 
         Guest guestInDb = guestService.getGuestById(guestCheckedInFalseWithoutStay.getId());
 
@@ -236,7 +246,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
 
         // when
-        ResponseEntity<Void> response = restTemplate.exchange("/api/guests", HttpMethod.POST, entity, Void.class);
+        ResponseEntity<Void> response = restTemplate.exchange("/api/guests/check-in", HttpMethod.POST, entity, Void.class);
 
 
         // then
