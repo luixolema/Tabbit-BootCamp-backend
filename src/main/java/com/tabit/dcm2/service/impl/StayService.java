@@ -64,7 +64,7 @@ public class StayService implements IStayService {
         stay.setPhone(stayDto.getGuestPersonalDetails().getPhone());
         stay.setPassportId(stayDto.getGuestPersonalDetails().getPassportId());
         stay.setCheckInDate(stayDto.getStayDetails().getCheckInDate());
-        stay.setCheckOutDate(stayDto.getStayDetails().getCheckOutDate());
+        stay.setCheckOutDate(stayDto.getStayDetails().getCheckOutDate().orElse(null));
         stay.setArriveDate(stayDto.getStayDetails().getArriveDate());
         stay.setLeaveDate(stayDto.getStayDetails().getLeaveDate());
         stay.setHotel(stayDto.getStayDetails().getHotel());
@@ -75,8 +75,7 @@ public class StayService implements IStayService {
         stay.setNitrox(stayDto.getStayDetails().isNitrox());
         stay.setActive(stayDto.getStayDetails().isActive());
         stay.setPreBooking(stayDto.getStayDetails().getPreBooking());
-
-        // need to put logic for converting LoanDetailsDto to Loan and update Loans base on incoming stay dto
+        stay.setMedicalStatement(stayDto.getStayDetails().isMedicalStatement());
 
         return stay;
     }

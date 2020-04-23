@@ -2,11 +2,13 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 
+import java.util.Optional;
+
 public class GuestDto extends AbstractBean {
     private Long id;
     private String firstName;
     private String lastName;
-    private String boxNumber;
+    private Optional<String> boxNumber = Optional.empty();
     private boolean checkedin;
 
     public Long getId() {
@@ -41,11 +43,11 @@ public class GuestDto extends AbstractBean {
         this.checkedin = checkedin;
     }
 
-    public String getBoxNumber() {
+    public Optional<String> getBoxNumber() {
         return boxNumber;
     }
 
     public void setBoxNumber(String boxNumber) {
-        this.boxNumber = boxNumber;
+        this.boxNumber = Optional.ofNullable(boxNumber);
     }
 }
