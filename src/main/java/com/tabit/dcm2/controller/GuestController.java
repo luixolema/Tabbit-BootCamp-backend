@@ -4,9 +4,22 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IGuestService;
-import com.tabit.dcm2.service.dto.*;
+import com.tabit.dcm2.service.dto.CheckInDto;
+import com.tabit.dcm2.service.dto.GuestDetailDto;
+import com.tabit.dcm2.service.dto.GuestDto;
+import com.tabit.dcm2.service.dto.GuestOverviewDto;
+import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.StayDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.function.Function;
@@ -112,7 +125,7 @@ public class GuestController {
         guestService.updatePersonalDetails(personalDetailsDto);
     }
 
-    @PostMapping
+    @PostMapping("/check-in")
     public void checkIn(@RequestBody CheckInDto checkInDto) {
         guestService.checkIn(checkInDto);
     }
