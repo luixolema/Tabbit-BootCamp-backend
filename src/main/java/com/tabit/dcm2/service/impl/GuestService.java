@@ -1,6 +1,7 @@
 package com.tabit.dcm2.service.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.tabit.dcm2.controller.GuestController;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.Stay;
 import com.tabit.dcm2.exception.GuestIllegalStateException;
@@ -12,6 +13,7 @@ import com.tabit.dcm2.service.IBoxManagementService;
 import com.tabit.dcm2.service.IGuestService;
 import com.tabit.dcm2.service.IStayService;
 import com.tabit.dcm2.service.dto.CheckInDto;
+import com.tabit.dcm2.service.dto.CreationGuestDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 import com.tabit.dcm2.service.util.GuestMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,5 +99,11 @@ public class GuestService implements IGuestService {
 
         stayRepo.save(newStay);
         guestRepo.save(guest);
+    }
+
+    @Override
+    public Guest create(CreationGuestDto creationGuestDto) {
+        Guest guest = GuestController.MAP_GUEST_PERSONAL_DETAILS_DTO_TO_GUEST.apply(creationGuestDto);
+        return guestRepo.save(guest);
     }
 }

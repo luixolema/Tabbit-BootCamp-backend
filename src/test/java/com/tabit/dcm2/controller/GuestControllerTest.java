@@ -9,16 +9,15 @@ import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -165,7 +164,7 @@ public class GuestControllerTest {
     }
 
     @Test
-    public void getGuestPersonalDetails_return_the_correct_GuestPersonalDetailDto() {
+    public void getGuestPersonalDetails_shall_return_the_correct_GuestPersonalDetailDto() {
         // given
         Guest randomGuest = RandomGuest.createRandomGuest();
 
@@ -177,4 +176,24 @@ public class GuestControllerTest {
         verify(guestService).getGuestById(randomGuest.getId());
         GuestMappingAssertions.assertPersonalDetails(randomGuest, guestPersonalDetailsDto);
     }
+
+    @Test
+    public void create_shall_create_a_new_guest() {
+        // given
+        CreationGuestDto creationGuestDto = RandomGuestPersonalDetailsDto.createCreationGuestDtoBuilder().build();
+        Guest randomGuest = RandomGuest.createRandomGuest();
+        when(guestService.create(Mockito.any())).thenReturn(randomGuest);
+        ArgumentCaptor<CreationGuestDto> captor = ArgumentCaptor.forClass(CreationGuestDto.class);
+
+        // when
+        guestController.create(creationGuestDto);
+
+        // then
+        verify(guestService).create(captor.capture());
+        CreationGuestDto validatedCreationGuestDto = captor.getValue();
+        assertThat(validatedCreationGuestDto).isEqualTo(creationGuestDto);
+        assertThat(validatedCreationGuestDto).isNotSameAs(creationGuestDto);
+    }
+
+
 }

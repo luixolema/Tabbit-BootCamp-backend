@@ -1,12 +1,12 @@
 package com.tabit.dcm2.service.util;
 
 import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.AbstractGuestPersonalDetailsDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class GuestMapper {
-    public void mapPersonalDetailsFromDto(Guest guestInDb, GuestPersonalDetailsDto guestPersonalDetailsDto) {
+    public void mapPersonalDetailsFromDto(Guest guestInDb, AbstractGuestPersonalDetailsDto guestPersonalDetailsDto) {
         guestInDb.setFirstName(guestPersonalDetailsDto.getFirstName());
         guestInDb.setLastName(guestPersonalDetailsDto.getLastName());
         guestInDb.setBirthDate(guestPersonalDetailsDto.getBirthDate());
