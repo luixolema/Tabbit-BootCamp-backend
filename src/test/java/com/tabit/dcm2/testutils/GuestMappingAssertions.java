@@ -17,9 +17,9 @@ public class GuestMappingAssertions {
         assertThat(expectedGuestDto.getId()).isEqualTo(guest.getId());
         if (expectBoxNumber) {
             List<Stay> sortedStays = sortStayByArriveDate(guest);
-            assertThat(expectedGuestDto.getBoxNumber()).isEqualTo(sortedStays.get(0).getBoxNumber());
+            assertThat(expectedGuestDto.getBoxNumber()).contains(sortedStays.get(0).getBoxNumber());
         } else {
-            assertThat(expectedGuestDto.getBoxNumber()).isNull();
+            assertThat(expectedGuestDto.getBoxNumber()).isEmpty();
         }
         assertThat(expectedGuestDto.getFirstName()).isEqualTo(guest.getFirstName());
         assertThat(expectedGuestDto.getLastName()).isEqualTo(guest.getLastName());
@@ -37,7 +37,7 @@ public class GuestMappingAssertions {
             assertThat(stayDto.getStayDetails().getBoxNumber()).isEqualTo(stay.getBoxNumber());
             assertThat(stayDto.getStayDetails().getBrevet()).isEqualTo(stay.getBrevet());
             assertThat(stayDto.getStayDetails().getCheckInDate()).isEqualTo(stay.getCheckInDate());
-            assertThat(stayDto.getStayDetails().getCheckOutDate()).isEqualTo(stay.getCheckOutDate());
+            assertThat(stayDto.getStayDetails().getCheckOutDate()).contains(stay.getCheckOutDate());
             assertThat(stayDto.getStayDetails().getLastDiveDate()).isEqualTo(stay.getLastDiveDate());
             assertThat(stayDto.getStayDetails().getLeaveDate()).isEqualTo(stay.getLeaveDate());
             assertThat(stayDto.getStayDetails().getDivesAmount()).isEqualTo(stay.getDivesAmount());

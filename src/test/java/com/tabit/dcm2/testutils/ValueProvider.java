@@ -33,6 +33,10 @@ public class ValueProvider {
         return random.nextInt();
     }
 
+    public Integer randomIntBetween(int min, int max) {
+        return random.nextInt(max + 1 - min) + min;
+    }
+
     public Double randomDouple() {
         return random.nextDouble();
     }
@@ -60,5 +64,9 @@ public class ValueProvider {
 
     public String randomCountry() {
         return COUNTRIES.get(random.nextInt(COUNTRIES.size()));
+    }
+
+    public String randomEmail() {
+        return randomString("first") + "@" + randomString("last") + ".de";
     }
 }

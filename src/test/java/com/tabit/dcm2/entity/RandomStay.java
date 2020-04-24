@@ -3,6 +3,8 @@ package com.tabit.dcm2.entity;
 import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.testutils.ValueProvider;
 
+import java.time.LocalDate;
+
 public class RandomStay {
 
     public static Stay createRandomStayWithoutId() {
@@ -20,6 +22,10 @@ public class RandomStay {
 
     public static Stay createRandomStay() {
         ValueProvider valueProvider = new ValueProvider();
+        LocalDate checkInDate = LocalDate.now();
+        Integer randomValue = valueProvider.randomIntBetween(1, 10);
+        LocalDate arriveDate = checkInDate.minusDays(randomValue);
+        LocalDate leaveDate = arriveDate.minusDays(randomValue);
 
         Stay stay = new Stay();
         stay.setId(valueProvider.randomId());
@@ -33,13 +39,13 @@ public class RandomStay {
         stay.setCity(valueProvider.randomString("city"));
         stay.setPostcode(valueProvider.randomString("postcode"));
         stay.setStreet(valueProvider.randomString("street"));
-        stay.setEmail(valueProvider.randomString("email")+"@mail.com");
+        stay.setEmail(valueProvider.randomString("email") + "@mail.com");
         stay.setPhone(valueProvider.randomString("phone"));
         stay.setPassportId(valueProvider.randomString("passport"));
-        stay.setCheckInDate(valueProvider.randomLocalDate());
+        stay.setCheckInDate(checkInDate);
         stay.setCheckOutDate(valueProvider.randomLocalDate());
-        stay.setArriveDate(valueProvider.randomLocalDate());
-        stay.setLeaveDate(valueProvider.randomLocalDate());
+        stay.setArriveDate(arriveDate);
+        stay.setLeaveDate(leaveDate);
         stay.setHotel(valueProvider.randomString("hotel"));
         stay.setRoom(valueProvider.randomString("room"));
         stay.setLastDiveDate(valueProvider.randomLocalDate());

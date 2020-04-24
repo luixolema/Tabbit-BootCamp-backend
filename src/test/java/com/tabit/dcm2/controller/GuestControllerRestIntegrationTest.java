@@ -20,9 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -68,7 +66,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     }
 
     @Test
-    public void  getGuests_shall_return_all_guests_for_null_input_param() {
+    public void getGuests_shall_return_all_guests_for_null_input_param() {
         //when
         ResponseEntity<GuestOverviewDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests", GuestOverviewDto.class);
 
@@ -137,6 +135,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
 //        printJson(result.getBody());
     }
+
     @Test
     public void getGuestDetails_shall_return_no_summary_for_not_checkedIn_guest_without_stays() {
         // when
@@ -151,8 +150,9 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     @Test
     public void updatePersonalDetails_can_serialize_all_fields_in_json_object() {
         // given
-        GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
-        guestPersonalDetailsDto.setId(guestCheckedInTrue.getId());
+        GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder()
+                .withId(guestCheckedInTrue.getId())
+                .build();
 
         HttpEntity<GuestPersonalDetailsDto> entity = createHttpEntity(guestPersonalDetailsDto);
 
@@ -172,8 +172,9 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     @Test
     public void updatePersonalDetails_shall_update_data() {
         // given
-        GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
-        guestPersonalDetailsDto.setId(guestCheckedInFalse.getId());
+        GuestPersonalDetailsDto guestPersonalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder()
+                .withId(guestCheckedInTrue.getId())
+                .build();
         printJson(guestPersonalDetailsDto);
 
         HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(guestPersonalDetailsDto);
@@ -197,8 +198,9 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     @Test
     public void checkIn_shall_create_new_active_stay_and_update_guest_personeldetails_and_set_checked_in_flag_true() {
         // given
-        CheckInDto checkInDto = RandomCheckInDto.createRandomCheckInDto();
-        checkInDto.getGuestPersonalDetails().setId(guestCheckedInFalseWithoutStay.getId());
+        CheckInDto checkInDto = RandomCheckInDto.createRandomCheckInDtoBuilder()
+                .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withId(guestCheckedInFalseWithoutStay.getId()).build())
+                .build();
 
         HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
 
@@ -225,13 +227,13 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         assertThat(checkInDto.getGuestPersonalDetails().getStreet()).isEqualTo(guestInDb.getStreet());
     }
 
-
     @Test
     public void checkIn_shall_return_a_conflict_response_if_boxnumber_is_already_used() {
         // given
-        CheckInDto checkInDto = RandomCheckInDto.createRandomCheckInDto();
-        checkInDto.getGuestPersonalDetails().setId(guestCheckedInFalseWithoutStay.getId());
-        checkInDto.getStayDetails().setBoxNumber(stayActual.getBoxNumber());
+        CheckInDto checkInDto = RandomCheckInDto.createRandomCheckInDtoBuilder()
+                .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withId(guestCheckedInFalseWithoutStay.getId()).build())
+                .withStayDetails(RandomStayDetailsForCheckInDto.createRandomStayDetailsForCheckInDtoBuilder().withBoxNumber(stayActual.getBoxNumber()).build())
+                .build();
 
         HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
 

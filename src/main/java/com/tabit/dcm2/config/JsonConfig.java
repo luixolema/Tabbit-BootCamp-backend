@@ -1,5 +1,6 @@
 package com.tabit.dcm2.config;
 
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
-public class DateAndTimeFormatConfig {
+public class JsonConfig {
     public static final String DATE_FORMAT = "dd.MM.yyyy";
     public static final String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm:ss";
 
@@ -22,7 +23,8 @@ public class DateAndTimeFormatConfig {
                     .serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(DATE_FORMAT)))
                     .serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
                     .deserializers(new LocalDateDeserializer(DateTimeFormatter.ofPattern(DATE_FORMAT)))
-                    .deserializers(new LocalDateTimeDeserializer((DateTimeFormatter.ofPattern(DATE_TIME_FORMAT))));
+                    .deserializers(new LocalDateTimeDeserializer((DateTimeFormatter.ofPattern(DATE_TIME_FORMAT))))
+                    .modules(new Jdk8Module());
         };
     }
 }
