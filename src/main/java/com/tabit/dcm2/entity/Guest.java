@@ -56,7 +56,7 @@ public class Guest implements IEntity {
     private String passportId;
 
     @Column(name = "checked_in")
-    private boolean checkedin;
+    private boolean checkedin = false;
 
     @Override
     public Long getId() {

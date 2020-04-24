@@ -14,5 +14,7 @@ public interface IGuestService {
     void updatePersonalDetails(GuestPersonalDetailsDto personalDetailsDto);
 
     void checkIn(CheckInDto checkInDto);
+
+    Guest create(GuestPersonalDetailsDto guestPersonalDetailsDto);
 }
 

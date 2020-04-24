@@ -52,8 +52,8 @@ public class TestdataImporter {
 
         setupEquipment();
 
-        Guest guestWithGoodLoans1 = createGuestAlex1();
-        Guest guestWithGoodLoans2 = createGuestAlex2();
+        Guest guestWithGoodLoans1 = createGuestAlexander1();
+        Guest guestWithGoodLoans2 = createGuestAlexander2();
 
         Guest guest = createGuestAntonioBanderas();
         Guest guest2 = createGuestAntonyHopkins();
@@ -68,9 +68,9 @@ public class TestdataImporter {
         guestRepo.saveAll(ImmutableList.of(guestWithGoodLoans1, guestWithGoodLoans2, guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
     }
 
-    private Guest createGuestAlex1() {
+    private Guest createGuestAlexander1() {
         LocalDate guestBirthDate = LocalDate.now().minusYears(59);
-        String firstName = "Alex";
+        String firstName = "Alexander";
 
         Stay stayOld = RandomStay.createRandomStayWithoutId();
         stayOld.setArriveDate(LocalDate.now().minusYears(7));
@@ -110,8 +110,8 @@ public class TestdataImporter {
         stayActual.setCheckOutDate(stayActual.getLeaveDate());
         stayActual.setBirthDate(guestBirthDate);
         stayActual.setFirstName(firstName);
-        stayActual.setLastName("Criteria 1");
-        stayActual.setBoxNumber("2312312");
+        stayActual.setLastName("Velonias Criteria 1");
+        stayActual.setBoxNumber("888");
         stayActual.setPreBooking("Smart man.");
         stayActual.setActive(true);
 
@@ -136,16 +136,16 @@ public class TestdataImporter {
         Guest guest = RandomGuest.createRandomGuestWitoutId();
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName(firstName);
-        guest.setLastName("Banderas With Many Stays And Different Names");
+        guest.setLastName("Velonias Criteria 1");
         guest.setCheckedin(true);
         guest.setStays(ImmutableList.of(stayOld, stayActual));
 
         return guest;
     }
 
-    private Guest createGuestAlex2() {
+    private Guest createGuestAlexander2() {
         LocalDate guestBirthDate = LocalDate.now().minusYears(59);
-        String firstName = "Alex";
+        String firstName = "Alexander";
 
         Stay stayOld = RandomStay.createRandomStayWithoutId();
         stayOld.setArriveDate(LocalDate.now().minusYears(7));
@@ -185,8 +185,8 @@ public class TestdataImporter {
         stayActual.setCheckOutDate(stayActual.getLeaveDate());
         stayActual.setBirthDate(guestBirthDate);
         stayActual.setFirstName(firstName);
-        stayActual.setLastName("Criteria 1");
-        stayActual.setBoxNumber("2312312");
+        stayActual.setLastName("Velonias Criteria 2");
+        stayActual.setBoxNumber("999");
         stayActual.setPreBooking("Smart man.");
         stayActual.setActive(true);
 
@@ -205,7 +205,7 @@ public class TestdataImporter {
         Guest guest = RandomGuest.createRandomGuestWitoutId();
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName(firstName);
-        guest.setLastName("Banderas With Many Stays And Different Names");
+        guest.setLastName("Velonias Criteria 2");
         guest.setCheckedin(true);
         guest.setStays(ImmutableList.of(stayOld, stayActual));
 
@@ -470,10 +470,10 @@ public class TestdataImporter {
         boxManagement4.setBoxNumber("4567");
 
         BoxManagement boxManagement5 = new BoxManagement();
-        boxManagement5.setBoxNumber("2312312");
+        boxManagement5.setBoxNumber("888");
 
         BoxManagement boxManagement6 = new BoxManagement();
-        boxManagement6.setBoxNumber("dsfsdfds");
+        boxManagement6.setBoxNumber("999");
 
         boxManagementRepo.saveAll(ImmutableList.of(boxManagement1, boxManagement2, boxManagement3, boxManagement4, boxManagement5, boxManagement6));
     }

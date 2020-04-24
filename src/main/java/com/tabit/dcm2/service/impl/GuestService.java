@@ -98,4 +98,11 @@ public class GuestService implements IGuestService {
         stayRepo.save(newStay);
         guestRepo.save(guest);
     }
+
+    @Override
+    public Guest create(GuestPersonalDetailsDto guestPersonalDetailsDto) {
+        Guest guest = new Guest();
+        guestMapper.mapPersonalDetailsFromDto(guest, guestPersonalDetailsDto);
+        return this.guestRepo.save(guest);
+    }
 }

@@ -123,4 +123,9 @@ public class GuestController {
         Guest guest = guestService.getGuestById(guestId);
         return MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO.apply(guest);
     }
+
+    @PostMapping
+    public long create(@RequestBody GuestPersonalDetailsDto guestPersonalDetailsDto) {
+        return 1L;
+    }
 }
