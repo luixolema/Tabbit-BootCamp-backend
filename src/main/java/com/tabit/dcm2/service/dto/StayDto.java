@@ -1,6 +1,7 @@
 package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
+import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
 import com.tabit.dcm2.entity.Loan;
 
 import java.util.ArrayList;
@@ -17,38 +18,73 @@ public class StayDto extends AbstractBean {
         return guestPersonalDetails;
     }
 
-    public void setGuestPersonalDetails(GuestPersonalDetailsDto guestPersonalDetailsDto) {
-        this.guestPersonalDetails = guestPersonalDetailsDto;
-    }
-
     public StayDetailsDto getStayDetails() {
         return stayDetails;
-    }
-
-    public void setStayDetails(StayDetailsDto stayDetails) {
-        this.stayDetails = stayDetails;
     }
 
     public List<LoanDetailsDto> getLoanDetails() {
         return loanDetails;
     }
 
-    public void setLoanDetails(List<LoanDetailsDto> loanDetails) {
-        this.loanDetails = loanDetails;
+//    public StayDto addLoanDetails(List<Loan> loans) {
+//        for(Loan loan : loans) {
+//            getLoanDetails().add(MAP_LOAN_TO_LOAN_DETAILS_DTO.apply(loan));
+//        }
+//        return StayDto.Builder.builderFromBean(this).build();
+//    }
+
+    public StayDto copy() {
+
+        return new StayDto.Builder()
+                .withGuestPersonalDetails(getGuestPersonalDetails().copy())
+                .withStayDetails(getStayDetails().copy())
+                .withLoanDetails(prepareLoanDetailsDtos(this))
+                .build();
     }
 
-    public void addLoanDetails(Loan loan) {
-        loanDetails.add(MAP_LOAN_TO_LOAN_DETAILS_DTO.apply(loan));
+    private static List<LoanDetailsDto> prepareLoanDetailsDtos(StayDto stayDto) {
+        List<LoanDetailsDto> loanDetailsDtos = new ArrayList<>();
+        for (LoanDetailsDto dto : stayDto.getLoanDetails()) {
+            loanDetailsDtos.add(LoanDetailsDto.Builder.builderFromBean(dto).build());
+        }
+        return loanDetailsDtos;
     }
 
-    private Function<Loan, LoanDetailsDto> MAP_LOAN_TO_LOAN_DETAILS_DTO = loan -> {
-        LoanDetailsDto loanDetailsDto = new LoanDetailsDto();
-        loanDetailsDto.setId(loan.getId());
-        loanDetailsDto.setDateOut(loan.getDateOut());
-        loanDetailsDto.setDateReturn(loan.getDateReturn());
-        loanDetailsDto.setSerialNumber(loan.getEquipment().getSerialNumber());
-        loanDetailsDto.setType(loan.getEquipment().getEquipmentType().getType());
-        return loanDetailsDto;
-    };
+    public static class Builder extends AbstractNonNullValidatingBeanBuilder<StayDto, StayDto.Builder> {
+
+        public Builder() {
+            super(new StayDto());
+        }
+
+        public static Builder builderFromBean(StayDto toCopy) {
+            return new Builder()
+                    .withGuestPersonalDetails(toCopy.getGuestPersonalDetails().copy())
+                    .withStayDetails(toCopy.getStayDetails().copy())
+                    .withLoanDetails(prepareLoanDetailsDtos(toCopy));
+        }
+
+        public Builder withGuestPersonalDetails(GuestPersonalDetailsDto guestPersonalDetails) {
+            bean.guestPersonalDetails = guestPersonalDetails;
+            return this;
+        }
+
+        public Builder withStayDetails(StayDetailsDto stayDetails) {
+            bean.stayDetails = stayDetails;
+            return this;
+        }
+
+        public Builder withLoanDetails(List<LoanDetailsDto> loanDetails) {
+            bean.loanDetails = loanDetails;
+            return this;
+        }
+    }
+
+    private Function<Loan, LoanDetailsDto> MAP_LOAN_TO_LOAN_DETAILS_DTO = loan -> new LoanDetailsDto.Builder()
+            .withId(loan.getId())
+            .withDateOut(loan.getDateOut())
+            .withDateReturn(loan.getDateReturn())
+            .withSerialNumber(loan.getEquipment().getSerialNumber())
+            .withType(loan.getEquipment().getEquipmentType().getType())
+            .build();
 }
 

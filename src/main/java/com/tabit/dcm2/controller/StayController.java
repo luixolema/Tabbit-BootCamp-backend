@@ -51,7 +51,7 @@ public class StayController {
         stayDto.setGuestPersonalDetails(guestPersonalDetails);
         stayDto.setStayDetails(stayDetails);
 
-        stay.getLoans().forEach(stayDto::addLoanDetails);
+        stayDto = stayDto.addLoanDetails(stay.getLoans());
 
         return stayDto;
     };
