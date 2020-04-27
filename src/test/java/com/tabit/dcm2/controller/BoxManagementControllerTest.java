@@ -1,6 +1,7 @@
 package com.tabit.dcm2.controller;
 
 import com.tabit.dcm2.entity.BoxManagement;
+import com.tabit.dcm2.entity.RandomBoxManagement;
 import com.tabit.dcm2.service.impl.BoxManagementService;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,8 +39,8 @@ public class BoxManagementControllerTest {
     @Test
     public void isBoxFree_shall_return_the_right_value(@FromDataPoints("isBoxFree") boolean isBoxFree) {
         // given
-        BoxManagement boxManagement = new BoxManagement();
-        boxManagement.setBoxNumber("test");
+        BoxManagement boxManagement = RandomBoxManagement.createRandomBoxManagement();
+        ;
         when(boxManagementService.isBoxFree(boxManagement.getBoxNumber())).thenReturn(isBoxFree);
 
         // when

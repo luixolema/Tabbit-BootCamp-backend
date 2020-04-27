@@ -5,7 +5,6 @@ import com.google.common.collect.Iterables;
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.Stay;
-import com.tabit.dcm2.exception.BoxReservationException;
 import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
@@ -27,7 +26,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -141,6 +139,8 @@ public class GuestServiceTest {
         Stay newStay = stayArgumentCaptor.getValue();
         StayMappingAssertions.assertNewStayFromCheckInDto(newStay, randomCheckInDto);
         assertThat(notCheckedInGuest.getStays()).containsExactly(oldStay, newStay);
+
+        verify(boxManagementService).reserveBox(randomCheckInDto.getStayDetails().getBoxNumber());
     }
 
     @Test(expected = GuestIllegalStateException.class)
@@ -151,21 +151,6 @@ public class GuestServiceTest {
         checkedInGuest.setCheckedin(true);
 
         when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(checkedInGuest));
-
-        // when
-        guestService.checkIn(randomCheckInDto);
-    }
-
-    @Test(expected = BoxReservationException.class)
-    public void checkIn_shall_throw_exception_if_box_is_already_reserved() {
-        // given
-        CheckInDto randomCheckInDto = RandomCheckInDto.createRandomCheckInDto();
-        Guest guest = RandomGuest.createRandomGuest();
-        guest.setCheckedin(false);
-
-        String boxNumber = randomCheckInDto.getStayDetails().getBoxNumber();
-        doThrow(BoxReservationException.class).when(boxManagementService).reserveBox(boxNumber);
-        when(guestRepo.findById(randomCheckInDto.getGuestPersonalDetails().getId())).thenReturn(Optional.of(guest));
 
         // when
         guestService.checkIn(randomCheckInDto);

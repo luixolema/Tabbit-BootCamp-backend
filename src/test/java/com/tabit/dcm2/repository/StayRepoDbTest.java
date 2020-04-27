@@ -79,7 +79,7 @@ public class StayRepoDbTest extends AbstractDbTest {
         // then
         Optional<Stay> actualStay = stayRepo.findById(stay.getId());
 
-        assertThat(actualStay.isPresent()).isTrue();
+        assertThat(actualStay).isPresent();
         assertStay(actualStay.get(), stay);
     }
 

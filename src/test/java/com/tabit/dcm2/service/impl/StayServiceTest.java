@@ -4,7 +4,6 @@ import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.entity.RandomGuest;
 import com.tabit.dcm2.entity.RandomStay;
 import com.tabit.dcm2.entity.Stay;
-import com.tabit.dcm2.exception.BoxReservationException;
 import com.tabit.dcm2.exception.ResourceNotFoundException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
@@ -25,7 +24,9 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StayServiceTest {
@@ -73,6 +74,7 @@ public class StayServiceTest {
         // given
         StayDto randomStayDto = RandomStayDto.createRandomStayDto();
         Stay randomStay = RandomStay.createRandomStay();
+        String oldBoxnumber = randomStay.getBoxNumber();
         Guest guestWithNoChanges = getGuestFromStayDto(randomStayDto);
         randomStay.setGuest(guestWithNoChanges);
 
@@ -82,10 +84,32 @@ public class StayServiceTest {
         stayService.updateStay(randomStayDto);
 
         // then
+        verify(boxManagementService).reserveBox(randomStayDto.getStayDetails().getBoxNumber());
+        verify(boxManagementService).releaseBox(oldBoxnumber);
+
         verify(stayRepo).save(stayArgumentCaptor.capture());
         Stay updateStay = stayArgumentCaptor.getValue();
         StayMappingAssertions.assertUpdatedStayFromStayDto(updateStay, randomStayDto);
         verifyZeroInteractions(guestRepo, guestMapper);
+    }
+
+    @Test
+    public void updateStay_shall_not_change_boxnumbers_if_they_are_the_same() {
+        // given
+        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
+        Stay randomStay = RandomStay.createRandomStay();
+        randomStay.setBoxNumber(randomStayDto.getStayDetails().getBoxNumber());
+
+        Guest guestWithNoChanges = getGuestFromStayDto(randomStayDto);
+        randomStay.setGuest(guestWithNoChanges);
+
+        when(stayRepo.findById(randomStayDto.getStayDetails().getId())).thenReturn(Optional.of(randomStay));
+
+        // when
+        stayService.updateStay(randomStayDto);
+
+        // then
+        verifyZeroInteractions(boxManagementService);
     }
 
     @Test
@@ -108,22 +132,6 @@ public class StayServiceTest {
 
         verify(guestMapper).mapPersonalDetailsFromDto(guestWithChanges, randomStayDto.getGuestPersonalDetails());
         verify(guestRepo).save(guestWithChanges);
-    }
-
-
-    @Test (expected = BoxReservationException.class)
-    public void updateStay_shall_throw_exception_if_reserving_non_free_box() {
-        // given
-        StayDto randomStayDto = RandomStayDto.createRandomStayDto();
-        Stay randomStay = RandomStay.createRandomStay();
-        Guest guestWithChanges = RandomGuest.createRandomGuest();
-        randomStay.setGuest(guestWithChanges);
-
-        when(stayRepo.findById(randomStayDto.getStayDetails().getId())).thenReturn(Optional.of(randomStay));
-        doThrow(BoxReservationException.class).when(boxManagementService).reserveBox(randomStayDto.getStayDetails().getBoxNumber());
-
-        // when
-        stayService.updateStay(randomStayDto);
     }
 
     private Guest getGuestFromStayDto(StayDto stayDto) {

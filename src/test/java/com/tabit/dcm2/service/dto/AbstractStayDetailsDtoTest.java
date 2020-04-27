@@ -23,6 +23,7 @@ public class AbstractStayDetailsDtoTest {
     public static BeanValidationExceptionTestCase<StayDetailsForCheckInDto.Builder>[] testCases = ImmutableList.of(
             negativDivesAmount(),
             leaveDateBeforArriveDate(),
+            lastDiveDateInTheFuture(),
             checkInNotBetweenLeaveDateAndArriveDate()).toArray(new BeanValidationExceptionTestCase[0]);
 
     @Theory
@@ -52,6 +53,12 @@ public class AbstractStayDetailsDtoTest {
                         .withArriveDate(NOW)
                         .withCheckInDate(NOW.minusDays(1)))
                 .withExpectedMessage("AbstractStayDetailsDto.checkInDate: must be between arriveDate and leaveDate");
+    }
+
+    private static BeanValidationExceptionTestCase<StayDetailsForCheckInDto.Builder> lastDiveDateInTheFuture() {
+        return new BeanValidationExceptionTestCase<StayDetailsForCheckInDto.Builder>()
+                .withInvalidDto(RandomStayDetailsForCheckInDto.createRandomStayDetailsForCheckInDtoBuilder().withLastDiveDate(NOW.plusDays(1)))
+                .withExpectedMessage("AbstractStayDetailsDto.lastDiveDate: must not be in the future");
     }
 
 }

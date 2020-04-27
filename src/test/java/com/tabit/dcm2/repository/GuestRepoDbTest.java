@@ -93,15 +93,15 @@ public class GuestRepoDbTest extends AbstractDbTest {
         // given
         Guest randomGuest = RandomGuest.createRandomGuestWitoutId();
         guestRule.persist(ImmutableList.of(randomGuest));
-        randomGuest.setFirstName(randomGuest.getFirstName() + "Update");
-        randomGuest.setBirthDate(randomGuest.getBirthDate().minusYears(5));
 
         // when
+        randomGuest.setFirstName(randomGuest.getFirstName() + "Update");
+        randomGuest.setBirthDate(randomGuest.getBirthDate().minusYears(5));
         guestRepo.save(randomGuest);
 
         // then
         Optional<Guest> actualGuest = guestRepo.findById(randomGuest.getId());
-        assertThat(actualGuest.isPresent()).isTrue();
+        assertThat(actualGuest).isPresent();
         assertGuest(actualGuest.get(), randomGuest, ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
     }
 
@@ -115,7 +115,7 @@ public class GuestRepoDbTest extends AbstractDbTest {
 
         //then
         Optional<Guest> actualGuest = guestRepo.findById(randomGuest.getId());
-        assertThat(actualGuest.isPresent()).isTrue();
-        assertGuest(randomGuest, actualGuest.get(), ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
+        assertThat(actualGuest).isPresent();
+        assertGuest(actualGuest.get(), randomGuest, ImmutableList.of(Iterables.getOnlyElement(randomGuest.getStays()).getId()));
     }
 }

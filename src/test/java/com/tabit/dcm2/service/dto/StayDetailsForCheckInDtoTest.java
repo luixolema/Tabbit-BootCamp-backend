@@ -21,8 +21,7 @@ public class StayDetailsForCheckInDtoTest {
 
     @DataPoints
     public static BeanValidationExceptionTestCase<StayDetailsForCheckInDto.Builder>[] testCases = ImmutableList.of(
-            leaveDateInThePast(),
-            lastDiveDateInTheFuture()).toArray(new BeanValidationExceptionTestCase[0]);
+            leaveDateInThePast()).toArray(new BeanValidationExceptionTestCase[0]);
 
     @Theory
     @Test
@@ -39,11 +38,5 @@ public class StayDetailsForCheckInDtoTest {
                         .withLeaveDate(NOW.minusDays(1))
                         .withArriveDate(NOW.minusDays(3)))
                 .withExpectedMessage("StayDetailsForCheckInDto.leaveDate: must not be in the past");
-    }
-
-    private static BeanValidationExceptionTestCase<StayDetailsForCheckInDto.Builder> lastDiveDateInTheFuture() {
-        return new BeanValidationExceptionTestCase<StayDetailsForCheckInDto.Builder>()
-                .withInvalidDto(RandomStayDetailsForCheckInDto.createRandomStayDetailsForCheckInDtoBuilder().withLastDiveDate(NOW.plusDays(1)))
-                .withExpectedMessage("StayDetailsForCheckInDto.lastDiveDate: must not be in the future");
     }
 }
