@@ -20,14 +20,13 @@ import static com.tabit.dcm2.controller.StayController.MAP_STAY_TO_STAY_DTO;
 public class GuestController {
 
     private static Function<Guest, GuestDto> MAP_GUEST_TO_GUEST_DTO = guest -> {
-        GuestDto guestDto = new GuestDto();
-        guestDto.setId(guest.getId());
-        if (guest.isCheckedin()) {
-            guestDto.setBoxNumber(guest.getStays().get(0).getBoxNumber());
-        }
-        guestDto.setFirstName(guest.getFirstName());
-        guestDto.setLastName(guest.getLastName());
-        guestDto.setCheckedin(guest.isCheckedin());
+        GuestDto guestDto = new GuestDto.Builder()
+                .withId(guest.getId())
+                .withFirstName(guest.getFirstName())
+                .withLastName(guest.getLastName())
+                .withBoxNumber(guest.isCheckedin() ? guest.getStays().get(0).getBoxNumber() : null)
+                .withCheckedin(guest.isCheckedin())
+                .build();
         return guestDto;
     };
 
@@ -104,7 +103,11 @@ public class GuestController {
                 break;
         }
         List<Guest> guests = guestService.getAllGuests(guestFilterType);
-        return new GuestOverviewDto(guests.stream().map(MAP_GUEST_TO_GUEST_DTO).collect(Collectors.toList()));
+
+        return new GuestOverviewDto.Builder()
+                .withGuests(guests.stream().map(MAP_GUEST_TO_GUEST_DTO).collect(Collectors.toList()))
+                .withTotal(guests.size())
+                .build();
     }
 
     @GetMapping("/{guestId}")
