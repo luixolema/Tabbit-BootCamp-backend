@@ -14,7 +14,7 @@ public class LocalDateAfterValidator extends AbstractBeanValidator<LocalDateAfte
     @Override
     public ValidationResult validate() {
         LocalDateAfterValidatorInput input = toValidate.get();
-        return input.after.get().isAfter(input.dateToCheckAgainst.get()) ? ValidationResult.noError() : ValidationResult.withError(beanProperty.get(), String.format(MESSAGE, input.beanPropertyDateToCheckAgainst));
+        return !input.after.get().isBefore(input.dateToCheckAgainst.get()) ? ValidationResult.noError() : ValidationResult.withError(beanProperty.get(), String.format(MESSAGE, input.beanPropertyDateToCheckAgainst));
     }
 
     public static class LocalDateAfterValidatorInput {
