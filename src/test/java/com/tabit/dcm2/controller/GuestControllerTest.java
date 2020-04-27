@@ -174,7 +174,6 @@ public class GuestControllerTest {
         GuestPersonalDetailsDto guestPersonalDetailsDto = guestController.getGuestPersonalDetails(randomGuest.getId());
 
         // then
-        verify(guestService).getGuestById(randomGuest.getId());
         GuestMappingAssertions.assertPersonalDetails(randomGuest, guestPersonalDetailsDto);
     }
 }
