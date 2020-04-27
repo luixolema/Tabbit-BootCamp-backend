@@ -32,10 +32,6 @@ public class GuestDto extends AbstractBean {
         return checkedin;
     }
 
-    public GuestDto copy() {
-        return Builder.builderFromBean(this).build();
-    }
-
     public static class Builder extends AbstractNonNullValidatingBeanBuilder<GuestDto, GuestDto.Builder> {
 
         public Builder() {
@@ -66,16 +62,5 @@ public class GuestDto extends AbstractBean {
             bean.checkedin = checkedin;
             return this;
         }
-
-        public static Builder builderFromBean(GuestDto toCopy) {
-            return new Builder()
-                    .withId(toCopy.getId())
-                    .withFirstName(toCopy.getFirstName())
-                    .withLastName(toCopy.getLastName())
-                    .withBoxNumber(toCopy.getBoxNumber().get())
-                    .withCheckedin(toCopy.isCheckedin());
-        }
-
     }
-
 }

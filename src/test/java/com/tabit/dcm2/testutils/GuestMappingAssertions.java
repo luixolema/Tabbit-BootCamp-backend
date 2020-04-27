@@ -23,6 +23,7 @@ public class GuestMappingAssertions {
         }
         assertThat(expectedGuestDto.getFirstName()).isEqualTo(guest.getFirstName());
         assertThat(expectedGuestDto.getLastName()).isEqualTo(guest.getLastName());
+        assertThat(expectedGuestDto.isCheckedin()).isEqualTo(guest.isCheckedin());
     }
 
     public static void assertGuestDetailDto(GuestDetailDto expectedGuestDetailDto, Guest guest, GuestDetailType guestDetailType) {
