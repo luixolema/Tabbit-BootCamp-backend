@@ -38,7 +38,7 @@ public class LocalDateAfterValidatorTest {
     }
 
     private static ValidationTestCase<LocalDateAfterValidatorInput> invalidIsSame() {
-        return new ValidationTestCase<LocalDateAfterValidatorInput>().withToValidate(new LocalDateAfterValidatorInput(PROPERTY_FIRST, () -> NOW, () -> NOW)).withExpectedResult(error);
+        return new ValidationTestCase<LocalDateAfterValidatorInput>().withToValidate(new LocalDateAfterValidatorInput(PROPERTY_FIRST, () -> NOW, () -> NOW)).withExpectedResult(ValidationResult.noError());
     }
 
     private static ValidationTestCase<LocalDateAfterValidatorInput> validIsAfter() {

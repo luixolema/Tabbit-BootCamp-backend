@@ -6,6 +6,7 @@ import com.tabit.dcm2.validation.LocalDateAfterValidator;
 import com.tabit.dcm2.validation.LocalDateAfterValidator.LocalDateAfterValidatorInput;
 import com.tabit.dcm2.validation.LocalDateInsideRangeValidator;
 import com.tabit.dcm2.validation.LocalDateInsideRangeValidator.LocalDateInsideRangeValidatorInput;
+import com.tabit.dcm2.validation.LocalDateNotInTheFutureValidator;
 import com.tabit.dcm2.validation.PositiveIntegerValidator;
 
 import java.time.LocalDate;
@@ -81,7 +82,8 @@ public abstract class AbstractStayDetailsDto extends AbstractBean {
             addValidators(
                     new PositiveIntegerValidator(simpleName + ".divesAmount", bean::getDivesAmount),
                     new LocalDateAfterValidator(simpleName + ".leaveDate", () -> new LocalDateAfterValidatorInput("arriveDate", bean::getArriveDate, bean::getLeaveDate)),
-                    new LocalDateInsideRangeValidator(simpleName + ".checkInDate", () -> new LocalDateInsideRangeValidatorInput("arriveDate", "leaveDate", bean::getArriveDate, bean::getLeaveDate, bean::getCheckInDate))
+                    new LocalDateInsideRangeValidator(simpleName + ".checkInDate", () -> new LocalDateInsideRangeValidatorInput("arriveDate", "leaveDate", bean::getArriveDate, bean::getLeaveDate, bean::getCheckInDate)),
+                    new LocalDateNotInTheFutureValidator(simpleName + ".lastDiveDate", bean::getLastDiveDate)
             );
         }
 

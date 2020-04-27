@@ -1,6 +1,5 @@
 package com.tabit.dcm2.service.dto;
 
-import com.tabit.dcm2.validation.LocalDateNotInTheFutureValidator;
 import com.tabit.dcm2.validation.LocalDateNotInThePastValidator;
 
 public class StayDetailsForCheckInDto extends AbstractStayDetailsDto {
@@ -16,7 +15,7 @@ public class StayDetailsForCheckInDto extends AbstractStayDetailsDto {
 
             String simpleName = StayDetailsForCheckInDto.class.getSimpleName();
             addValidators(
-                    new LocalDateNotInTheFutureValidator(simpleName + ".lastDiveDate", bean::getLastDiveDate),
+
                     new LocalDateNotInThePastValidator(simpleName + ".leaveDate", bean::getLeaveDate)
             );
         }
