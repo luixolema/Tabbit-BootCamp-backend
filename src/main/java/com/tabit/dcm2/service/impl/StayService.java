@@ -36,7 +36,7 @@ public class StayService implements IStayService {
 
         Stay stay = findById(stayDto.getStayDetails().getId());
 
-        if(!stayDto.getStayDetails().getBoxNumber().equals(stay.getBoxNumber())){ //if box updated
+        if (!stayDto.getStayDetails().getBoxNumber().equals(stay.getBoxNumber())) { //if box updated
             boxManagementService.reserveBox(stayDto.getStayDetails().getBoxNumber());
             boxManagementService.releaseBox(stay.getBoxNumber());
         }

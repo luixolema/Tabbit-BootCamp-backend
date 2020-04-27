@@ -46,7 +46,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         stayActual.setArriveDate(LocalDate.now().minusDays(10));
         stayActual.setActive(true);
 
-        boxManagement = new BoxManagement();
+        boxManagement = RandomBoxManagement.createRandomBoxManagement();
         boxManagement.setBoxNumber(stayActual.getBoxNumber());
         boxManagementRule.persist(ImmutableList.of(boxManagement));
 
