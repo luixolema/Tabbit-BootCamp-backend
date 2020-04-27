@@ -10,11 +10,9 @@ import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IBoxManagementService;
-import com.tabit.dcm2.service.dto.CheckInDto;
-import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
-import com.tabit.dcm2.service.dto.RandomCheckInDto;
-import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
+import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.service.util.GuestMapper;
+import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -156,5 +154,20 @@ public class GuestServiceTest {
 
         // when
         guestService.checkIn(randomCheckInDto);
+    }
+
+    @Test
+    public void create_shall_save_a_new_guest() {
+        // given
+        CreationGuestDto randomCreationGuestDto = RandomGuestPersonalDetailsDto.createCreationGuestDtoBuilder().build();
+        ArgumentCaptor<Guest> guestArgumentCaptor = ArgumentCaptor.forClass(Guest.class);
+
+        // when
+        guestService.create(randomCreationGuestDto);
+
+        // then
+        verify(guestRepo).save(guestArgumentCaptor.capture());
+        Guest actualGuest = guestArgumentCaptor.getValue();
+        GuestMappingAssertions.assertPersonalDetails(actualGuest, randomCreationGuestDto);
     }
 }

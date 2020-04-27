@@ -2,6 +2,7 @@ package com.tabit.dcm2.service;
 
 import com.tabit.dcm2.entity.Guest;
 import com.tabit.dcm2.service.dto.CheckInDto;
+import com.tabit.dcm2.service.dto.CreationGuestDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
 
 import java.util.List;
@@ -15,6 +16,6 @@ public interface IGuestService {
 
     void checkIn(CheckInDto checkInDto);
 
-    Guest create(GuestPersonalDetailsDto guestPersonalDetailsDto);
+    Guest create(CreationGuestDto guest);
 }
 
