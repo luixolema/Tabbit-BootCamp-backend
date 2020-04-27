@@ -1,18 +1,18 @@
 package com.tabit.dcm2.service.dto;
 
-public class CreationGuestDto extends AbstractGuestPersonalDetailsDto {
+public class GuestCreationDto extends AbstractGuestPersonalDetailsDto {
 
-    public CreationGuestDto copy() {
+    public GuestCreationDto copy() {
         return Builder.builderFromBean(this).build();
     }
 
-    public static class Builder extends AbstractGuestPersonalDetailsDto.AbstractBuilder<CreationGuestDto, Builder> {
+    public static class Builder extends AbstractBuilder<GuestCreationDto, Builder> {
 
         public Builder() {
-            super(new CreationGuestDto());
+            super(new GuestCreationDto());
         }
 
-        public static Builder builderFromBean(CreationGuestDto toCopy) {
+        public static Builder builderFromBean(GuestCreationDto toCopy) {
             return new Builder()
                     .withFirstName(toCopy.getFirstName())
                     .withLastName(toCopy.getLastName())

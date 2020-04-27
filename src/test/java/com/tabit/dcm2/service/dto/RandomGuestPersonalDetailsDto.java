@@ -42,21 +42,4 @@ public class RandomGuestPersonalDetailsDto {
                 .withStreet(guest.getStreet())
                 .build();
     }
-
-    public static CreationGuestDto.Builder createCreationGuestDtoBuilder() {
-        ValueProvider valueProvider = new ValueProvider();
-
-        return new CreationGuestDto.Builder()
-                .withBirthDate(valueProvider.randomLocalDate())
-                .withFirstName(valueProvider.randomString("firstName"))
-                .withCity(valueProvider.randomString("city"))
-                .withCountry(valueProvider.randomString("country"))
-                .withEmail(valueProvider.randomEmail())
-                .withLastName(valueProvider.randomString("lastName"))
-                .withNationality(valueProvider.randomString("nationality"))
-                .withPassportId(valueProvider.randomString("passportId"))
-                .withPhone(valueProvider.randomString("phone"))
-                .withPostcode(valueProvider.randomString("postcode"))
-                .withStreet(valueProvider.randomString("street"));
-    }
 }

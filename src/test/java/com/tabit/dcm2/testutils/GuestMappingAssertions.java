@@ -104,6 +104,11 @@ public class GuestMappingAssertions {
     }
 
     public static void assertPersonalDetails(Guest guest, AbstractGuestPersonalDetailsDto guestPersonalDetailsDto) {
+        assertPersonalDetailsWithoutId(guest, guestPersonalDetailsDto);
+        assertThat(guest.getId()).isEqualTo(((GuestPersonalDetailsDto) guestPersonalDetailsDto).getId());
+    }
+
+    public static void assertPersonalDetailsWithoutId(Guest guest, AbstractGuestPersonalDetailsDto guestPersonalDetailsDto) {
         assertThat(guest.getFirstName()).isEqualTo(guestPersonalDetailsDto.getFirstName());
         assertThat(guest.getLastName()).isEqualTo(guestPersonalDetailsDto.getLastName());
         assertThat(guest.getBirthDate()).isEqualTo(guestPersonalDetailsDto.getBirthDate());

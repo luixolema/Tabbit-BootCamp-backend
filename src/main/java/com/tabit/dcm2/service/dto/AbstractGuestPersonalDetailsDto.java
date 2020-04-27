@@ -19,7 +19,7 @@ public abstract class AbstractGuestPersonalDetailsDto extends AbstractBean {
     protected String phone;
     protected String passportId;
 
-    protected static abstract class AbstractBuilder<BEAN extends AbstractGuestPersonalDetailsDto, BUILDER extends AbstractGuestPersonalDetailsDto.AbstractBuilder<BEAN, BUILDER>> extends AbstractNonNullValidatingBeanBuilder<BEAN, BUILDER> {
+    protected static abstract class AbstractBuilder<BEAN extends AbstractGuestPersonalDetailsDto, BUILDER extends AbstractBuilder<BEAN, BUILDER>> extends AbstractNonNullValidatingBeanBuilder<BEAN, BUILDER> {
 
         protected AbstractBuilder(BEAN bean) {
             super(bean);

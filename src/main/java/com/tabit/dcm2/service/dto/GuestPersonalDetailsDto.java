@@ -1,8 +1,5 @@
 package com.tabit.dcm2.service.dto;
 
-import com.tabit.dcm2.validation.EmailValidator;
-
-
 public class GuestPersonalDetailsDto extends AbstractGuestPersonalDetailsDto {
     private Long id;
 
@@ -18,11 +15,10 @@ public class GuestPersonalDetailsDto extends AbstractGuestPersonalDetailsDto {
         return Builder.builderFromBean(this).build();
     }
 
-    public static class Builder extends AbstractGuestPersonalDetailsDto.AbstractBuilder<GuestPersonalDetailsDto, Builder> {
+    public static class Builder extends AbstractBuilder<GuestPersonalDetailsDto, Builder> {
 
         public Builder() {
             super(new GuestPersonalDetailsDto());
-            addValidators(new EmailValidator(GuestPersonalDetailsDto.class.getSimpleName() + ".email", bean::getEmail));
         }
 
         public static Builder builderFromBean(GuestPersonalDetailsDto toCopy) {
