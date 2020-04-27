@@ -46,4 +46,5 @@ public class GuestOverviewDto extends AbstractBean {
             return this;
         }
     }
+
 }

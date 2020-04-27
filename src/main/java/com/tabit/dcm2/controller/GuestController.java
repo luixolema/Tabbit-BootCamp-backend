@@ -106,7 +106,6 @@ public class GuestController {
 
         return new GuestOverviewDto.Builder()
                 .withGuests(guests.stream().map(MAP_GUEST_TO_GUEST_DTO).collect(Collectors.toList()))
-                .withTotal(guests.size())
                 .build();
     }
 
