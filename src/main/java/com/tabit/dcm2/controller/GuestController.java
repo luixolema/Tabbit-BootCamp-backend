@@ -69,23 +69,6 @@ public class GuestController {
                     .withBirthDate(guest.getBirthDate())
                     .build();
 
-    public static Function<AbstractGuestPersonalDetailsDto, Guest> MAP_GUEST_PERSONAL_DETAILS_DTO_TO_GUEST = guestPersonalDetailDTO -> {
-        Guest guest = new Guest();
-        guest.setFirstName(guestPersonalDetailDTO.getFirstName());
-        guest.setStreet(guestPersonalDetailDTO.getStreet());
-        guest.setPostcode(guestPersonalDetailDTO.getPostcode());
-        guest.setCountry(guestPersonalDetailDTO.getCountry());
-        guest.setCity(guestPersonalDetailDTO.getCity());
-        guest.setPhone(guestPersonalDetailDTO.getPhone());
-        guest.setPassportId(guestPersonalDetailDTO.getPassportId());
-        guest.setNationality(guestPersonalDetailDTO.getNationality());
-        guest.setEmail(guestPersonalDetailDTO.getEmail());
-        guest.setBirthDate(guestPersonalDetailDTO.getBirthDate());
-        guest.setLastName(guestPersonalDetailDTO.getLastName());
-
-        return guest;
-    };
-
     @Autowired
     private IGuestService guestService;
 
@@ -142,8 +125,8 @@ public class GuestController {
     }
 
     @PostMapping
-    public long create(@RequestBody CreationGuestDto creationGuestDto) {
-        CreationGuestDto validatedGuestDto = creationGuestDto.copy();
+    public long create(@RequestBody GuestCreationDto guestCreationDto) {
+        GuestCreationDto validatedGuestDto = guestCreationDto.copy();
         Guest guest = guestService.create(validatedGuestDto);
         return guest.getId();
     }

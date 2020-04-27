@@ -15,7 +15,6 @@ public class StayDetailsForCheckInDto extends AbstractStayDetailsDto {
 
             String simpleName = StayDetailsForCheckInDto.class.getSimpleName();
             addValidators(
-
                     new LocalDateNotInThePastValidator(simpleName + ".leaveDate", bean::getLeaveDate)
             );
         }

@@ -12,7 +12,6 @@ import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IBoxManagementService;
 import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.service.util.GuestMapper;
-import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import com.tabit.dcm2.testutils.StayMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,11 +41,10 @@ public class GuestServiceTest {
     private IStayRepo stayRepo;
     @Captor
     private ArgumentCaptor<Stay> stayArgumentCaptor;
-    @InjectMocks
-    private GuestService guestService;
-
     @Captor
     private ArgumentCaptor<Guest> guestArgumentCaptor;
+    @InjectMocks
+    private GuestService guestService;
 
     @Test
     public void getGuests_shall_return_all_guests() {
@@ -159,15 +158,16 @@ public class GuestServiceTest {
     @Test
     public void create_shall_save_a_new_guest() {
         // given
-        CreationGuestDto randomCreationGuestDto = RandomGuestPersonalDetailsDto.createCreationGuestDtoBuilder().build();
-        ArgumentCaptor<Guest> guestArgumentCaptor = ArgumentCaptor.forClass(Guest.class);
+        GuestCreationDto randomGuestCreationDto = RandomGuestCreationDto.createGuestCreationDto();
 
         // when
-        guestService.create(randomCreationGuestDto);
+        guestService.create(randomGuestCreationDto);
 
         // then
-        verify(guestRepo).save(guestArgumentCaptor.capture());
+        verify(guestMapper).mapPersonalDetailsFromDto(guestArgumentCaptor.capture(), eq(randomGuestCreationDto));
         Guest actualGuest = guestArgumentCaptor.getValue();
-        GuestMappingAssertions.assertPersonalDetails(actualGuest, randomCreationGuestDto);
+        assertThat(actualGuest.getId()).isNull();
+
+        verify(guestRepo).save(actualGuest);
     }
 }

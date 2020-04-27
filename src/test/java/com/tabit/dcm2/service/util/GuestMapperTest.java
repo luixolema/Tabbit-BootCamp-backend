@@ -20,6 +20,6 @@ public class GuestMapperTest {
         mapper.mapPersonalDetailsFromDto(randomGuest, guestPersonalDetailsDto);
 
         // then
-        GuestMappingAssertions.assertPersonalDetails(randomGuest, guestPersonalDetailsDto);
+        GuestMappingAssertions.assertPersonalDetailsWithoutId(randomGuest, guestPersonalDetailsDto);
     }
 }

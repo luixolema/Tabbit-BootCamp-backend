@@ -20,9 +20,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -271,9 +269,9 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     @Test
     public void create_can_serialize_all_fields_in_json_object() {
         // given
-        CreationGuestDto creationGuestDto = RandomGuestPersonalDetailsDto.createCreationGuestDtoBuilder().build();
+        GuestCreationDto guestCreationDto = RandomGuestCreationDto.createGuestCreationDto();
 
-        HttpEntity<CreationGuestDto> entity = createHttpEntity(creationGuestDto);
+        HttpEntity<GuestCreationDto> entity = createHttpEntity(guestCreationDto);
 
         // when
         ResponseEntity<Long> response = restTemplate.exchange(
@@ -288,12 +286,11 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         assertThat(response.getBody()).isNotNull();
     }
 
-
     @Test
     public void create_save_the_new_guest() {
         // given
-        CreationGuestDto creationGuestDto = RandomGuestPersonalDetailsDto.createCreationGuestDtoBuilder().build();
-        HttpEntity<CreationGuestDto> entity = createHttpEntity(creationGuestDto);
+        GuestCreationDto guestCreationDto = RandomGuestCreationDto.createGuestCreationDto();
+        HttpEntity<GuestCreationDto> entity = createHttpEntity(guestCreationDto);
 
         // when
         ResponseEntity<Long> response = restTemplate.exchange(
@@ -308,7 +305,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
         assertThat(createdGuestId).isNotNull();
-        GuestMappingAssertions.assertPersonalDetails(currentSavedGuest, creationGuestDto);
+        GuestMappingAssertions.assertPersonalDetailsWithoutId(currentSavedGuest, guestCreationDto);
     }
 
 }

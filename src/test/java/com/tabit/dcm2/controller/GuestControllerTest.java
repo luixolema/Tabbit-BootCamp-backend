@@ -9,15 +9,16 @@ import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,9 +27,11 @@ import static org.mockito.Mockito.when;
 public class GuestControllerTest {
 
     @Captor
-    ArgumentCaptor<CheckInDto> checkInDtoArgumentCaptor;
+    private ArgumentCaptor<CheckInDto> checkInDtoArgumentCaptor;
     @Captor
-    ArgumentCaptor<GuestPersonalDetailsDto> guestPersonalDetailsDtoArgumentCaptor;
+    private ArgumentCaptor<GuestPersonalDetailsDto> guestPersonalDetailsDtoArgumentCaptor;
+    @Captor
+    private ArgumentCaptor<GuestCreationDto> guestCreationDtoArgumentCaptor;
     @Mock
     private IGuestService guestService;
 
@@ -179,20 +182,16 @@ public class GuestControllerTest {
     @Test
     public void create_shall_create_a_new_guest() {
         // given
-        CreationGuestDto creationGuestDto = RandomGuestPersonalDetailsDto.createCreationGuestDtoBuilder().build();
+        GuestCreationDto guestCreationDto = RandomGuestCreationDto.createGuestCreationDto();
         Guest randomGuest = RandomGuest.createRandomGuest();
-        when(guestService.create(Mockito.any())).thenReturn(randomGuest);
-        ArgumentCaptor<CreationGuestDto> captor = ArgumentCaptor.forClass(CreationGuestDto.class);
+        when(guestService.create(guestCreationDtoArgumentCaptor.capture())).thenReturn(randomGuest);
 
         // when
-        guestController.create(creationGuestDto);
+        guestController.create(guestCreationDto);
 
         // then
-        verify(guestService).create(captor.capture());
-        CreationGuestDto validatedCreationGuestDto = captor.getValue();
-        assertThat(validatedCreationGuestDto).isEqualTo(creationGuestDto);
-        assertThat(validatedCreationGuestDto).isNotSameAs(creationGuestDto);
+        GuestCreationDto validatedGuestCreationDto = guestCreationDtoArgumentCaptor.getValue();
+        assertThat(validatedGuestCreationDto).isEqualTo(guestCreationDto);
+        assertThat(validatedGuestCreationDto).isNotSameAs(guestCreationDto);
     }
-
-
 }
