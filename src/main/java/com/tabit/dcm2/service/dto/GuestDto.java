@@ -1,6 +1,7 @@
 package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
+import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
 
 import java.util.Optional;
 
@@ -15,39 +16,51 @@ public class GuestDto extends AbstractBean {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getFirstName() {
         return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public Optional<String> getBoxNumber() {
+        return boxNumber;
     }
 
     public boolean isCheckedin() {
         return checkedin;
     }
 
-    public void setCheckedin(boolean checkedin) {
-        this.checkedin = checkedin;
-    }
+    public static class Builder extends AbstractNonNullValidatingBeanBuilder<GuestDto, GuestDto.Builder> {
 
-    public Optional<String> getBoxNumber() {
-        return boxNumber;
-    }
+        public Builder() {
+            super(new GuestDto());
+        }
 
-    public void setBoxNumber(String boxNumber) {
-        this.boxNumber = Optional.ofNullable(boxNumber);
+        public GuestDto.Builder withId(Long id) {
+            bean.id = id;
+            return this;
+        }
+
+        public GuestDto.Builder withFirstName(String firstName) {
+            bean.firstName = firstName;
+            return this;
+        }
+
+        public GuestDto.Builder withLastName(String lastName) {
+            bean.lastName = lastName;
+            return this;
+        }
+
+        public GuestDto.Builder withBoxNumber(String boxNumber) {
+            bean.boxNumber = Optional.ofNullable(boxNumber);
+            return this;
+        }
+
+        public GuestDto.Builder withCheckedin(boolean checkedin) {
+            bean.checkedin = checkedin;
+            return this;
+        }
     }
 }
