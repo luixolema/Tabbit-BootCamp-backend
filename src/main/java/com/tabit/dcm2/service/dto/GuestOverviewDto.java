@@ -46,4 +46,29 @@ public class GuestOverviewDto extends AbstractBean {
             return this;
         }
     }
+
+
+    public GuestOverviewDto copy() {
+        return new Builder()
+                .withGuests(getGuests().stream().map(GuestDto::copy).collect(Collectors.toList()))
+                .withTotal(getTotal())
+                .build();
+    }
+
+    public static class Builder extends AbstractNonNullValidatingBeanBuilder<GuestOverviewDto, Builder> {
+
+        public Builder() {
+            super(new GuestOverviewDto());
+        }
+
+        public Builder withGuests(List<GuestDto> guests) {
+            bean.guests = guests;
+            return this;
+        }
+
+        public Builder withTotal(int total) {
+            bean.total = total;
+            return this;
+        }
+    }
 }
