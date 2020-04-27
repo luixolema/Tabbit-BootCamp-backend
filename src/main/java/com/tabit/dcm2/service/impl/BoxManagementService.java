@@ -34,7 +34,6 @@ public class BoxManagementService implements IBoxManagementService {
         }
     }
 
-
     @Override
     public void releaseBox(String boxNumber) {
         Optional<BoxManagement> boxManagement = boxManagementRepo.findByBoxNumber(boxNumber);

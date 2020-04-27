@@ -2,6 +2,7 @@ package com.tabit.dcm2.repository;
 
 import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.BoxManagement;
+import com.tabit.dcm2.entity.RandomBoxManagement;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,34 +21,21 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
     @Before
     public void setUp() {
         // given
-        boxManagement = new BoxManagement();
-        boxManagement.setBoxNumber("test");
-
+        boxManagement = RandomBoxManagement.createRandomBoxManagement();
         boxManagementRule.persist(ImmutableList.of(boxManagement));
     }
-
-    @Test
-    public void findById_shall_return_the_box_management() {
-        //when
-        Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findById(boxManagement.getId());
-
-        //then
-        assertThat(expectedBoxManagement.isPresent()).isTrue();
-        assertBoxManagement(boxManagement, expectedBoxManagement.get());
-    }
-
 
     @Test
     public void delete_shall_remove_the_box_management() {
         // given
         Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
-        boxManagementRepo.delete(expectedBoxManagement.get());
 
         //when
-        expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
+        boxManagementRepo.delete(expectedBoxManagement.get());
 
         //then
-        assertThat(expectedBoxManagement.isPresent()).isFalse();
+        expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
+        assertThat(expectedBoxManagement).isEmpty();
     }
 
     @Test
@@ -63,8 +51,7 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
     @Test
     public void save_shall_create_the_box_management() {
         // when
-        BoxManagement boxManagement = new BoxManagement();
-        boxManagement.setBoxNumber("box number");
+        BoxManagement boxManagement = RandomBoxManagement.createRandomBoxManagement();
         boxManagementRepo.save(boxManagement);
 
         // then
@@ -77,15 +64,14 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
     @Test(expected = DataIntegrityViolationException.class)
     public void save_shall_fail_on_duplication_of_box_number() {
         // given
-        BoxManagement duplicatedBoxManagement = new BoxManagement();
+        BoxManagement duplicatedBoxManagement = RandomBoxManagement.createRandomBoxManagement();
         duplicatedBoxManagement.setBoxNumber(boxManagement.getBoxNumber());
 
         // when
         boxManagementRepo.save(duplicatedBoxManagement);
-
     }
 
-    public void assertBoxManagement(BoxManagement actualBoxManagement, BoxManagement expectedBoxManagement){
+    private void assertBoxManagement(BoxManagement actualBoxManagement, BoxManagement expectedBoxManagement) {
         assertThat(actualBoxManagement.getId()).isEqualTo(expectedBoxManagement.getId());
         assertThat(actualBoxManagement.getBoxNumber()).isEqualTo(expectedBoxManagement.getBoxNumber());
     }

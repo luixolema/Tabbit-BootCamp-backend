@@ -2,6 +2,7 @@ package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.BoxManagement;
+import com.tabit.dcm2.entity.RandomBoxManagement;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,11 @@ public class BoxManagementControllerRestIntegrationTest extends AbstractRestInte
     public void setUp() {
 
         //given
-        reservedBoxManager = new BoxManagement();
-        reservedBoxManager.setBoxNumber("test");
+        reservedBoxManager = RandomBoxManagement.createRandomBoxManagement();
+        ;
 
         boxManagementRule.persist(ImmutableList.of(reservedBoxManager));
     }
-
 
     @Test
     public void isBoxFree_shall_return_the_right_value() {

@@ -88,7 +88,7 @@ DROP TABLE IF EXISTS `box_management`;
 
   CREATE TABLE `box_management`(
     `id` bigint(20) NOT NULL,
-    `box_number` VARCHAR(24) NOT NULL,
+    `box_number` VARCHAR(400) NOT NULL,
     UNIQUE (box_number),
     PRIMARY KEY(`id`)
   );
