@@ -34,12 +34,6 @@ public class LoanDetailsDto extends AbstractBean {
         return dateReturn;
     }
 
-    public LoanDetailsDto copy() {
-        return new Builder()
-                .builderFromBean(this)
-                .build();
-    }
-
     public static class Builder extends AbstractNonNullValidatingBeanBuilder<LoanDetailsDto, LoanDetailsDto.Builder> {
 
         public Builder() {
