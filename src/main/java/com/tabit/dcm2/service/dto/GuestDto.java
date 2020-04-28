@@ -2,6 +2,7 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
+import com.tabit.dcm2.validation.DependentlyRequiredValueValidator;
 
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ public class GuestDto extends AbstractBean {
     private String firstName;
     private String lastName;
     private Optional<String> boxNumber = Optional.empty();
+
     private boolean checkedin;
 
     public Long getId() {
@@ -36,6 +38,19 @@ public class GuestDto extends AbstractBean {
 
         public Builder() {
             super(new GuestDto());
+
+            String simpleName = GuestDto.class.getSimpleName();
+            addValidators(
+                    new DependentlyRequiredValueValidator<>(
+                            "BoxNumber",
+                            () -> new DependentlyRequiredValueValidator.DependentlyRequiredValueValidatorInput<>(
+                                    "CheckIn",
+                                    "BoxNumber",
+                                    bean::isCheckedin,
+                                    bean::getBoxNumber
+                            )
+                    )
+            );
         }
 
         public GuestDto.Builder withId(Long id) {
