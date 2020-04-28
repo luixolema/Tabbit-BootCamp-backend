@@ -8,7 +8,9 @@ import com.tabit.dcm2.service.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,28 +30,6 @@ public class GuestController {
                 .withCheckedin(guest.isCheckedin())
                 .build();
         return guestDto;
-    };
-
-    private static Function<Guest, StayDto> MAP_GUEST_TO_STAY_DTO = guest -> {
-        GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto.Builder()
-                .withId(guest.getId())
-                .withFirstName(guest.getFirstName())
-                .withLastName(guest.getLastName())
-                .withBirthDate(guest.getBirthDate())
-                .withNationality(guest.getNationality())
-                .withCountry(guest.getCountry())
-                .withCity(guest.getCity())
-                .withPostcode(guest.getPostcode())
-                .withStreet(guest.getStreet())
-                .withEmail(guest.getEmail())
-                .withPhone(guest.getPhone())
-                .withPassportId(guest.getPassportId())
-                .build();
-
-        StayDto stayDto = new StayDto();
-        stayDto.setGuestPersonalDetails(guestPersonalDetails);
-
-        return stayDto;
     };
 
     private static Function<Guest, GuestPersonalDetailsDto> MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO = guest ->
@@ -94,18 +74,27 @@ public class GuestController {
 
     @GetMapping("/{guestId}")
     public GuestDetailDto getGuestDetails(@PathVariable long guestId) {
-        GuestDetailDto resultGuestDetailDto = new GuestDetailDto();
+        GuestDetailDto.Builder builder = new GuestDetailDto.Builder();
 
         Guest guest = guestService.getGuestById(guestId);
         if (guest.isCheckedin()) {
             Stay currentStay = guest.getStays().get(0);
-            resultGuestDetailDto.setStayDto(MAP_STAY_TO_STAY_DTO.apply(currentStay));
-        } else {
-            resultGuestDetailDto.setStayDto(MAP_GUEST_TO_STAY_DTO.apply(guest));
+            builder.withStayDto(Optional.of(MAP_STAY_TO_STAY_DTO.apply(currentStay)));
         }
-        guest.getStays().forEach(resultGuestDetailDto::addStaySummary);
+        builder.withGuestPersonalDetailsDto(MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO.apply(guest));
 
-        return resultGuestDetailDto;
+        List<StaySummaryDto> staySummaries = new ArrayList<>();
+        for (Stay stay : guest.getStays()) {
+            staySummaries.add(new StaySummaryDto.Builder()
+                    .withId(stay.getId())
+                    .withArriveDate(stay.getArriveDate())
+                    .withLeaveDate(stay.getLeaveDate())
+                    .withActive(stay.isActive())
+                    .build()
+            );
+        }
+
+        return builder.withStaySummaries(staySummaries).build();
     }
 
     @PutMapping

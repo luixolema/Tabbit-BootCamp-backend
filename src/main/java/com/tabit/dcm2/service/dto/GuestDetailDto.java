@@ -1,33 +1,49 @@
 package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
-import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class GuestDetailDto extends AbstractBean {
 
-    private StayDto stayDto;
+    private Optional<StayDto> stayDto = Optional.empty();
+    private GuestPersonalDetailsDto guestPersonalDetails;
     private List<StaySummaryDto> staySummaries = new ArrayList<>();
 
-    public StayDto getStayDto() {
+    public Optional<StayDto> getStayDto() {
         return stayDto;
     }
 
-    public void setStayDto(StayDto stayDto) {
-        this.stayDto = stayDto;
+    public GuestPersonalDetailsDto getGuestPersonalDetails() {
+        return guestPersonalDetails;
     }
 
     public List<StaySummaryDto> getStaySummaries() {
         return staySummaries;
     }
 
-    public void setStaySummaries(List<StaySummaryDto> staySummaries) {
-        this.staySummaries = staySummaries;
-    }
+    public static class Builder extends AbstractNonNullValidatingBeanBuilder<GuestDetailDto, Builder> {
 
-    public void addStaySummary(Stay stay) {
-        staySummaries.add(new StaySummaryDto(stay.getId(), stay.getArriveDate(), stay.getLeaveDate(), stay.isActive()));
+        public Builder() {
+            super(new GuestDetailDto());
+        }
+
+        public Builder withStayDto(Optional<StayDto> stayDto) {
+            bean.stayDto = stayDto;
+            return this;
+        }
+
+        public Builder withStaySummaries(List<StaySummaryDto> staySummaries) {
+            bean.staySummaries = staySummaries;
+            return this;
+        }
+
+        public Builder withGuestPersonalDetailsDto(GuestPersonalDetailsDto guestPersonalDetailsDto) {
+            bean.guestPersonalDetails = guestPersonalDetailsDto;
+            return this;
+        }
     }
 }

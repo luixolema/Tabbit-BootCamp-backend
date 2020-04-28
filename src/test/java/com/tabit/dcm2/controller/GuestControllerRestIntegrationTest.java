@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -131,7 +133,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
         GuestMappingAssertions.assertGuestDetailDto(response.getBody(), guestCheckedInTrue, WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY);
-        assertThat(response.getBody().getStayDto().getStayDetails().getId()).isEqualTo(stayActual.getId());
+        assertThat(response.getBody().getStayDto().get().getStayDetails().getId()).isEqualTo(stayActual.getId());
 
 //        printJson(result.getBody());
     }
@@ -142,7 +144,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         ResponseEntity<GuestDetailDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/" + guestCheckedInFalseWithoutStay.getId(), GuestDetailDto.class);
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
-        assertThat(response.getBody().getStayDto().getStayDetails()).isNull();
+        assertThat(response.getBody().getStayDto()).isEmpty();
         assertThat(response.getBody().getStaySummaries()).isEmpty();
         GuestMappingAssertions.assertGuestDetailDto(response.getBody(), guestCheckedInFalseWithoutStay, WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY);
     }

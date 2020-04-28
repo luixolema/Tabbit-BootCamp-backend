@@ -8,6 +8,7 @@ import com.tabit.dcm2.service.dto.StayDto;
 import org.assertj.core.util.Lists;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Comparator.comparing;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +31,7 @@ public class StayMappingAssertions {
         assertThat(stayDto.getStayDetails().getBoxNumber()).isEqualTo(stay.getBoxNumber());
         assertThat(stayDto.getStayDetails().getBrevet()).isEqualTo(stay.getBrevet());
         assertThat(stayDto.getStayDetails().getCheckInDate()).isEqualTo(stay.getCheckInDate());
-        assertThat(stayDto.getStayDetails().getCheckOutDate()).contains(stay.getCheckOutDate());
+        assertThat(stayDto.getStayDetails().getCheckOutDate()).isEqualTo(Optional.ofNullable(stay.getCheckOutDate()));
         assertThat(stayDto.getStayDetails().getLastDiveDate()).isEqualTo(stay.getLastDiveDate());
         assertThat(stayDto.getStayDetails().getLeaveDate()).isEqualTo(stay.getLeaveDate());
         assertThat(stayDto.getStayDetails().getDivesAmount()).isEqualTo(stay.getDivesAmount());
@@ -98,6 +99,7 @@ public class StayMappingAssertions {
         assertThat(updatedStay.getEmail()).isEqualTo(stayDto.getGuestPersonalDetails().getEmail());
         assertThat(updatedStay.getPhone()).isEqualTo(stayDto.getGuestPersonalDetails().getPhone());
         assertThat(updatedStay.getPassportId()).isEqualTo(stayDto.getGuestPersonalDetails().getPassportId());
+
         assertThat(updatedStay.getBoxNumber()).isEqualTo(stayDto.getStayDetails().getBoxNumber());
         assertThat(updatedStay.getCheckInDate()).isEqualTo(stayDto.getStayDetails().getCheckInDate());
         assertThat(updatedStay.getCheckOutDate()).isEqualTo(stayDto.getStayDetails().getCheckOutDate().orElse(null));
