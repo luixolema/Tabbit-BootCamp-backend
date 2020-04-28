@@ -5,44 +5,24 @@ import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class GuestDetailDto extends AbstractBean {
 
-    private StayDto stayDto;
+    private Optional<StayDto> stayDto = Optional.empty();
+    private GuestPersonalDetailsDto guestPersonalDetails;
     private List<StaySummaryDto> staySummaries = new ArrayList<>();
 
-    public StayDto getStayDto() {
+    public Optional<StayDto> getStayDto() {
         return stayDto;
+    }
+
+    public GuestPersonalDetailsDto getGuestPersonalDetails() {
+        return guestPersonalDetails;
     }
 
     public List<StaySummaryDto> getStaySummaries() {
         return staySummaries;
-    }
-
-//    public void addStaySummary(Stay stay) {
-//        staySummaries.add(new StaySummaryDto.Builder()
-//                .withId(stay.getId())
-//                .withArriveDate(stay.getArriveDate())
-//                .withLeaveDate(stay.getLeaveDate())
-//                .withActive(stay.isActive())
-//                .build());
-//    }
-
-
-    public GuestDetailDto copy() {
-
-        return new GuestDetailDto.Builder()
-                .withStayDto(getStayDto().copy())
-                .withStaySummaries(prepareStaySummaryDtos(this))
-                .build();
-    }
-
-    private static List<StaySummaryDto> prepareStaySummaryDtos(GuestDetailDto guestDetailDto) {
-        List<StaySummaryDto> staySummaryDtos = new ArrayList<>();
-        for (StaySummaryDto dto : guestDetailDto.getStaySummaries()) {
-            staySummaryDtos.add(StaySummaryDto.Builder.builderFromBean(dto).build());
-        }
-        return staySummaryDtos;
     }
 
     public static class Builder extends AbstractNonNullValidatingBeanBuilder<GuestDetailDto, Builder> {
@@ -51,21 +31,18 @@ public class GuestDetailDto extends AbstractBean {
             super(new GuestDetailDto());
         }
 
-        public static Builder builderFromBean(GuestDetailDto toCopy) {
-
-
-            return new Builder()
-                    .withStayDto(toCopy.getStayDto().copy())
-                    .withStaySummaries(prepareStaySummaryDtos(toCopy));
-        }
-
-        public Builder withStayDto(StayDto stayDto) {
+        public Builder withStayDto(Optional<StayDto> stayDto) {
             bean.stayDto = stayDto;
             return this;
         }
 
         public Builder withStaySummaries(List<StaySummaryDto> staySummaries) {
             bean.staySummaries = staySummaries;
+            return this;
+        }
+
+        public Builder withGuestPersonalDetailsDto(GuestPersonalDetailsDto guestPersonalDetailsDto) {
+            bean.guestPersonalDetails = guestPersonalDetailsDto;
             return this;
         }
     }

@@ -2,6 +2,7 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
+import com.tabit.dcm2.validation.LocalDateAfterValidator;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -43,6 +44,11 @@ public class LoanDetailsDto extends AbstractBean {
 
         public Builder() {
             super(new LoanDetailsDto());
+
+            String simpleName = LoanDetailsDto.class.getSimpleName();
+            addValidators(
+                    new LocalDateAfterValidator(simpleName + ".dateReturn", () -> new LocalDateAfterValidator.LocalDateAfterValidatorInput("dateOut", bean::getDateOut, () -> bean.getDateReturn().orElse(bean.getDateOut())))
+            );
         }
 
         public static Builder builderFromBean(LoanDetailsDto toCopy) {

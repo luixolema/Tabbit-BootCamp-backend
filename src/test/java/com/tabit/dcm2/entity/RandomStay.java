@@ -25,7 +25,8 @@ public class RandomStay {
         LocalDate checkInDate = LocalDate.now();
         Integer randomValue = valueProvider.randomIntBetween(1, 10);
         LocalDate arriveDate = checkInDate.minusDays(randomValue);
-        LocalDate leaveDate = arriveDate.minusDays(randomValue);
+        LocalDate leaveDate = checkInDate.plusDays(randomValue);
+        LocalDate checkOutDate = leaveDate.minusDays(1);
 
         Stay stay = new Stay();
         stay.setId(valueProvider.randomId());
@@ -43,7 +44,9 @@ public class RandomStay {
         stay.setPhone(valueProvider.randomString("phone"));
         stay.setPassportId(valueProvider.randomString("passport"));
         stay.setCheckInDate(checkInDate);
-        stay.setCheckOutDate(valueProvider.randomLocalDate());
+        if (valueProvider.randomBoolean()) {
+            stay.setCheckOutDate(checkOutDate);
+        }
         stay.setArriveDate(arriveDate);
         stay.setLeaveDate(leaveDate);
         stay.setHotel(valueProvider.randomString("hotel"));

@@ -26,13 +26,6 @@ public class StayDto extends AbstractBean {
         return loanDetails;
     }
 
-//    public StayDto addLoanDetails(List<Loan> loans) {
-//        for(Loan loan : loans) {
-//            getLoanDetails().add(MAP_LOAN_TO_LOAN_DETAILS_DTO.apply(loan));
-//        }
-//        return StayDto.Builder.builderFromBean(this).build();
-//    }
-
     public StayDto copy() {
 
         return new StayDto.Builder()
@@ -54,13 +47,6 @@ public class StayDto extends AbstractBean {
 
         public Builder() {
             super(new StayDto());
-        }
-
-        public static Builder builderFromBean(StayDto toCopy) {
-            return new Builder()
-                    .withGuestPersonalDetails(toCopy.getGuestPersonalDetails().copy())
-                    .withStayDetails(toCopy.getStayDetails().copy())
-                    .withLoanDetails(prepareLoanDetailsDtos(toCopy));
         }
 
         public Builder withGuestPersonalDetails(GuestPersonalDetailsDto guestPersonalDetails) {

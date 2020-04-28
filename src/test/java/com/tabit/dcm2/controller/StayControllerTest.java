@@ -11,11 +11,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.theories.Theories;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import static com.tabit.dcm2.testutils.StayMappingAssertions.assertStayDto;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,6 +26,9 @@ public class StayControllerTest {
 
     @InjectMocks
     private StayController stayController;
+
+    @Captor
+    ArgumentCaptor<StayDto> stayDtoArgumentCaptor;
 
     @Before
     public void setUp() {
@@ -57,7 +59,10 @@ public class StayControllerTest {
         stayController.updateStay(randomStayDto);
 
         // then
-        verify(stayService).updateStay(randomStayDto);
+        verify(stayService).updateStay(stayDtoArgumentCaptor.capture());
+        StayDto validatedStayDto = stayDtoArgumentCaptor.getValue();
+        assertThat(validatedStayDto).isEqualTo(randomStayDto);
+        assertThat(validatedStayDto).isNotSameAs(randomStayDto);
     }
 
 }

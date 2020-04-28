@@ -30,12 +30,6 @@ public class StaySummaryDto extends AbstractBean {
         return active;
     }
 
-    public StaySummaryDto copy() {
-        return new Builder()
-                .builderFromBean(this)
-                .build();
-    }
-
     public static class Builder extends AbstractNonNullValidatingBeanBuilder<StaySummaryDto, StaySummaryDto.Builder> {
 
         public Builder() {
@@ -45,14 +39,6 @@ public class StaySummaryDto extends AbstractBean {
             addValidators(
                     new LocalDateAfterValidator(simpleName + ".leaveDate", () -> new LocalDateAfterValidatorInput("arriveDate", bean::getArriveDate, bean::getLeaveDate))
             );
-        }
-
-        public static Builder builderFromBean(StaySummaryDto toCopy) {
-            return new StaySummaryDto.Builder()
-                    .withId(toCopy.getId())
-                    .withArriveDate(toCopy.getArriveDate())
-                    .withLeaveDate(toCopy.getLeaveDate())
-                    .withActive(toCopy.isActive());
         }
 
         public Builder withId(Long id) {
