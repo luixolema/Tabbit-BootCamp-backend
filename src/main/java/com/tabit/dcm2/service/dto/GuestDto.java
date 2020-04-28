@@ -39,7 +39,6 @@ public class GuestDto extends AbstractBean {
         public Builder() {
             super(new GuestDto());
 
-
             String simpleName = GuestDto.class.getSimpleName();
             addValidators(
                     new DependentlyRequiredValueValidator<>(
