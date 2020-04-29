@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -79,9 +78,10 @@ public class GuestController {
         Guest guest = guestService.getGuestById(guestId);
         if (guest.isCheckedin()) {
             Stay currentStay = guest.getStays().get(0);
-            builder.withStayDto(Optional.of(MAP_STAY_TO_STAY_DTO.apply(currentStay)));
+            builder.withStayDto(MAP_STAY_TO_STAY_DTO.apply(currentStay));
+        } else {
+            builder.withGuestPersonalDetailsDto(MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO.apply(guest));
         }
-        builder.withGuestPersonalDetailsDto(MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO.apply(guest));
 
         List<StaySummaryDto> staySummaries = new ArrayList<>();
         for (Stay stay : guest.getStays()) {

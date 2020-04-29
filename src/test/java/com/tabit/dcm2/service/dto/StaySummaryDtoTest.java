@@ -17,6 +17,6 @@ public class StaySummaryDtoTest {
     public void invalid_dto_with_leave_date_before_arrive_date_throws_exception() {
         expectedException.expect(BeanValidationException.class);
         expectedException.expectMessage("StaySummaryDto.leaveDate: must be after arriveDate");
-        new StaySummaryDto.Builder().withId(1L).withActive(true).withLeaveDate(NOW.minusDays(1)).withArriveDate(NOW).build();
+        RandomStaySummaryDto.createRandomStaySummaryDtoBuilder().withLeaveDate(NOW.minusDays(1)).withArriveDate(NOW).build();
     }
 }

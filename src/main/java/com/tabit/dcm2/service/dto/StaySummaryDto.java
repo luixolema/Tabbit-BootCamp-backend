@@ -34,7 +34,7 @@ public class StaySummaryDto extends AbstractBean {
 
         public Builder() {
             super(new StaySummaryDto());
-
+            // FIXME validators depending on active (leave date not in the past)
             String simpleName = StaySummaryDto.class.getSimpleName();
             addValidators(
                     new LocalDateAfterValidator(simpleName + ".leaveDate", () -> new LocalDateAfterValidatorInput("arriveDate", bean::getArriveDate, bean::getLeaveDate))

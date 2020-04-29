@@ -10,14 +10,23 @@ import com.tabit.dcm2.service.dto.StayDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
 @RequestMapping(path = "/api/stay")
 public class StayController {
+
+    private static final Function<Loan, LoanDetailsDto> MAP_LOAN_TO_LOAN_DETAILS_DTO = loan -> new LoanDetailsDto.Builder()
+            .withId(loan.getId())
+            .withType(loan.getEquipment().getEquipmentType().getType())
+            .withSerialNumber(loan.getEquipment().getSerialNumber())
+            .withDateOut(loan.getDateOut())
+            .withDateReturn(loan.getDateReturn())
+            .build();
+
     static Function<Stay, StayDto> MAP_STAY_TO_STAY_DTO = stay -> {
         GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto.Builder()
                 .withId(stay.getGuest().getId())
@@ -52,17 +61,7 @@ public class StayController {
                 .withPreBooking(stay.getPreBooking())
                 .build();
 
-        List<LoanDetailsDto> loanDetailsDtos = new ArrayList<>();
-        for (Loan loan : stay.getLoans()) {
-            loanDetailsDtos.add(new LoanDetailsDto.Builder()
-                    .withId(loan.getId())
-                    .withType(loan.getEquipment().getEquipmentType().getType())
-                    .withSerialNumber(loan.getEquipment().getSerialNumber())
-                    .withDateOut(loan.getDateOut())
-                    .withDateReturn(loan.getDateReturn())
-                    .build()
-            );
-        }
+        List<LoanDetailsDto> loanDetailsDtos = stay.getLoans().stream().map(MAP_LOAN_TO_LOAN_DETAILS_DTO).collect(Collectors.toList());
 
         return new StayDto.Builder()
                 .withGuestPersonalDetails(guestPersonalDetails)

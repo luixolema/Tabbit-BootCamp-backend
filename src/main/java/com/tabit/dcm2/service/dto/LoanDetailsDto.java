@@ -34,12 +34,17 @@ public class LoanDetailsDto extends AbstractBean {
         return dateReturn;
     }
 
+    public LoanDetailsDto copy() {
+        return Builder.builderFromBean(this).build();
+    }
+
     public static class Builder extends AbstractNonNullValidatingBeanBuilder<LoanDetailsDto, LoanDetailsDto.Builder> {
 
         public Builder() {
             super(new LoanDetailsDto());
 
             String simpleName = LoanDetailsDto.class.getSimpleName();
+            // FIXME if not present really needed?
             addValidators(
                     new LocalDateAfterValidator(simpleName + ".dateReturn", () -> new LocalDateAfterValidator.LocalDateAfterValidatorInput("dateOut", bean::getDateOut, () -> bean.getDateReturn().orElse(bean.getDateOut())))
             );
