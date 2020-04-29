@@ -16,7 +16,7 @@ public class RandomStayDetailsDto {
         Integer randomValue = valueProvider.randomIntBetween(1, 10);
         LocalDate arriveDate = checkInDate.minusDays(randomValue);
         LocalDate leaveDate = checkInDate.plusDays(randomValue);
-        LocalDate checkOutDate = leaveDate.minusDays(1);
+        LocalDate checkOutDate = valueProvider.randomBoolean() ? leaveDate.minusDays(1) : null;
 
         return new StayDetailsDto.Builder()
                 .withId(valueProvider.randomId())

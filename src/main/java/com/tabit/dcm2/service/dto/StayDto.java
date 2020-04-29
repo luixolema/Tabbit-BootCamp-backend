@@ -2,11 +2,10 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
-import com.tabit.dcm2.entity.Loan;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class StayDto extends AbstractBean {
 
@@ -27,26 +26,20 @@ public class StayDto extends AbstractBean {
     }
 
     public StayDto copy() {
-
-        return new StayDto.Builder()
-                .withGuestPersonalDetails(getGuestPersonalDetails().copy())
-                .withStayDetails(getStayDetails().copy())
-                .withLoanDetails(prepareLoanDetailsDtos(this))
-                .build();
-    }
-
-    private static List<LoanDetailsDto> prepareLoanDetailsDtos(StayDto stayDto) {
-        List<LoanDetailsDto> loanDetailsDtos = new ArrayList<>();
-        for (LoanDetailsDto dto : stayDto.getLoanDetails()) {
-            loanDetailsDtos.add(LoanDetailsDto.Builder.builderFromBean(dto).build());
-        }
-        return loanDetailsDtos;
+        return Builder.builderFromBean(this).build();
     }
 
     public static class Builder extends AbstractNonNullValidatingBeanBuilder<StayDto, StayDto.Builder> {
 
         public Builder() {
             super(new StayDto());
+        }
+
+        public static Builder builderFromBean(StayDto toCopy) {
+            return new Builder()
+                    .withGuestPersonalDetails(toCopy.getGuestPersonalDetails().copy())
+                    .withStayDetails(toCopy.getStayDetails().copy())
+                    .withLoanDetails(toCopy.getLoanDetails().stream().map(LoanDetailsDto::copy).collect(Collectors.toList()));
         }
 
         public Builder withGuestPersonalDetails(GuestPersonalDetailsDto guestPersonalDetails) {
@@ -64,13 +57,5 @@ public class StayDto extends AbstractBean {
             return this;
         }
     }
-
-    private Function<Loan, LoanDetailsDto> MAP_LOAN_TO_LOAN_DETAILS_DTO = loan -> new LoanDetailsDto.Builder()
-            .withId(loan.getId())
-            .withDateOut(loan.getDateOut())
-            .withDateReturn(loan.getDateReturn())
-            .withSerialNumber(loan.getEquipment().getSerialNumber())
-            .withType(loan.getEquipment().getEquipmentType().getType())
-            .build();
 }
 

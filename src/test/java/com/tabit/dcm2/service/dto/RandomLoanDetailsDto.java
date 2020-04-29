@@ -14,7 +14,7 @@ public class RandomLoanDetailsDto {
         LocalDate today = LocalDate.now();
         Integer randomValue = valueProvider.randomIntBetween(1, 10);
         LocalDate dateOut = today.minusDays(randomValue);
-        LocalDate dateReturn = today.plusDays(randomValue);
+        LocalDate dateReturn = valueProvider.randomBoolean() ? today.plusDays(randomValue) : null;
 
         return new LoanDetailsDto.Builder()
                 .withId(valueProvider.randomId())

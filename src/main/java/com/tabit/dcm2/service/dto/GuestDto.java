@@ -42,7 +42,7 @@ public class GuestDto extends AbstractBean {
             String simpleName = GuestDto.class.getSimpleName();
             addValidators(
                     new DependentlyRequiredValueValidator<>(
-                            "BoxNumber",
+                            simpleName + ".boxNumber",
                             () -> new DependentlyRequiredValueValidator.DependentlyRequiredValueValidatorInput<>(
                                     "CheckIn",
                                     "BoxNumber",

@@ -20,6 +20,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import static com.tabit.dcm2.controller.StayController.MAP_STAY_TO_STAY_DTO;
 import static com.tabit.dcm2.entity.RandomGuest.createGuestFromStayWithoutId;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,10 +60,10 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     @Test
     public void updateStay_can_serialize_all_fields_in_json_object() {
         // given
-        StayDto.Builder stayDtoBuilder = RandomStayDto.createRandomStayDtoBuilder();
-        stayDtoBuilder.withStayDetails(RandomStayDetailsDto.createRandomStayDetailsDtoBuilder().withId(stay.getId()).build());
-        stayDtoBuilder.withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withId(guest.getId()).build());
-        StayDto stayDto = stayDtoBuilder.build();
+        StayDto stayDto = RandomStayDto.createRandomStayDtoBuilder()
+                .withStayDetails(RandomStayDetailsDto.createRandomStayDetailsDtoBuilder().withId(stay.getId()).build())
+                .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withId(guest.getId()).build())
+                .build();
 
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
 
@@ -77,14 +78,14 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     @Test
     public void updateStay_shall_update_also_guest_data_when_guestDetails_is_updated() {
         // given
-        StayDto.Builder stayDtoBuilder = RandomStayDto.createStayDtoBuilderFromStay(stay);
-        stayDtoBuilder.withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder()
-                .withId(guest.getId())
-                .withFirstName(stay.getFirstName() + "Update")
-                .withBirthDate(stay.getBirthDate().minusDays(10))
-                .build());
-        stayDtoBuilder.withStayDetails(RandomStayDetailsDto.createRandomStayDetailsDtoBuilderFromStay(stay).withHotel(stay.getHotel() + "Update").build());
-        StayDto stayDto = stayDtoBuilder.build();
+        StayDto stayDto = StayDto.Builder.builderFromBean(MAP_STAY_TO_STAY_DTO.apply(stay))
+                .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder()
+                        .withId(guest.getId())
+                        .withFirstName(stay.getFirstName() + "Update")
+                        .withBirthDate(stay.getBirthDate().minusDays(10))
+                        .build())
+                .withStayDetails(RandomStayDetailsDto.createRandomStayDetailsDtoBuilderFromStay(stay).withHotel(stay.getHotel() + "Update").build())
+                .build();
 
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
 
@@ -104,9 +105,9 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     @Test
     public void updateStay_shall_update_only_stay_data_when_guestDetails_is_not_updated() {
         // given
-        StayDto.Builder stayDtoBuilder = RandomStayDto.createStayDtoBuilderFromStay(stay);
-        stayDtoBuilder.withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createGuestPersonalDetailsDtoFromGuest(guest));
-        StayDto stayDto = stayDtoBuilder.build();
+        StayDto stayDto = StayDto.Builder.builderFromBean(MAP_STAY_TO_STAY_DTO.apply(stay))
+                .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createGuestPersonalDetailsDtoFromGuest(guest))
+                .build();
 
         HttpEntity<StayDto> entity = createHttpEntity(stayDto);
 

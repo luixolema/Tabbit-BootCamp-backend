@@ -11,24 +11,15 @@ public class DependentlyRequiredValueValidator<T> extends AbstractBeanValidator<
         super(beanProperty, toValidate);
     }
 
+    // FIXME not very reusable: true => present, false = absent it will not always be like that
     @Override
     public ValidationResult validate() {
-        DependentlyRequiredValueValidatorInput<T> validatorInput = this.toValidate.get();
+        DependentlyRequiredValueValidatorInput<T> validatorInput = toValidate.get();
 
-
-        boolean needTobeRequired = validatorInput.dependeeValue.get();
-        boolean isPresentRequiredValue = validatorInput.dependentlyRequiredValue.get().isPresent();
-
-        boolean valid;
-
-        if (needTobeRequired) {
-            valid = isPresentRequiredValue;
-        } else {
-            valid = !isPresentRequiredValue;
-        }
+        boolean valid = validatorInput.dependeeValue.get() == validatorInput.dependentlyRequiredValue.get().isPresent();
 
         return valid ? ValidationResult.noError() : ValidationResult.withError(
-                validatorInput.beanDependeeProperty,
+                beanProperty.get(),
                 String.format(
                         MESSAGE,
                         validatorInput.beanDependeeProperty,

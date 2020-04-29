@@ -35,6 +35,8 @@ public class StayDetailsDto extends AbstractStayDetailsDto {
             super(new StayDetailsDto());
 
             String simpleName = StayDetailsDto.class.getSimpleName();
+            // FIXME validators depending on active (leave date not in the past)
+            // did i really need checkout if not present
             addValidators(
                     new LocalDateAfterValidator(simpleName + ".checkOutDate", () -> new LocalDateAfterValidatorInput("checkInDate", bean::getCheckInDate, () -> bean.getCheckOutDate().orElse(bean.getCheckInDate()))),
                     new LocalDateInsideRangeValidator(simpleName + ".checkOutDate", () -> new LocalDateInsideRangeValidatorInput("arriveDate", "leaveDate", bean::getArriveDate, bean::getLeaveDate, () -> bean.getCheckOutDate().orElse(bean.getArriveDate())))
