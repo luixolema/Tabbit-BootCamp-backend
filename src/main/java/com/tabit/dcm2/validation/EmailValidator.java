@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public class EmailValidator extends AbstractBeanValidator<String> {
 
     private static final String MESSAGE = "Email is not valid";
-    private static String EMAIL_PATTERN = "^(\\w){2,}@(\\w){2,}[.](\\w){2,10}$";
+    private static String EMAIL_PATTERN = "^(.+){2,}@.{2,}[.].{2,10}$";
 
     public EmailValidator(String beanProperty, Supplier<String> toValidate) {
         super(beanProperty, toValidate);
