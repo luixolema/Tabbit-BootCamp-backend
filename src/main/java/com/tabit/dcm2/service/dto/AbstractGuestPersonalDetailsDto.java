@@ -3,6 +3,7 @@ package com.tabit.dcm2.service.dto;
 import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
 import com.tabit.dcm2.validation.EmailValidator;
+import com.tabit.dcm2.validation.LocalDateNotInTheFutureValidator;
 
 import java.time.LocalDate;
 
@@ -26,7 +27,8 @@ public abstract class AbstractGuestPersonalDetailsDto extends AbstractBean {
 
             String simpleName = AbstractGuestPersonalDetailsDto.class.getSimpleName();
             addValidators(
-                    new EmailValidator(simpleName + ".email", bean::getEmail)
+                    new EmailValidator(simpleName + ".email", bean::getEmail),
+                    new LocalDateNotInTheFutureValidator(simpleName + ".birthDate", bean::getBirthDate)
             );
         }
 
