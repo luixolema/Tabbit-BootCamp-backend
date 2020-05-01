@@ -3,6 +3,7 @@ package com.tabit.dcm2.validation;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+@SuppressWarnings("PMD")
 public class DependentlyRequiredValueValidator<T> extends AbstractBeanValidator<DependentlyRequiredValueValidator.DependentlyRequiredValueValidatorInput<T>> {
 
     private String MESSAGE = "If %s is set to %b, it must be %<b that %s is defined";

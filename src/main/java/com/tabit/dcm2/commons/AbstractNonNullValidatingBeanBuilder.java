@@ -14,7 +14,7 @@ import java.util.Optional;
 public abstract class AbstractNonNullValidatingBeanBuilder<BEAN extends AbstractBean, BUILDER extends AbstractNonNullValidatingBeanBuilder<BEAN, BUILDER>> {
 
     protected BEAN bean;
-    private List<IBeanValidator> beanValidators = Lists.newArrayList(new NonNullFieldsValidator(() -> bean));
+    private final List<IBeanValidator> beanValidators = Lists.newArrayList(new NonNullFieldsValidator(() -> bean));
 
     public AbstractNonNullValidatingBeanBuilder(BEAN bean) {
         this.bean = bean;
@@ -48,7 +48,7 @@ public abstract class AbstractNonNullValidatingBeanBuilder<BEAN extends Abstract
 
         verifyConsistentSetup();
         BEAN copy = bean;
-        bean = null;
+        bean = null; //NOPMD - null explizitly wanted here
         return copy;
     }
 }

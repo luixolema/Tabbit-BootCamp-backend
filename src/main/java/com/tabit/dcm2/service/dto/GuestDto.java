@@ -6,6 +6,7 @@ import com.tabit.dcm2.validation.DependentlyRequiredValueValidator;
 
 import java.util.Optional;
 
+@SuppressWarnings("PMD.ImmutableField")
 public class GuestDto extends AbstractBean {
     private Long id;
     private String firstName;

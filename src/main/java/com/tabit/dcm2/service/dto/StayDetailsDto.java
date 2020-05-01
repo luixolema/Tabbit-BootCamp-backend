@@ -8,6 +8,7 @@ import com.tabit.dcm2.validation.LocalDateInsideRangeValidator.LocalDateInsideRa
 import java.time.LocalDate;
 import java.util.Optional;
 
+@SuppressWarnings("PMD.ImmutableField")
 public class StayDetailsDto extends AbstractStayDetailsDto {
     private Long id;
     private Optional<LocalDate> checkOutDate = Optional.empty();

@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Optional;
 
+@SuppressWarnings("PMD")
 @RunWith(Theories.class)
 public class DependentlyRequiredValueValidatorTest {
 
