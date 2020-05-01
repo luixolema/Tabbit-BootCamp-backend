@@ -4,6 +4,8 @@ import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
 import com.tabit.dcm2.validation.LocalDateAfterValidator;
 import com.tabit.dcm2.validation.LocalDateAfterValidator.LocalDateAfterValidatorInput;
+import com.tabit.dcm2.validation.LocalDateNotInThePastValidator;
+import com.tabit.dcm2.validation.ValidationResult;
 
 import java.time.LocalDate;
 
@@ -34,10 +36,10 @@ public class StaySummaryDto extends AbstractBean {
 
         public Builder() {
             super(new StaySummaryDto());
-            // FIXME validators depending on active (leave date not in the past)
             String simpleName = StaySummaryDto.class.getSimpleName();
             addValidators(
-                    new LocalDateAfterValidator(simpleName + ".leaveDate", () -> new LocalDateAfterValidatorInput("arriveDate", bean::getArriveDate, bean::getLeaveDate))
+                    new LocalDateAfterValidator(simpleName + ".leaveDate", new LocalDateAfterValidatorInput("arriveDate", bean::getArriveDate, bean::getLeaveDate)),
+                    () -> bean.isActive() ? new LocalDateNotInThePastValidator(simpleName + ".leaveDate", bean::getLeaveDate).validate() : ValidationResult.noError()
             );
         }
 

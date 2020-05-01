@@ -3,18 +3,21 @@ package com.tabit.dcm2.validation;
 import java.time.LocalDate;
 import java.util.function.Supplier;
 
-public class LocalDateInsideRangeValidator extends AbstractBeanValidator<LocalDateInsideRangeValidator.LocalDateInsideRangeValidatorInput> {
-
+public class LocalDateInsideRangeValidator implements IBeanValidator {
     private static final String MESSAGE = "must be between %s and %s";
 
-    public LocalDateInsideRangeValidator(String beanProperty, Supplier<LocalDateInsideRangeValidatorInput> toValidate) {
-        super(beanProperty, toValidate);
+    private final String beanProperty;
+    private final LocalDateInsideRangeValidatorInput toValidate;
+
+    public LocalDateInsideRangeValidator(String beanProperty, LocalDateInsideRangeValidatorInput toValidate) {
+        this.beanProperty = beanProperty;
+        this.toValidate = toValidate;
     }
 
     @Override
     public ValidationResult validate() {
-        LocalDateInsideRangeValidatorInput input = toValidate.get();
-        return isInsideRange(input) ? ValidationResult.noError() : ValidationResult.withError(beanProperty.get(), String.format(MESSAGE, input.beanPropertyRangeStart, input.beanPropertyRangeEnd));
+        LocalDateInsideRangeValidatorInput input = toValidate;
+        return isInsideRange(input) ? ValidationResult.noError() : ValidationResult.withError(beanProperty, String.format(MESSAGE, input.beanPropertyRangeStart, input.beanPropertyRangeEnd));
     }
 
     private boolean isInsideRange(LocalDateInsideRangeValidatorInput input) {

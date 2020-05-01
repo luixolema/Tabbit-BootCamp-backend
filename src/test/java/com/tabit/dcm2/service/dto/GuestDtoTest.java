@@ -31,12 +31,12 @@ public class GuestDtoTest {
     private static BeanValidationExceptionTestCase<GuestDto.Builder> checkedInGuestWithoutBoxNumber() {
         return new BeanValidationExceptionTestCase<GuestDto.Builder>()
                 .withInvalidDto(RandomGuestDto.createRandomGuestDtoBuilder().withCheckedin(true).withBoxNumber(null))
-                .withExpectedMessage("GuestDto.boxNumber: If CheckIn is set to true, it must be true that BoxNumber is defined");
+                .withExpectedMessage("GuestDto.boxNumber: Boxnumber must be set if checkedIn");
     }
 
-//    private static BeanValidationExceptionTestCase<GuestDto.Builder> notCheckedInGuestWithBoxNumber() {
-//    return new BeanValidationExceptionTestCase<GuestDto.Builder>()
-//            .withInvalidDto(RandomGuestDto.createRandomGuestDtoBuilder().withCheckedin(true).withBoxNumber(null))
-//            .withExpectedMessage("GuestDto.boxNumber: If CheckIn is set to false, it must be false that BoxNumber is defined");
-//    }
+    private static BeanValidationExceptionTestCase<GuestDto.Builder> notCheckedInGuestWithBoxNumber() {
+        return new BeanValidationExceptionTestCase<GuestDto.Builder>()
+                .withInvalidDto(RandomGuestDto.createRandomGuestDtoBuilder().withCheckedin(true).withBoxNumber(null))
+                .withExpectedMessage("GuestDto.boxNumber: Boxnumber must not be set if not checkedIn");
+    }
 }
