@@ -8,7 +8,6 @@ import com.tabit.dcm2.service.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -20,18 +19,16 @@ import static com.tabit.dcm2.controller.StayController.MAP_STAY_TO_STAY_DTO;
 @RequestMapping("/api/guests")
 public class GuestController {
 
-    private static Function<Guest, GuestDto> MAP_GUEST_TO_GUEST_DTO = guest -> {
-        GuestDto guestDto = new GuestDto.Builder()
-                .withId(guest.getId())
-                .withFirstName(guest.getFirstName())
-                .withLastName(guest.getLastName())
-                .withBoxNumber(guest.isCheckedin() ? guest.getStays().get(0).getBoxNumber() : null)
-                .withCheckedin(guest.isCheckedin())
-                .build();
-        return guestDto;
-    };
+    private static final Function<Guest, GuestDto> MAP_GUEST_TO_GUEST_DTO = guest ->
+            new GuestDto.Builder()
+                    .withId(guest.getId())
+                    .withFirstName(guest.getFirstName())
+                    .withLastName(guest.getLastName())
+                    .withBoxNumber(guest.isCheckedin() ? guest.getStays().get(0).getBoxNumber() : null)
+                    .withCheckedin(guest.isCheckedin())
+                    .build();
 
-    private static Function<Guest, GuestPersonalDetailsDto> MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO = guest ->
+    private static final Function<Guest, GuestPersonalDetailsDto> MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO = guest ->
             new GuestPersonalDetailsDto.Builder()
                     .withId(guest.getId())
                     .withPostcode(guest.getPostcode())
@@ -46,6 +43,13 @@ public class GuestController {
                     .withCity(guest.getCity())
                     .withBirthDate(guest.getBirthDate())
                     .build();
+
+    private static final Function<Stay, StaySummaryDto> MAP_STAY_TO_STAY_SUMMARY_DTO_FUNCTION = stay -> new StaySummaryDto.Builder()
+            .withId(stay.getId())
+            .withArriveDate(stay.getArriveDate())
+            .withLeaveDate(stay.getLeaveDate())
+            .withActive(stay.isActive())
+            .build();
 
     @Autowired
     private IGuestService guestService;
@@ -83,17 +87,7 @@ public class GuestController {
             builder.withGuestPersonalDetailsDto(MAP_GUEST_TO_GUEST_PERSONAL_DETAILS_DTO.apply(guest));
         }
 
-        List<StaySummaryDto> staySummaries = new ArrayList<>();
-        for (Stay stay : guest.getStays()) {
-            staySummaries.add(new StaySummaryDto.Builder()
-                    .withId(stay.getId())
-                    .withArriveDate(stay.getArriveDate())
-                    .withLeaveDate(stay.getLeaveDate())
-                    .withActive(stay.isActive())
-                    .build()
-            );
-        }
-
+        List<StaySummaryDto> staySummaries = guest.getStays().stream().map(MAP_STAY_TO_STAY_SUMMARY_DTO_FUNCTION).collect(Collectors.toList());
         return builder.withStaySummaries(staySummaries).build();
     }
 

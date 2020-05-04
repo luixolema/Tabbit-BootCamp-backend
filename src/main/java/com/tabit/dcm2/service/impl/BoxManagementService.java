@@ -30,7 +30,7 @@ public class BoxManagementService implements IBoxManagementService {
         try {
             boxManagementRepo.save(boxManagement);
         } catch (DataIntegrityViolationException ex) {
-            throw new BoxReservationException();
+            throw new BoxReservationException(ex);
         }
     }
 

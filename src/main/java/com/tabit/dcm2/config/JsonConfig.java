@@ -18,13 +18,11 @@ public class JsonConfig {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jsonCustomizer() {
-        return builder -> {
-            builder.simpleDateFormat(DATE_TIME_FORMAT)
-                    .serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(DATE_FORMAT)))
-                    .serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
-                    .deserializers(new LocalDateDeserializer(DateTimeFormatter.ofPattern(DATE_FORMAT)))
-                    .deserializers(new LocalDateTimeDeserializer((DateTimeFormatter.ofPattern(DATE_TIME_FORMAT))))
-                    .modules(new Jdk8Module());
-        };
+        return builder -> builder.simpleDateFormat(DATE_TIME_FORMAT)
+                .serializers(new LocalDateSerializer(DateTimeFormatter.ofPattern(DATE_FORMAT)))
+                .serializers(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
+                .deserializers(new LocalDateDeserializer(DateTimeFormatter.ofPattern(DATE_FORMAT)))
+                .deserializers(new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
+                .modules(new Jdk8Module());
     }
 }

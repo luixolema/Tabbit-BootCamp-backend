@@ -26,7 +26,7 @@ public class NonNullFieldsValidator implements IBeanValidator {
             try {
                 return field.get(abstractBean) == null;
             } catch (IllegalAccessException e) {
-                throw new BeanValidationException("cannot access fields of " + abstractBean.getClass().getSimpleName());
+                throw new BeanValidationException("cannot access fields of " + abstractBean.getClass().getSimpleName(), e);
             }
         }).findFirst();
 

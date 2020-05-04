@@ -5,4 +5,5 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR, reason = "The Guest is already checked in.")
 public class GuestIllegalStateException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
 }
