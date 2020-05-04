@@ -9,12 +9,13 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class NonNullFieldsValidator extends AbstractBeanValidator<AbstractBean> {
-
+public class NonNullFieldsValidator implements IBeanValidator {
     private static final String MESSAGE = "Null value is not allowed";
 
+    private final Supplier<AbstractBean> toValidate;
+
     public NonNullFieldsValidator(Supplier<AbstractBean> toValidate) {
-        super(toValidate);
+        this.toValidate = toValidate;
     }
 
     @Override

@@ -81,8 +81,8 @@ public abstract class AbstractStayDetailsDto extends AbstractBean {
             String simpleName = AbstractStayDetailsDto.class.getSimpleName();
             addValidators(
                     new PositiveIntegerValidator(simpleName + ".divesAmount", bean::getDivesAmount),
-                    new LocalDateAfterValidator(simpleName + ".leaveDate", () -> new LocalDateAfterValidatorInput("arriveDate", bean::getArriveDate, bean::getLeaveDate)),
-                    new LocalDateInsideRangeValidator(simpleName + ".checkInDate", () -> new LocalDateInsideRangeValidatorInput("arriveDate", "leaveDate", bean::getArriveDate, bean::getLeaveDate, bean::getCheckInDate)),
+                    new LocalDateAfterValidator(simpleName + ".leaveDate", new LocalDateAfterValidatorInput("arriveDate", bean::getArriveDate, bean::getLeaveDate)),
+                    new LocalDateInsideRangeValidator(simpleName + ".checkInDate", new LocalDateInsideRangeValidatorInput("arriveDate", "leaveDate", bean::getArriveDate, bean::getLeaveDate, bean::getCheckInDate)),
                     new LocalDateNotInTheFutureValidator(simpleName + ".lastDiveDate", bean::getLastDiveDate)
             );
         }

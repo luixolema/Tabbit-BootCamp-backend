@@ -21,6 +21,7 @@ public class StayDetailsDtoTest {
 
     @DataPoints
     public static BeanValidationExceptionTestCase<StayDetailsDto.Builder>[] testCases = ImmutableList.of(
+            leaveDateNotInThePastWhenActive(),
             checkOutDateBeforeCheckInDate(),
             checkOutDateBetweenArriveDateAndLeaveDate()).toArray(new BeanValidationExceptionTestCase[0]);
 
@@ -42,6 +43,14 @@ public class StayDetailsDtoTest {
         return new BeanValidationExceptionTestCase<StayDetailsDto.Builder>()
                 .withInvalidDto(RandomStayDetailsDto.createRandomStayDetailsDtoBuilder().withCheckInDate(NOW).withCheckOutDate(NOW.plusDays(2)).withArriveDate(NOW).withLeaveDate(NOW.plusDays(1)))
                 .withExpectedMessage("StayDetailsDto.checkOutDate: must be between arriveDate and leaveDate");
+    }
+
+    private static BeanValidationExceptionTestCase<StayDetailsDto.Builder> leaveDateNotInThePastWhenActive() {
+        return new BeanValidationExceptionTestCase<StayDetailsDto.Builder>()
+                .withInvalidDto(RandomStayDetailsDto.createRandomStayDetailsDtoBuilder()
+                        .withActive(true)
+                        .withCheckInDate(NOW.minusDays(2)).withCheckOutDate(null).withArriveDate(NOW.minusDays(2)).withLeaveDate(NOW.minusDays(1)))
+                .withExpectedMessage("StayDetailsDto.leaveDate: must not be in the past");
     }
 
 }

@@ -3,18 +3,21 @@ package com.tabit.dcm2.validation;
 import java.time.LocalDate;
 import java.util.function.Supplier;
 
-public class LocalDateAfterValidator extends AbstractBeanValidator<LocalDateAfterValidator.LocalDateAfterValidatorInput> {
-
+public class LocalDateAfterValidator implements IBeanValidator {
     private static final String MESSAGE = "must be after %s";
 
-    public LocalDateAfterValidator(String beanProperty, Supplier<LocalDateAfterValidatorInput> toValidate) {
-        super(beanProperty, toValidate);
+    private final String beanProperty;
+    private final LocalDateAfterValidatorInput toValidate;
+
+    public LocalDateAfterValidator(String beanProperty, LocalDateAfterValidatorInput toValidate) {
+        this.beanProperty = beanProperty;
+        this.toValidate = toValidate;
     }
 
     @Override
     public ValidationResult validate() {
-        LocalDateAfterValidatorInput input = toValidate.get();
-        return !input.after.get().isBefore(input.dateToCheckAgainst.get()) ? ValidationResult.noError() : ValidationResult.withError(beanProperty.get(), String.format(MESSAGE, input.beanPropertyDateToCheckAgainst));
+        LocalDateAfterValidatorInput input = toValidate;
+        return !input.after.get().isBefore(input.dateToCheckAgainst.get()) ? ValidationResult.noError() : ValidationResult.withError(beanProperty, String.format(MESSAGE, input.beanPropertyDateToCheckAgainst));
     }
 
     public static class LocalDateAfterValidatorInput {

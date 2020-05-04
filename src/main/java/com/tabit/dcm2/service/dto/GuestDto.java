@@ -2,7 +2,8 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
-import com.tabit.dcm2.validation.DependentlyRequiredValueValidator;
+import com.tabit.dcm2.validation.IBeanValidator;
+import com.tabit.dcm2.validation.ValidationResult;
 
 import java.util.Optional;
 
@@ -39,19 +40,20 @@ public class GuestDto extends AbstractBean {
 
         public Builder() {
             super(new GuestDto());
+            addValidators(getBoxNumberValidator());
+        }
 
-            String simpleName = GuestDto.class.getSimpleName();
-            addValidators(
-                    new DependentlyRequiredValueValidator<>(
-                            simpleName + ".boxNumber",
-                            () -> new DependentlyRequiredValueValidator.DependentlyRequiredValueValidatorInput<>(
-                                    "CheckIn",
-                                    "BoxNumber",
-                                    bean::isCheckedin,
-                                    bean::getBoxNumber
-                            )
-                    )
-            );
+        private IBeanValidator getBoxNumberValidator() {
+            return () -> {
+                String beanProperty = GuestDto.class.getSimpleName() + ".boxNumber";
+                if (bean.isCheckedin() && !bean.getBoxNumber().isPresent()) {
+                    return ValidationResult.withError(beanProperty, "Boxnumber must be set if checkedIn.");
+                }
+                if (!bean.isCheckedin() && bean.getBoxNumber().isPresent()) {
+                    return ValidationResult.withError(beanProperty, "Boxnumber must not be set if not checkedIn.");
+                }
+                return ValidationResult.noError();
+            };
         }
 
         public GuestDto.Builder withId(Long id) {

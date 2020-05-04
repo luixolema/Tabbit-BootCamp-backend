@@ -31,10 +31,9 @@ public class GuestDetailDto extends AbstractBean {
 
         public Builder() {
             super(new GuestDetailDto());
-            addValidators(
-                    () -> (bean.stayDto.isPresent() && bean.guestPersonalDetails.isPresent()) || (!bean.stayDto.isPresent() && !bean.guestPersonalDetails.isPresent())
-                            ? ValidationResult.withError(GuestDetailDto.class.getSimpleName(), "Exactly one of stayDto or guestPersonalDetails must be set")
-                            : ValidationResult.noError());
+            addValidators(() -> (bean.stayDto.isPresent() && bean.guestPersonalDetails.isPresent()) || (!bean.stayDto.isPresent() && !bean.guestPersonalDetails.isPresent())
+                    ? ValidationResult.withError(GuestDetailDto.class.getSimpleName(), "Exactly one of stayDto or guestPersonalDetails must be set")
+                    : ValidationResult.noError());
         }
 
         public Builder withStayDto(StayDto stayDto) {
