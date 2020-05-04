@@ -5,6 +5,7 @@ package com.tabit.dcm2.exception;
  * It should be detected by the tests and should never be in production mode, so there is no need for an responsestatus.
  */
 public class ProgramException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
     public ProgramException(String message) {
         super(message);
     }

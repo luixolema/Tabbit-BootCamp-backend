@@ -6,6 +6,7 @@ import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("PMD.ImmutableField")
 public class GuestOverviewDto extends AbstractBean {
     private List<GuestDto> guests = new ArrayList<>();
     private int total;

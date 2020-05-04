@@ -73,7 +73,7 @@ public abstract class AbstractStayDetailsDto extends AbstractBean {
         return preBooking;
     }
 
-    protected static abstract class AbstractBuilder<BEAN extends AbstractStayDetailsDto, BUILDER extends AbstractBuilder<BEAN, BUILDER>> extends AbstractNonNullValidatingBeanBuilder<BEAN, BUILDER> {
+    protected abstract static class AbstractBuilder<BEAN extends AbstractStayDetailsDto, BUILDER extends AbstractBuilder<BEAN, BUILDER>> extends AbstractNonNullValidatingBeanBuilder<BEAN, BUILDER> {
 
         protected AbstractBuilder(BEAN bean) {
             super(bean);

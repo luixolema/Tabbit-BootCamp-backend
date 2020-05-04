@@ -10,7 +10,6 @@ import com.tabit.dcm2.repository.IStayRepo;
 import com.tabit.dcm2.service.GuestFilterType;
 import com.tabit.dcm2.service.IBoxManagementService;
 import com.tabit.dcm2.service.IGuestService;
-import com.tabit.dcm2.service.IStayService;
 import com.tabit.dcm2.service.dto.CheckInDto;
 import com.tabit.dcm2.service.dto.GuestCreationDto;
 import com.tabit.dcm2.service.dto.GuestPersonalDetailsDto;
@@ -23,7 +22,7 @@ import java.util.function.Function;
 
 @Service
 public class GuestService implements IGuestService {
-    private static Function<CheckInDto, Stay> MAP_CHECKIN_DTO_TO_STAY = checkInDto -> {
+    private static final Function<CheckInDto, Stay> MAP_CHECKIN_DTO_TO_STAY = checkInDto -> {
         Stay stay = new Stay();
         stay.setFirstName(checkInDto.getGuestPersonalDetails().getFirstName());
         stay.setLastName(checkInDto.getGuestPersonalDetails().getLastName());
@@ -57,8 +56,6 @@ public class GuestService implements IGuestService {
     private IGuestRepo guestRepo;
     @Autowired
     private GuestMapper guestMapper;
-    @Autowired
-    private IStayService stayService;
     @Autowired
     private IBoxManagementService boxManagementService;
     @Autowired

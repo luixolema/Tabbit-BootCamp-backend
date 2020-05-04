@@ -8,6 +8,7 @@ import com.tabit.dcm2.validation.ValidationResult;
 import java.time.LocalDate;
 import java.util.Optional;
 
+@SuppressWarnings("PMD.ImmutableField")
 public class LoanDetailsDto extends AbstractBean {
     private Long id;
     private String type;

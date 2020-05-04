@@ -27,7 +27,7 @@ public class StayController {
             .withDateReturn(loan.getDateReturn())
             .build();
 
-    static Function<Stay, StayDto> MAP_STAY_TO_STAY_DTO = stay -> {
+    static final Function<Stay, StayDto> MAP_STAY_TO_STAY_DTO = stay -> {
         GuestPersonalDetailsDto guestPersonalDetails = new GuestPersonalDetailsDto.Builder()
                 .withId(stay.getGuest().getId())
                 .withFirstName(stay.getFirstName())
@@ -74,7 +74,7 @@ public class StayController {
     private IStayService stayService;
 
     @GetMapping("/{stayId}")
-    public StayDto getStay(@PathVariable() Long stayId) {
+    public StayDto getStay(@PathVariable Long stayId) {
         return MAP_STAY_TO_STAY_DTO.apply(stayService.findById(stayId));
     }
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("PMD.ImmutableField")
 public class GuestDetailDto extends AbstractBean {
 
     private Optional<StayDto> stayDto = Optional.empty();
