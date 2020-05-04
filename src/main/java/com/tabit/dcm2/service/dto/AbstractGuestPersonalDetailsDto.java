@@ -6,6 +6,7 @@ import com.tabit.dcm2.validation.EmailValidator;
 import com.tabit.dcm2.validation.LocalDateNotInTheFutureValidator;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public abstract class AbstractGuestPersonalDetailsDto extends AbstractBean {
     protected String firstName;
@@ -17,8 +18,8 @@ public abstract class AbstractGuestPersonalDetailsDto extends AbstractBean {
     protected String postcode;
     protected String street;
     protected String email;
-    protected String phone;
-    protected String passportId;
+    protected Optional<String> phone;
+    protected Optional<String> passportId;
 
     protected static abstract class AbstractBuilder<BEAN extends AbstractGuestPersonalDetailsDto, BUILDER extends AbstractBuilder<BEAN, BUILDER>> extends AbstractNonNullValidatingBeanBuilder<BEAN, BUILDER> {
 
@@ -67,13 +68,8 @@ public abstract class AbstractGuestPersonalDetailsDto extends AbstractBean {
             return derivedBuilder();
         }
 
-        public BUILDER withBrevet(String passportId) {
-            bean.passportId = passportId;
-            return derivedBuilder();
-        }
-
         public BUILDER withPhone(String phone) {
-            bean.phone = phone;
+            bean.phone = Optional.ofNullable(phone);
             return derivedBuilder();
         }
 
@@ -88,7 +84,7 @@ public abstract class AbstractGuestPersonalDetailsDto extends AbstractBean {
         }
 
         public BUILDER withPassportId(String passportId) {
-            bean.passportId = passportId;
+            bean.passportId = Optional.ofNullable(passportId);
             return derivedBuilder();
         }
     }
@@ -129,11 +125,11 @@ public abstract class AbstractGuestPersonalDetailsDto extends AbstractBean {
         return email;
     }
 
-    public String getPhone() {
+    public Optional<String> getPhone() {
         return phone;
     }
 
-    public String getPassportId() {
+    public Optional<String> getPassportId() {
         return passportId;
     }
 }

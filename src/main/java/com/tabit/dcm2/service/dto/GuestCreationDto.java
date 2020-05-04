@@ -20,8 +20,8 @@ public class GuestCreationDto extends AbstractGuestPersonalDetailsDto {
                     .withEmail(toCopy.getEmail())
                     .withNationality(toCopy.getNationality())
                     .withCity(toCopy.getCity())
-                    .withPassportId(toCopy.getPassportId())
-                    .withPhone(toCopy.getPhone())
+                    .withPassportId(toCopy.getPassportId().orElse(null))
+                    .withPhone(toCopy.getPhone().orElse(null))
                     .withCountry(toCopy.getCountry())
                     .withPostcode(toCopy.getPostcode())
                     .withStreet(toCopy.getStreet());

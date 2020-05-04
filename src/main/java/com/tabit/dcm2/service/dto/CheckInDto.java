@@ -2,6 +2,7 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
+import com.tabit.dcm2.validation.NotEmptyOptionalFieldValidator;
 
 public class CheckInDto extends AbstractBean {
     private GuestPersonalDetailsDto guestPersonalDetails;
@@ -26,6 +27,13 @@ public class CheckInDto extends AbstractBean {
 
         public Builder() {
             super(new CheckInDto());
+
+            String simpleName = CheckInDto.class.getSimpleName() + "." + GuestPersonalDetailsDto.class.getSimpleName();
+
+            this.addValidators(
+                    new NotEmptyOptionalFieldValidator(simpleName + ".passportId", () -> bean.getGuestPersonalDetails().getPassportId()),
+                    new NotEmptyOptionalFieldValidator(simpleName + ".phone", () -> bean.getGuestPersonalDetails().getPhone())
+            );
         }
 
         public Builder withStayDetails(StayDetailsForCheckInDto stayDetails) {

@@ -216,17 +216,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         assertThat(response.getBody()).isNull();
 
         StayMappingAssertions.assertNewStayFromCheckInDto(guestInDb.getStays().get(0), checkInDto);
-        assertThat(checkInDto.getGuestPersonalDetails().getFirstName()).isEqualTo(guestInDb.getFirstName());
-        assertThat(checkInDto.getGuestPersonalDetails().getLastName()).isEqualTo(guestInDb.getLastName());
-        assertThat(checkInDto.getGuestPersonalDetails().getCity()).isEqualTo(guestInDb.getCity());
-        assertThat(checkInDto.getGuestPersonalDetails().getBirthDate()).isEqualTo(guestInDb.getBirthDate());
-        assertThat(checkInDto.getGuestPersonalDetails().getCountry()).isEqualTo(guestInDb.getCountry());
-        assertThat(checkInDto.getGuestPersonalDetails().getEmail()).isEqualTo(guestInDb.getEmail());
-        assertThat(checkInDto.getGuestPersonalDetails().getNationality()).isEqualTo(guestInDb.getNationality());
-        assertThat(checkInDto.getGuestPersonalDetails().getPassportId()).isEqualTo(guestInDb.getPassportId());
-        assertThat(checkInDto.getGuestPersonalDetails().getPhone()).isEqualTo(guestInDb.getPhone());
-        assertThat(checkInDto.getGuestPersonalDetails().getPostcode()).isEqualTo(guestInDb.getPostcode());
-        assertThat(checkInDto.getGuestPersonalDetails().getStreet()).isEqualTo(guestInDb.getStreet());
+        GuestMappingAssertions.assertPersonalDetails(guestInDb, checkInDto.getGuestPersonalDetails());
     }
 
     @Test

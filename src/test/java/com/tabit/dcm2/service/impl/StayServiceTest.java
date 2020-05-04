@@ -146,8 +146,8 @@ public class StayServiceTest {
         guest.setPostcode(stayDto.getGuestPersonalDetails().getPostcode());
         guest.setStreet(stayDto.getGuestPersonalDetails().getStreet());
         guest.setEmail(stayDto.getGuestPersonalDetails().getEmail());
-        guest.setPhone(stayDto.getGuestPersonalDetails().getPhone());
-        guest.setPassportId(stayDto.getGuestPersonalDetails().getPassportId());
+        guest.setPhone(stayDto.getGuestPersonalDetails().getPhone().orElse(null));
+        guest.setPassportId(stayDto.getGuestPersonalDetails().getPassportId().orElse(null));
 
         return guest;
     }

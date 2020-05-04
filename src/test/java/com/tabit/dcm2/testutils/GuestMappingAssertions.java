@@ -79,8 +79,8 @@ public class GuestMappingAssertions {
         assertThat(guest.getEmail()).isEqualTo(guestPersonalDetailsDto.getEmail());
         assertThat(guest.getNationality()).isEqualTo(guestPersonalDetailsDto.getNationality());
         assertThat(guest.getCity()).isEqualTo(guestPersonalDetailsDto.getCity());
-        assertThat(guest.getPassportId()).isEqualTo(guestPersonalDetailsDto.getPassportId());
-        assertThat(guest.getPhone()).isEqualTo(guestPersonalDetailsDto.getPhone());
+        assertThat(guest.getPassportId()).isEqualTo(guestPersonalDetailsDto.getPassportId().orElse(null));
+        assertThat(guest.getPhone()).isEqualTo(guestPersonalDetailsDto.getPhone().orElse(null));
         assertThat(guest.getCountry()).isEqualTo(guestPersonalDetailsDto.getCountry());
         assertThat(guest.getPostcode()).isEqualTo(guestPersonalDetailsDto.getPostcode());
         assertThat(guest.getStreet()).isEqualTo(guestPersonalDetailsDto.getStreet());
