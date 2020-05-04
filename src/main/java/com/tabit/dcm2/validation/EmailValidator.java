@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 public class EmailValidator implements IBeanValidator {
     private static final String MESSAGE = "Email is not valid";
-    private static String EMAIL_PATTERN = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    private static final String EMAIL_PATTERN = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
     private final String beanProperty;
     private final Supplier<String> toValidate;
