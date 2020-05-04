@@ -32,7 +32,7 @@ public class LocalDateInsideRangeValidatorTest {
     @Theory
     @Test
     public void validates_correct(ValidationTestCase<LocalDateInsideRangeValidatorInput> validationTestCase) {
-        ValidationResult validationResult = new LocalDateInsideRangeValidator(PROPERTY, () -> validationTestCase.toValidate).validate();
+        ValidationResult validationResult = new LocalDateInsideRangeValidator(PROPERTY, validationTestCase.toValidate).validate();
 
         Assertions.assertThat(validationResult).isEqualTo(validationTestCase.expectedResult);
     }

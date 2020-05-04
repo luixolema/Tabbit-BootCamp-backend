@@ -4,6 +4,8 @@ import com.tabit.dcm2.validation.LocalDateAfterValidator;
 import com.tabit.dcm2.validation.LocalDateAfterValidator.LocalDateAfterValidatorInput;
 import com.tabit.dcm2.validation.LocalDateInsideRangeValidator;
 import com.tabit.dcm2.validation.LocalDateInsideRangeValidator.LocalDateInsideRangeValidatorInput;
+import com.tabit.dcm2.validation.LocalDateNotInThePastValidator;
+import com.tabit.dcm2.validation.ValidationResult;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -35,11 +37,14 @@ public class StayDetailsDto extends AbstractStayDetailsDto {
             super(new StayDetailsDto());
 
             String simpleName = StayDetailsDto.class.getSimpleName();
-            // FIXME validators depending on active (leave date not in the past)
-            // did i really need checkout if not present
             addValidators(
-                    new LocalDateAfterValidator(simpleName + ".checkOutDate", () -> new LocalDateAfterValidatorInput("checkInDate", bean::getCheckInDate, () -> bean.getCheckOutDate().orElse(bean.getCheckInDate()))),
-                    new LocalDateInsideRangeValidator(simpleName + ".checkOutDate", () -> new LocalDateInsideRangeValidatorInput("arriveDate", "leaveDate", bean::getArriveDate, bean::getLeaveDate, () -> bean.getCheckOutDate().orElse(bean.getArriveDate())))
+                    () -> bean.getCheckOutDate().isPresent()
+                            ? new LocalDateAfterValidator(simpleName + ".checkOutDate", new LocalDateAfterValidatorInput("checkInDate", bean::getCheckInDate, () -> bean.getCheckOutDate().get())).validate()
+                            : ValidationResult.noError(),
+                    () -> bean.getCheckOutDate().isPresent()
+                            ? new LocalDateInsideRangeValidator(simpleName + ".checkOutDate", new LocalDateInsideRangeValidatorInput("arriveDate", "leaveDate", bean::getArriveDate, bean::getLeaveDate, () -> bean.getCheckOutDate().get())).validate()
+                            : ValidationResult.noError(),
+                    () -> bean.isActive() ? new LocalDateNotInThePastValidator(simpleName + ".leaveDate", bean::getLeaveDate).validate() : ValidationResult.noError()
             );
         }
 

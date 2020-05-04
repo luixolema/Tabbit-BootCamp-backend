@@ -2,7 +2,6 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
-import com.tabit.dcm2.validation.IBeanValidator;
 import com.tabit.dcm2.validation.ValidationResult;
 
 import java.util.ArrayList;
@@ -31,14 +30,9 @@ public class GuestDetailDto extends AbstractBean {
 
         public Builder() {
             super(new GuestDetailDto());
-            addValidators(new IBeanValidator() {
-                @Override
-                public ValidationResult validate() {
-                    return (bean.stayDto.isPresent() && bean.guestPersonalDetails.isPresent()) || (!bean.stayDto.isPresent() && !bean.guestPersonalDetails.isPresent())
-                            ? ValidationResult.withError(GuestDetailDto.class.getSimpleName(), "Exactly one of stayDto or guestPersonalDetails must be set")
-                            : ValidationResult.noError();
-                }
-            });
+            addValidators(() -> (bean.stayDto.isPresent() && bean.guestPersonalDetails.isPresent()) || (!bean.stayDto.isPresent() && !bean.guestPersonalDetails.isPresent())
+                    ? ValidationResult.withError(GuestDetailDto.class.getSimpleName(), "Exactly one of stayDto or guestPersonalDetails must be set")
+                    : ValidationResult.noError());
         }
 
         public Builder withStayDto(StayDto stayDto) {

@@ -28,7 +28,7 @@ public class LocalDateAfterValidatorTest {
     @Theory
     @Test
     public void validates_correct(ValidationTestCase<LocalDateAfterValidatorInput> validationTestCase) {
-        ValidationResult validationResult = new LocalDateAfterValidator(PROPERTY, () -> validationTestCase.toValidate).validate();
+        ValidationResult validationResult = new LocalDateAfterValidator(PROPERTY, validationTestCase.toValidate).validate();
 
         Assertions.assertThat(validationResult).isEqualTo(validationTestCase.expectedResult);
     }
