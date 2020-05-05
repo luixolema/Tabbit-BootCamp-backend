@@ -3,9 +3,15 @@ package com.tabit.dcm2.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BeanValidationException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
+
     public BeanValidationException(String error) {
         super(error);
+    }
+
+    public BeanValidationException(String error, Throwable cause) {
+        super(error, cause);
     }
 }

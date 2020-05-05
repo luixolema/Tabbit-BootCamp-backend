@@ -20,13 +20,13 @@ public class EmailValidatorTest {
             validEmail(),
             validEmailThirdPartMaxLength(),
             invalidEmailFirstPartTooShort(),
-            invalidEmailSeconPartTooShort(),
+            invalidEmailSecondPartTooShort(),
             invalidEmailLastPartTooShort(),
             invalidEmailLastPartTooLong(),
             invalidEmailNoAT(),
-            invalidEmailNoDot()
-//            invalidEmailSpaceAtTheBeginning()
-//            invalidEmailSpaceAtTheEnd()
+            invalidEmailNoDot(),
+            invalidEmailSpaceAtTheBeginning(),
+            invalidEmailSpaceAtTheEnd()
     ).toArray(new ValidationTestCase[0]);
 
     @Theory
@@ -43,17 +43,17 @@ public class EmailValidatorTest {
     }
 
     private static ValidationTestCase<String> validEmailThirdPartMaxLength() {
-        String email = "ha@ta.bit1234567";
+        String email = "ha@ta.bit";
         return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(ValidationResult.noError());
     }
 
     private static ValidationTestCase<String> invalidEmailFirstPartTooShort() {
-        String email = "h@ta.bi";
+        String email = "@ta.bi";
         return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(error);
     }
 
-    private static ValidationTestCase<String> invalidEmailSeconPartTooShort() {
-        String email = "ha@t.bi";
+    private static ValidationTestCase<String> invalidEmailSecondPartTooShort() {
+        String email = "ha@t";
         return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(error);
     }
 
@@ -77,13 +77,13 @@ public class EmailValidatorTest {
         return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(error);
     }
 
-//    private static ValidationTestCase<String> invalidEmailSpaceAtTheBeginning() {
-//        String email = " ha@ta.bit";
-//        return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(error);
-//    }
-//
-//    private static ValidationTestCase<String> invalidEmailSpaceAtTheEnd() {
-//        String email = "ha@ta.bit ";
-//        return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(error);
-//    }
+    private static ValidationTestCase<String> invalidEmailSpaceAtTheBeginning() {
+        String email = " ha@ta.bit";
+        return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(error);
+    }
+
+    private static ValidationTestCase<String> invalidEmailSpaceAtTheEnd() {
+        String email = "ha@ta.bit ";
+        return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(error);
+    }
 }

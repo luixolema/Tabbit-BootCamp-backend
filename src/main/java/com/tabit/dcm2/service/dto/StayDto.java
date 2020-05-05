@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("PMD.ImmutableField")
 public class StayDto extends AbstractBean {
 
     private GuestPersonalDetailsDto guestPersonalDetails;

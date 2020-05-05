@@ -21,7 +21,7 @@ public abstract class AbstractGuestPersonalDetailsDto extends AbstractBean {
     protected Optional<String> phone;
     protected Optional<String> passportId;
 
-    protected static abstract class AbstractBuilder<BEAN extends AbstractGuestPersonalDetailsDto, BUILDER extends AbstractBuilder<BEAN, BUILDER>> extends AbstractNonNullValidatingBeanBuilder<BEAN, BUILDER> {
+    protected abstract static class AbstractBuilder<BEAN extends AbstractGuestPersonalDetailsDto, BUILDER extends AbstractBuilder<BEAN, BUILDER>> extends AbstractNonNullValidatingBeanBuilder<BEAN, BUILDER> {
 
         protected AbstractBuilder(BEAN bean) {
             super(bean);

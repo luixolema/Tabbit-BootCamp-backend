@@ -80,17 +80,18 @@ public class StayService implements IStayService {
         return stay;
     }
 
+    @SuppressWarnings({"checkstyle:cyclomaticcomplexity", "checkstyle:booleanexpressioncomplexity"})
     private boolean isPersonalDetailsChanged(Guest guest, StayDto stayDto) {
-        return !guest.getFirstName().equals(stayDto.getGuestPersonalDetails().getFirstName()) ||
-                !guest.getLastName().equals(stayDto.getGuestPersonalDetails().getLastName()) ||
-                !guest.getBirthDate().equals(stayDto.getGuestPersonalDetails().getBirthDate()) ||
-                !guest.getNationality().equals(stayDto.getGuestPersonalDetails().getNationality()) ||
-                !guest.getCountry().equals(stayDto.getGuestPersonalDetails().getCountry()) ||
-                !guest.getCity().equals(stayDto.getGuestPersonalDetails().getCity()) ||
-                !guest.getPostcode().equals(stayDto.getGuestPersonalDetails().getPostcode()) ||
-                !guest.getStreet().equals(stayDto.getGuestPersonalDetails().getStreet()) ||
-                !guest.getEmail().equals(stayDto.getGuestPersonalDetails().getEmail()) ||
-                !guest.getPhone().equals(stayDto.getGuestPersonalDetails().getPhone().orElse(null)) ||
-                !guest.getPassportId().equals(stayDto.getGuestPersonalDetails().getPassportId().orElse(null));
+        return !guest.getFirstName().equals(stayDto.getGuestPersonalDetails().getFirstName())
+                || !guest.getLastName().equals(stayDto.getGuestPersonalDetails().getLastName())
+                || !guest.getBirthDate().equals(stayDto.getGuestPersonalDetails().getBirthDate())
+                || !guest.getNationality().equals(stayDto.getGuestPersonalDetails().getNationality())
+                || !guest.getCountry().equals(stayDto.getGuestPersonalDetails().getCountry())
+                || !guest.getCity().equals(stayDto.getGuestPersonalDetails().getCity())
+                || !guest.getPostcode().equals(stayDto.getGuestPersonalDetails().getPostcode())
+                || !guest.getStreet().equals(stayDto.getGuestPersonalDetails().getStreet())
+                || !guest.getEmail().equals(stayDto.getGuestPersonalDetails().getEmail())
+                || !guest.getPhone().equals(stayDto.getGuestPersonalDetails().getPhone().orElse(null))
+                || !guest.getPassportId().equals(stayDto.getGuestPersonalDetails().getPassportId().orElse(null));
     }
 }
