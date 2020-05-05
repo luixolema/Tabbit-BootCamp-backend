@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS `stay`;
 DROP TABLE IF EXISTS `guest`;
 DROP TABLE IF EXISTS `id_gen`;
 DROP TABLE IF EXISTS `box_management`;
+DROP TABLE IF EXISTS `user`;
 
 
   CREATE TABLE `guest` (
@@ -92,6 +93,15 @@ DROP TABLE IF EXISTS `box_management`;
     UNIQUE (box_number),
     PRIMARY KEY(`id`)
   );
+
+  CREATE TABLE `user`(
+      `id` bigint(20) NOT NULL,
+      `name` VARCHAR(200) NOT NULL,
+      `login` VARCHAR(200) NOT NULL,
+      `password` VARCHAR(200) NOT NULL,
+      UNIQUE (login),
+      PRIMARY KEY(`id`)
+    );
 
   CREATE TABLE `id_gen`(
     `id_value` INTEGER NOT NULL,
