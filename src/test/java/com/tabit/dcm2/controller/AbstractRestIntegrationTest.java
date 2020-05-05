@@ -33,10 +33,18 @@ public abstract class AbstractRestIntegrationTest extends AbstractDbTest {
         return "http://localhost:" + port;
     }
 
-    protected <T> HttpEntity<T> createHttpEntity(T details) {
+    protected <T> HttpEntity<T> createHttpEntity(T details, String authToken) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + authToken);
         return new HttpEntity<T>(details, headers);
+    }
+
+    protected <T> HttpEntity<T> createHttpEntity(String authToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", "Bearer " + authToken);
+        return new HttpEntity<T>(headers);
     }
 
     private ObjectMapper createObjectMapper() {
