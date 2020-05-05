@@ -38,12 +38,12 @@ public class EmailValidatorTest {
     }
 
     private static ValidationTestCase<String> validEmail() {
-        String email = "ha@ta.bi";
+        String email = "ha.ta@ta.bi";
         return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(ValidationResult.noError());
     }
 
     private static ValidationTestCase<String> validEmailThirdPartMaxLength() {
-        String email = "ha@ta.bit";
+        String email = "ha@ta.bitabcd";
         return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(ValidationResult.noError());
     }
 
@@ -63,7 +63,7 @@ public class EmailValidatorTest {
     }
 
     private static ValidationTestCase<String> invalidEmailLastPartTooLong() {
-        String email = "ha@ta.bit12345678";
+        String email = "ha@ta.bitabcde";
         return new ValidationTestCase<String>().withToValidate(email).withExpectedResult(error);
     }
 
