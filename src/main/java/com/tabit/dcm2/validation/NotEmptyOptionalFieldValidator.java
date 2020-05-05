@@ -4,12 +4,12 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class NotEmptyOptionalFieldValidator implements IBeanValidator {
-    private static final String MESSAGE = "Optional is not valid";
+    private static final String MESSAGE = "Optional must not be empty";
 
     private final String beanProperty;
-    private final Supplier<Optional> toValidate;
+    private final Supplier<Optional<?>> toValidate;
 
-    public NotEmptyOptionalFieldValidator(String beanProperty, Supplier<Optional> toValidate) {
+    public NotEmptyOptionalFieldValidator(String beanProperty, Supplier<Optional<?>> toValidate) {
         this.beanProperty = beanProperty;
         this.toValidate = toValidate;
     }

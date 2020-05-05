@@ -10,8 +10,6 @@ import org.junit.experimental.theories.Theory;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import java.util.Optional;
-
 @RunWith(Theories.class)
 public class CheckInDtoTest {
 
@@ -34,8 +32,7 @@ public class CheckInDtoTest {
 
     private static BeanValidationExceptionTestCase<CheckInDto.Builder> checkedInDtoWithEmptyPhone() {
         StayDetailsForCheckInDto stayDetailsForCheckInDto = RandomStayDetailsForCheckInDto.createRandomStayDetailsForCheckInDto();
-        GuestPersonalDetailsDto personalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
-        personalDetailsDto.phone = Optional.empty();
+        GuestPersonalDetailsDto personalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withPhone(null).withPassportId("passport").build();
 
         CheckInDto.Builder checkInDtoBuilder = RandomCheckInDto.createRandomCheckInDtoBuilder()
                 .withGuestPersonalDetails(personalDetailsDto)
@@ -44,13 +41,12 @@ public class CheckInDtoTest {
 
         return new BeanValidationExceptionTestCase<CheckInDto.Builder>()
                 .withInvalidDto(checkInDtoBuilder)
-                .withExpectedMessage("CheckInDto.GuestPersonalDetailsDto.phone: Optional is not valid");
+                .withExpectedMessage("CheckInDto.GuestPersonalDetailsDto.phone: Optional must not be empty");
     }
 
     private static BeanValidationExceptionTestCase<CheckInDto.Builder> checkInDtoWithEmptyPassportId() {
         StayDetailsForCheckInDto stayDetailsForCheckInDto = RandomStayDetailsForCheckInDto.createRandomStayDetailsForCheckInDto();
-        GuestPersonalDetailsDto personalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
-        personalDetailsDto.passportId = Optional.empty();
+        GuestPersonalDetailsDto personalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withPhone("phone").withPassportId(null).build();
 
         CheckInDto.Builder checkInDtoBuilder = RandomCheckInDto.createRandomCheckInDtoBuilder()
                 .withGuestPersonalDetails(personalDetailsDto)
@@ -59,7 +55,7 @@ public class CheckInDtoTest {
 
         return new BeanValidationExceptionTestCase<CheckInDto.Builder>()
                 .withInvalidDto(checkInDtoBuilder)
-                .withExpectedMessage("CheckInDto.GuestPersonalDetailsDto.passportId: Optional is not valid");
+                .withExpectedMessage("CheckInDto.GuestPersonalDetailsDto.passportId: Optional must not be empty");
     }
 
 }

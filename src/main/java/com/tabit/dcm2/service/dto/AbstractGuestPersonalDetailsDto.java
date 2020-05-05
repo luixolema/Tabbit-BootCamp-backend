@@ -18,8 +18,8 @@ public abstract class AbstractGuestPersonalDetailsDto extends AbstractBean {
     protected String postcode;
     protected String street;
     protected String email;
-    protected Optional<String> phone;
-    protected Optional<String> passportId;
+    protected Optional<String> phone = Optional.empty();
+    protected Optional<String> passportId = Optional.empty();
 
     protected abstract static class AbstractBuilder<BEAN extends AbstractGuestPersonalDetailsDto, BUILDER extends AbstractBuilder<BEAN, BUILDER>> extends AbstractNonNullValidatingBeanBuilder<BEAN, BUILDER> {
 

@@ -11,7 +11,6 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import java.util.Collections;
-import java.util.Optional;
 
 
 @RunWith(Theories.class)
@@ -36,8 +35,7 @@ public class StayDtoTest {
 
     private static BeanValidationExceptionTestCase<StayDto.Builder> stayDtoWithEmptyPhone() {
         StayDetailsDto stayDetailsDto = RandomStayDetailsDto.createRandomStayDetailsDto();
-        GuestPersonalDetailsDto personalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
-        personalDetailsDto.phone = Optional.empty();
+        GuestPersonalDetailsDto personalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withPhone(null).withPassportId("passport").build();
 
         StayDto.Builder checkInDtoBuilder = RandomStayDto.createRandomStayDtoBuilder()
                 .withGuestPersonalDetails(personalDetailsDto)
@@ -47,13 +45,12 @@ public class StayDtoTest {
 
         return new BeanValidationExceptionTestCase<StayDto.Builder>()
                 .withInvalidDto(checkInDtoBuilder)
-                .withExpectedMessage("StayDto.GuestPersonalDetailsDto.phone: Optional is not valid");
+                .withExpectedMessage("StayDto.GuestPersonalDetailsDto.phone: Optional must not be empty");
     }
 
     private static BeanValidationExceptionTestCase<StayDto.Builder> stayDtoWithEmptyPassportId() {
         StayDetailsDto stayDetailsDto = RandomStayDetailsDto.createRandomStayDetailsDto();
-        GuestPersonalDetailsDto personalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
-        personalDetailsDto.passportId = Optional.empty();
+        GuestPersonalDetailsDto personalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withPhone("phone").withPassportId(null).build();
 
         StayDto.Builder checkInDtoBuilder = RandomStayDto.createRandomStayDtoBuilder()
                 .withGuestPersonalDetails(personalDetailsDto)
@@ -63,7 +60,7 @@ public class StayDtoTest {
 
         return new BeanValidationExceptionTestCase<StayDto.Builder>()
                 .withInvalidDto(checkInDtoBuilder)
-                .withExpectedMessage("StayDto.GuestPersonalDetailsDto.passportId: Optional is not valid");
+                .withExpectedMessage("StayDto.GuestPersonalDetailsDto.passportId: Optional must not be empty");
     }
 
 }

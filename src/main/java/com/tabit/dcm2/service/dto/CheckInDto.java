@@ -30,7 +30,7 @@ public class CheckInDto extends AbstractBean {
 
             String simpleName = CheckInDto.class.getSimpleName() + "." + GuestPersonalDetailsDto.class.getSimpleName();
 
-            this.addValidators(
+            addValidators(
                     new NotEmptyOptionalFieldValidator(simpleName + ".passportId", () -> bean.getGuestPersonalDetails().getPassportId()),
                     new NotEmptyOptionalFieldValidator(simpleName + ".phone", () -> bean.getGuestPersonalDetails().getPhone())
             );
