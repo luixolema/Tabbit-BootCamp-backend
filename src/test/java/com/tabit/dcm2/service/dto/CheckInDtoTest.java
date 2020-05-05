@@ -21,7 +21,7 @@ public class CheckInDtoTest {
     @DataPoints
     public static BeanValidationExceptionTestCase<CheckInDto.Builder>[] testCases = ImmutableList.of(
             checkedInDtoWithEmptyPhone(),
-            CheckInDtoWithEmptyPassportId()
+            checkInDtoWithEmptyPassportId()
     ).toArray(new BeanValidationExceptionTestCase[0]);
 
     @Theory
@@ -47,7 +47,7 @@ public class CheckInDtoTest {
                 .withExpectedMessage("CheckInDto.GuestPersonalDetailsDto.phone: Optional is not valid");
     }
 
-    private static BeanValidationExceptionTestCase<CheckInDto.Builder> CheckInDtoWithEmptyPassportId() {
+    private static BeanValidationExceptionTestCase<CheckInDto.Builder> checkInDtoWithEmptyPassportId() {
         StayDetailsForCheckInDto stayDetailsForCheckInDto = RandomStayDetailsForCheckInDto.createRandomStayDetailsForCheckInDto();
         GuestPersonalDetailsDto personalDetailsDto = RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDto();
         personalDetailsDto.passportId = Optional.empty();

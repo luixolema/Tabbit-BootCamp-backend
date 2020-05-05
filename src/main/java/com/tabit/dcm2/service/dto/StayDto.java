@@ -2,6 +2,7 @@ package com.tabit.dcm2.service.dto;
 
 import com.tabit.dcm2.commons.AbstractBean;
 import com.tabit.dcm2.commons.AbstractNonNullValidatingBeanBuilder;
+import com.tabit.dcm2.validation.NotEmptyOptionalFieldValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,12 @@ public class StayDto extends AbstractBean {
 
         public Builder() {
             super(new StayDto());
+            String simpleName = StayDto.class.getSimpleName() + "." + GuestPersonalDetailsDto.class.getSimpleName();
+
+            this.addValidators(
+                    new NotEmptyOptionalFieldValidator(simpleName + ".passportId", () -> bean.getGuestPersonalDetails().getPassportId()),
+                    new NotEmptyOptionalFieldValidator(simpleName + ".phone", () -> bean.getGuestPersonalDetails().getPhone())
+            );
         }
 
         public static Builder builderFromBean(StayDto toCopy) {

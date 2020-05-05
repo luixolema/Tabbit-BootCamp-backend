@@ -61,8 +61,8 @@ public class StayService implements IStayService {
         stay.setPostcode(stayDto.getGuestPersonalDetails().getPostcode());
         stay.setStreet(stayDto.getGuestPersonalDetails().getStreet());
         stay.setEmail(stayDto.getGuestPersonalDetails().getEmail());
-        stay.setPhone(stayDto.getGuestPersonalDetails().getPhone().orElse(null));
-        stay.setPassportId(stayDto.getGuestPersonalDetails().getPassportId().orElse(null));
+        stay.setPhone(stayDto.getGuestPersonalDetails().getPhone().get());
+        stay.setPassportId(stayDto.getGuestPersonalDetails().getPassportId().get());
         stay.setCheckInDate(stayDto.getStayDetails().getCheckInDate());
         stay.setCheckOutDate(stayDto.getStayDetails().getCheckOutDate().orElse(null));
         stay.setArriveDate(stayDto.getStayDetails().getArriveDate());
