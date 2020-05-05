@@ -1,13 +1,13 @@
-DROP TABLE IF EXISTS `loan`;
-DROP TABLE IF EXISTS `equipment`;
-DROP TABLE IF EXISTS `equipment_type`;
-DROP TABLE IF EXISTS `stay`;
-DROP TABLE IF EXISTS `guest`;
-DROP TABLE IF EXISTS `id_gen`;
-DROP TABLE IF EXISTS `box_management`;
+drop table IF EXISTS `loan`;
+drop table IF EXISTS `equipment`;
+drop table IF EXISTS `equipment_type`;
+drop table IF EXISTS `stay`;
+drop table IF EXISTS `guest`;
+drop table IF EXISTS `id_gen`;
+drop table IF EXISTS `box_management`;
 
 
-  CREATE TABLE `guest` (
+  create TABLE `guest` (
     `id` bigint(20) NOT NULL,
     `first_name` varchar(400) NOT NULL,
     `last_name` varchar(400) NOT NULL,
@@ -18,13 +18,13 @@ DROP TABLE IF EXISTS `box_management`;
     `postcode` varchar(400) NOT NULL,
     `street` varchar(400) NOT NULL,
     `email` varchar(400),
-    `phone` varchar(400) NOT NULL,
-    `passport_id` varchar(400) NOT NULL,
+    `phone` varchar(400),
+    `passport_id` varchar(400),
     `checked_in` tinyint(1) NOT NULL DEFAULT '0',
     PRIMARY KEY (`id`)
   );
 
-  CREATE TABLE `stay` (
+  create TABLE `stay` (
       `id` bigint(20) NOT NULL,
       `guest_id` bigint(20) NOT NULL,
       `first_name` varchar(400) NOT NULL,
@@ -56,7 +56,7 @@ DROP TABLE IF EXISTS `box_management`;
       PRIMARY KEY (`id`)
     );
 
-  CREATE TABLE `equipment_type` (
+  create TABLE `equipment_type` (
     `id` bigint(20) NOT NULL,
     `type` varchar(100) NOT NULL,
     `description` varchar(400) NOT NULL,
@@ -65,7 +65,7 @@ DROP TABLE IF EXISTS `box_management`;
     PRIMARY KEY (`id`)
   );
 
-   CREATE TABLE `equipment` (
+   create TABLE `equipment` (
      `id` bigint(20) NOT NULL,
      `eq_type_id` bigint(20) NOT NULL,
      `serial_number` varchar(100) NOT NULL,
@@ -74,7 +74,7 @@ DROP TABLE IF EXISTS `box_management`;
      PRIMARY KEY (`id`)
    );
 
-   CREATE TABLE `loan` (
+   create TABLE `loan` (
      `id` bigint(20) NOT NULL,
      `stay_id` bigint(20) NOT NULL,
      `equipment_id` bigint(20) NOT NULL,
@@ -86,14 +86,14 @@ DROP TABLE IF EXISTS `box_management`;
      PRIMARY KEY (`id`)
    );
 
-  CREATE TABLE `box_management`(
+  create TABLE `box_management`(
     `id` bigint(20) NOT NULL,
     `box_number` VARCHAR(400) NOT NULL,
     UNIQUE (box_number),
     PRIMARY KEY(`id`)
   );
 
-  CREATE TABLE `id_gen`(
+  create TABLE `id_gen`(
     `id_value` INTEGER NOT NULL,
     `id_name` VARCHAR(24) NOT NULL,
     PRIMARY KEY(`id_name`)

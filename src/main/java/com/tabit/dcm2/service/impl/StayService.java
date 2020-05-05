@@ -61,8 +61,8 @@ public class StayService implements IStayService {
         stay.setPostcode(stayDto.getGuestPersonalDetails().getPostcode());
         stay.setStreet(stayDto.getGuestPersonalDetails().getStreet());
         stay.setEmail(stayDto.getGuestPersonalDetails().getEmail());
-        stay.setPhone(stayDto.getGuestPersonalDetails().getPhone());
-        stay.setPassportId(stayDto.getGuestPersonalDetails().getPassportId());
+        stay.setPhone(stayDto.getGuestPersonalDetails().getPhone().get());
+        stay.setPassportId(stayDto.getGuestPersonalDetails().getPassportId().get());
         stay.setCheckInDate(stayDto.getStayDetails().getCheckInDate());
         stay.setCheckOutDate(stayDto.getStayDetails().getCheckOutDate().orElse(null));
         stay.setArriveDate(stayDto.getStayDetails().getArriveDate());
@@ -91,7 +91,7 @@ public class StayService implements IStayService {
                 || !guest.getPostcode().equals(stayDto.getGuestPersonalDetails().getPostcode())
                 || !guest.getStreet().equals(stayDto.getGuestPersonalDetails().getStreet())
                 || !guest.getEmail().equals(stayDto.getGuestPersonalDetails().getEmail())
-                || !guest.getPhone().equals(stayDto.getGuestPersonalDetails().getPhone())
-                || !guest.getPassportId().equals(stayDto.getGuestPersonalDetails().getPassportId());
+                || !guest.getPhone().equals(stayDto.getGuestPersonalDetails().getPhone().orElse(null))
+                || !guest.getPassportId().equals(stayDto.getGuestPersonalDetails().getPassportId().orElse(null));
     }
 }

@@ -15,8 +15,8 @@ public class RandomGuestCreationDto {
                 .withEmail(valueProvider.randomEmail())
                 .withLastName(valueProvider.randomString("lastName"))
                 .withNationality(valueProvider.randomString("nationality"))
-                .withPassportId(valueProvider.randomString("passportId"))
-                .withPhone(valueProvider.randomString("phone"))
+                .withPassportId(valueProvider.randomBoolean() ? valueProvider.randomString("passportId") : null)
+                .withPhone(valueProvider.randomBoolean() ? valueProvider.randomString("phone") : null)
                 .withPostcode(valueProvider.randomString("postcode"))
                 .withStreet(valueProvider.randomString("street"));
     }
