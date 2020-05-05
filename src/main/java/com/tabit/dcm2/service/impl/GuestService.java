@@ -34,8 +34,8 @@ public class GuestService implements IGuestService {
         stay.setPostcode(checkInDto.getGuestPersonalDetails().getPostcode());
         stay.setStreet(checkInDto.getGuestPersonalDetails().getStreet());
         stay.setEmail(checkInDto.getGuestPersonalDetails().getEmail());
-        stay.setPhone(checkInDto.getGuestPersonalDetails().getPhone().orElse(null));
-        stay.setPassportId(checkInDto.getGuestPersonalDetails().getPassportId().orElse(null));
+        stay.setPhone(checkInDto.getGuestPersonalDetails().getPhone().get());
+        stay.setPassportId(checkInDto.getGuestPersonalDetails().getPassportId().get());
         stay.setBoxNumber(checkInDto.getStayDetails().getBoxNumber());
         stay.setCheckInDate(checkInDto.getStayDetails().getCheckInDate());
         stay.setArriveDate(checkInDto.getStayDetails().getArriveDate());
