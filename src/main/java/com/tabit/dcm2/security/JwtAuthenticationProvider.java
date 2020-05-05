@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Autowired
-    private JwtTokenService jwtService;
+    private JwtTokenService jwtTokenService;
 
     @Override
     public Authentication authenticate(Authentication authentication) {
         String token = (String) authentication.getCredentials();
-        String username = jwtService.getUsernameFromToken(token);
+        String username = jwtTokenService.getUsernameFromToken(token);
 
-        return jwtService.validateToken(token)
+        return jwtTokenService.validateToken(token)
                 .map(aBoolean -> new JwtAuthenticatedProfile(username))
                 .orElseThrow(() -> new JwtAuthenticationException("JWT Token validation failed"));
     }

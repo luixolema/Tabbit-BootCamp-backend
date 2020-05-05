@@ -3,6 +3,9 @@ package com.tabit.dcm2.security;
 public class JwtTokenResponse {
     private String token;
 
+    public JwtTokenResponse() {
+    }
+
     public JwtTokenResponse(String token) {
         this.token = token;
     }

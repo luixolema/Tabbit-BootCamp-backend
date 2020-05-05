@@ -4,6 +4,7 @@ import com.tabit.dcm2.service.IJwtTokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -14,8 +15,10 @@ import java.util.function.Function;
 @Service
 public class JwtTokenService implements IJwtTokenService {
 
-    private static final String SECRET = "mySecret";
-    private static final Long EXPIRATION = 30000L;
+    @Value("${jwt.secret}")
+    private String secret;
+    @Value("${jwt.expiration}")
+    private Long expiration;
 
     @Override
     public String generateToken(String login) {
@@ -27,7 +30,7 @@ public class JwtTokenService implements IJwtTokenService {
                 .setSubject(login)
                 .setIssuedAt(createDate)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
@@ -46,7 +49,7 @@ public class JwtTokenService implements IJwtTokenService {
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
-                .setSigningKey(SECRET)
+                .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
     }
@@ -61,6 +64,6 @@ public class JwtTokenService implements IJwtTokenService {
     }
 
     private Date calculateExpirationDate(Date createdDate) {
-        return new Date(createdDate.getTime() + EXPIRATION);
+        return new Date(createdDate.getTime() + expiration);
     }
 }
