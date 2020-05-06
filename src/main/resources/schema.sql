@@ -5,7 +5,24 @@ drop table IF EXISTS `stay`;
 drop table IF EXISTS `guest`;
 drop table IF EXISTS `id_gen`;
 drop table IF EXISTS `box_management`;
+drop table IF EXISTS `users`;
+drop table IF EXISTS `dive_center`;
 
+  create TABLE `dive_center`(
+    `id` bigint(20) NOT NULL,
+    `name` VARCHAR(400) NOT NULL,
+    PRIMARY KEY(`id`)
+  );
+
+   create TABLE `users`(
+    `id` bigint(20) NOT NULL,
+    `user_name` VARCHAR(400) NOT NULL,
+    `email` VARCHAR(400) NOT NULL,
+    `password` VARCHAR(400) NOT NULL,
+    `dive_center_id` bigint(20) NOT NULL,
+    FOREIGN KEY (`dive_center_id`) REFERENCES dive_center(`id`),
+    PRIMARY KEY(`id`)
+  );
 
   create TABLE `guest` (
     `id` bigint(20) NOT NULL,

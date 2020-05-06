@@ -2,13 +2,12 @@ package com.tabit.dcm2;
 
 import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.*;
-import com.tabit.dcm2.repository.IBoxManagementRepo;
-import com.tabit.dcm2.repository.IEquipmentRepo;
-import com.tabit.dcm2.repository.IGuestRepo;
+import com.tabit.dcm2.repository.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -17,11 +16,20 @@ import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("mysql")
 public class TestdataImporter {
 
     @Autowired
     private IGuestRepo guestRepo;
+
+    @Autowired
+    private IUserRepo userRepo;
+
+    @Autowired
+    private IDiveCenterRepo diveCenterRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private IBoxManagementRepo boxManagementRepo;
@@ -36,6 +44,10 @@ public class TestdataImporter {
     private Equipment fins_XD_F_12;
     private Equipment suite_XS_G_13;
 
+    private DiveCenter diveCenter1;
+
+    private User user1;
+
     /**
      * to import some testdata to the application just set ActiveProfile to mysql.
      * but dont commit it!
@@ -44,8 +56,27 @@ public class TestdataImporter {
      */
     @Test
     public void import_testdata_for_application() {
+        saveDivesCenters();
+        saveUsers();
         saveGuests();
         saveBoxNumbers();
+    }
+
+    private void saveUsers() {
+        user1 = new User();
+        user1.setDiveCenter(diveCenter1);
+        user1.setEmail("lolo@lolo.lo");
+        user1.setPassword(passwordEncoder.encode("lolo"));
+        user1.setUserName("lolo");
+
+        userRepo.save(user1);
+    }
+
+    private void saveDivesCenters() {
+        diveCenter1 = new DiveCenter();
+        diveCenter1.setName("DVC name");
+
+        diveCenterRepo.save(diveCenter1);
     }
 
     private void saveGuests() {
