@@ -1,7 +1,7 @@
 package com.tabit.dcm2.security;
 
 import com.tabit.dcm2.exception.JwtAuthenticationException;
-import com.tabit.dcm2.service.impl.JwtTokenService;
+import com.tabit.dcm2.service.IJwtTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Autowired
-    private JwtTokenService jwtService;
+    private IJwtTokenService jwtService;
 
     @Override
     public Authentication authenticate(Authentication authentication) {

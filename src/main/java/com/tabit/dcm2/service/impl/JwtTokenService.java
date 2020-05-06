@@ -2,8 +2,8 @@ package com.tabit.dcm2.service.impl;
 
 import com.tabit.dcm2.service.IJwtTokenService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,12 +17,15 @@ public class JwtTokenService implements IJwtTokenService {
     private static final String SECRET = "mySecret";
     private static final Long EXPIRATION = 30000L;
 
+    @Autowired
+    private JwtsFactory jwtsFactory;
+
     @Override
     public String generateToken(String login) {
         final Date createDate = new Date();
         final Date expirationDate = calculateExpirationDate(createDate);
 
-        return Jwts.builder()
+        return jwtsFactory.createJwtBuilder()
                 .setClaims(new HashMap<>())
                 .setSubject(login)
                 .setIssuedAt(createDate)
@@ -31,21 +34,22 @@ public class JwtTokenService implements IJwtTokenService {
                 .compact();
     }
 
+    @Override
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
-    public Date getExpirationDateFromToken(String token) {
+    private Date getExpirationDateFromToken(String token) {
         return getClaimFromToken(token, Claims::getExpiration);
     }
 
-    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+    private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser()
+        return jwtsFactory.createParser()
                 .setSigningKey(SECRET)
                 .parseClaimsJws(token)
                 .getBody();
@@ -56,6 +60,7 @@ public class JwtTokenService implements IJwtTokenService {
         return expiration.after(new Date());
     }
 
+    @Override
     public Optional<Boolean> validateToken(String token) {
         return isTokenNotExpired(token) ? Optional.of(Boolean.TRUE) : Optional.empty();
     }
