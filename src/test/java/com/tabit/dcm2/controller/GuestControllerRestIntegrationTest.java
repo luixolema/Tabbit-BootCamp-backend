@@ -239,7 +239,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
                 .build();
         printJson(guestPersonalDetailsDto);
 
-        HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(guestPersonalDetailsDto, authToken);
+        HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(guestPersonalDetailsDto);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange(
