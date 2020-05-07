@@ -57,7 +57,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     @Test
     public void getStay_shall_return_stay() {
         // given
-        HttpEntity<StayDto> entity = createHttpEntity(authToken);
+        HttpEntity<?> entity = createHttpEntity(authToken);
 
         // when
         ResponseEntity<StayDto> response = restTemplate.exchange(

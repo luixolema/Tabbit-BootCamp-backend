@@ -94,7 +94,7 @@ DROP TABLE IF EXISTS `user`;
     PRIMARY KEY(`id`)
   );
 
-  CREATE TABLE `user`(
+  create TABLE `user`(
       `id` bigint(20) NOT NULL,
       `name` VARCHAR(200) NOT NULL,
       `login` VARCHAR(200) NOT NULL,

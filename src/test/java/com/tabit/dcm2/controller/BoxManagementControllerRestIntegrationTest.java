@@ -43,7 +43,7 @@ public class BoxManagementControllerRestIntegrationTest extends AbstractRestInte
     @Test
     public void isBoxFree_shall_return_the_right_value() {
         // given
-        HttpEntity<Boolean> entity = createHttpEntity(authToken);
+        HttpEntity<?> entity = createHttpEntity(authToken);
 
         // when
         ResponseEntity<Boolean> responseIsBoxFree = restTemplate.exchange(
