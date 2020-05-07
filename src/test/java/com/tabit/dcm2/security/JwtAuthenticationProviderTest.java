@@ -3,6 +3,7 @@ package com.tabit.dcm2.security;
 import com.tabit.dcm2.exception.JwtAuthenticationException;
 import com.tabit.dcm2.service.impl.JwtTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -42,6 +43,18 @@ public class JwtAuthenticationProviderTest {
         String token = "testToken";
         JwtAuthentication jwtAuthentication = new JwtAuthentication(token);
         when(jwtTokenService.getUsernameFromToken(token)).thenThrow(new ExpiredJwtException(null, null, "expired"));
+
+        // when
+        jwtAuthenticationProvider.authenticate(jwtAuthentication);
+    }
+
+    @Test(expected = JwtAuthenticationException.class)
+    public void getUsernameFromToken_should_throw_exception_with_invalid_token() {
+        // given
+        String login = "login";
+        String token = "testToken";
+        JwtAuthentication jwtAuthentication = new JwtAuthentication(token);
+        when(jwtTokenService.getUsernameFromToken(token)).thenThrow(new JwtException("test"));
 
         // when
         jwtAuthenticationProvider.authenticate(jwtAuthentication);
