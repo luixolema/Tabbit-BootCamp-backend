@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.service.IGuestService;
+import com.tabit.dcm2.service.ILoginService;
 import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.testutils.GuestMappingAssertions;
 import com.tabit.dcm2.testutils.StayMappingAssertions;
@@ -29,6 +30,9 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     @Autowired
     private IGuestService guestService;
 
+    @Autowired
+    private ILoginService loginService;
+
     private Guest guestCheckedInTrue;
     private Guest guestCheckedInFalse;
     private Guest guestCheckedInFalse2;
@@ -36,6 +40,8 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     private Stay stayOld;
     private Stay stayActual;
     private BoxManagement boxManagement;
+    private User user;
+    private String authToken;
 
     @Before
     public void setUp() {
@@ -63,12 +69,25 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         guestCheckedInFalseWithoutStay.setStays(new ArrayList<>());
 
         guestRule.persist(ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2, guestCheckedInFalseWithoutStay));
+
+        user = RandomUser.createRandomUserWithoutId();
+        userRule.persist(ImmutableList.of(user));
+
+        authToken = loginService.generateJwtToken(user.getLogin(), user.getPassword()).getToken();
     }
 
     @Test
     public void getGuests_shall_return_all_guests_for_null_input_param() {
-        //when
-        ResponseEntity<GuestOverviewDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests", GuestOverviewDto.class);
+        // given
+        HttpEntity<GuestOverviewDto> entity = createHttpEntity(authToken);
+
+        // when
+        ResponseEntity<GuestOverviewDto> response = restTemplate.exchange(
+                "/api/guests/",
+                HttpMethod.GET,
+                entity,
+                GuestOverviewDto.class
+        );
 
         //then
         GuestOverviewDto actualGuestOverviewDto = response.getBody();
@@ -86,8 +105,16 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
     @Test
     public void getGuests_shall_return_checkedin_guests() {
+        // given
+        HttpEntity<GuestOverviewDto> entity = createHttpEntity(authToken);
+
         // when
-        ResponseEntity<GuestOverviewDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/?checkedIn=1", GuestOverviewDto.class);
+        ResponseEntity<GuestOverviewDto> response = restTemplate.exchange(
+                "/api/guests/?checkedIn=1",
+                HttpMethod.GET,
+                entity,
+                GuestOverviewDto.class
+        );
 
         // then
         GuestOverviewDto actualGuestOverviewDto = response.getBody();
@@ -98,8 +125,16 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
     @Test
     public void getGuests_shall_return_not_checkedin_guests() {
+        // given
+        HttpEntity<GuestOverviewDto> entity = createHttpEntity(authToken);
+
         // when
-        ResponseEntity<GuestOverviewDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/?checkedIn=0", GuestOverviewDto.class);
+        ResponseEntity<GuestOverviewDto> response = restTemplate.exchange(
+                "/api/guests/?checkedIn=0",
+                HttpMethod.GET,
+                entity,
+                GuestOverviewDto.class
+        );
 
         // then
         GuestOverviewDto actualGuestOverviewDto = response.getBody();
@@ -115,8 +150,16 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
     @Test
     public void getGuestDetails_shall_return_only_personal_details_from_guest_for_not_checkedIn_guest() {
+        // given
+        HttpEntity<GuestDetailDto> entity = createHttpEntity(authToken);
+
         // when
-        ResponseEntity<GuestDetailDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/" + guestCheckedInFalse.getId(), GuestDetailDto.class);
+        ResponseEntity<GuestDetailDto> response = restTemplate.exchange(
+                "/api/guests/" + guestCheckedInFalse.getId(),
+                HttpMethod.GET,
+                entity,
+                GuestDetailDto.class
+        );
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
@@ -125,8 +168,16 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
     @Test
     public void getGuestDetails_shall_return_stay_and_personal_details_from_actual_stay_for_checkedIn_guest() {
+        // given
+        HttpEntity<GuestDetailDto> entity = createHttpEntity(authToken);
+
         // when
-        ResponseEntity<GuestDetailDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/" + guestCheckedInTrue.getId(), GuestDetailDto.class);
+        ResponseEntity<GuestDetailDto> response = restTemplate.exchange(
+                "/api/guests/" + guestCheckedInTrue.getId(),
+                HttpMethod.GET,
+                entity,
+                GuestDetailDto.class
+        );
 
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
@@ -138,8 +189,17 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
     @Test
     public void getGuestDetails_shall_return_no_summary_for_not_checkedIn_guest_without_stays() {
+        // given
+        HttpEntity<GuestDetailDto> entity = createHttpEntity(authToken);
+
         // when
-        ResponseEntity<GuestDetailDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/guests/" + guestCheckedInFalseWithoutStay.getId(), GuestDetailDto.class);
+        ResponseEntity<GuestDetailDto> response = restTemplate.exchange(
+                "/api/guests/" + guestCheckedInFalseWithoutStay.getId(),
+                HttpMethod.GET,
+                entity,
+                GuestDetailDto.class
+        );
+
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
         assertThat(response.getBody().getStayDto()).isEmpty();
@@ -154,7 +214,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
                 .withId(guestCheckedInTrue.getId())
                 .build();
 
-        HttpEntity<GuestPersonalDetailsDto> entity = createHttpEntity(guestPersonalDetailsDto);
+        HttpEntity<GuestPersonalDetailsDto> entity = createHttpEntity(guestPersonalDetailsDto, authToken);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange(
@@ -177,7 +237,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
                 .build();
         printJson(guestPersonalDetailsDto);
 
-        HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(guestPersonalDetailsDto);
+        HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(guestPersonalDetailsDto, authToken);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange(
@@ -206,7 +266,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
                         .build())
                 .build();
 
-        HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
+        HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto, authToken);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange("/api/guests/check-in", HttpMethod.POST, entity, Void.class);
@@ -233,7 +293,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
                 .withStayDetails(RandomStayDetailsForCheckInDto.createRandomStayDetailsForCheckInDtoBuilder().withBoxNumber(stayActual.getBoxNumber()).build())
                 .build();
 
-        HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto);
+        HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto, authToken);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange("/api/guests/check-in", HttpMethod.POST, entity, Void.class);
@@ -248,12 +308,13 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     public void getGuestPersonalDetails_return_the_correct_GuestPersonalDetailDto() {
         // given
         String url = String.format("/api/guests/%s/personal-details", guestCheckedInTrue.getId());
+        HttpEntity<CheckInDto> entity = createHttpEntity(authToken);
 
         // when
         ResponseEntity<GuestPersonalDetailsDto> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                null,
+                entity,
                 GuestPersonalDetailsDto.class
         );
 
@@ -269,7 +330,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         // given
         GuestCreationDto guestCreationDto = RandomGuestCreationDto.createGuestCreationDto();
 
-        HttpEntity<GuestCreationDto> entity = createHttpEntity(guestCreationDto);
+        HttpEntity<GuestCreationDto> entity = createHttpEntity(guestCreationDto, authToken);
 
         // when
         ResponseEntity<Long> response = restTemplate.exchange(
@@ -288,7 +349,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     public void create_save_the_new_guest() {
         // given
         GuestCreationDto guestCreationDto = RandomGuestCreationDto.createGuestCreationDto();
-        HttpEntity<GuestCreationDto> entity = createHttpEntity(guestCreationDto);
+        HttpEntity<GuestCreationDto> entity = createHttpEntity(guestCreationDto, authToken);
 
         // when
         ResponseEntity<Long> response = restTemplate.exchange(

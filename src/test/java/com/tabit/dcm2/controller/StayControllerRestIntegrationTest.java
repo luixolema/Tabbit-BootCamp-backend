@@ -1,11 +1,10 @@
 package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomStay;
-import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
+import com.tabit.dcm2.service.ILoginService;
 import com.tabit.dcm2.service.dto.RandomGuestPersonalDetailsDto;
 import com.tabit.dcm2.service.dto.RandomStayDetailsDto;
 import com.tabit.dcm2.service.dto.RandomStayDto;
@@ -31,9 +30,13 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     private IStayRepo stayRepo;
     @Autowired
     private IGuestRepo guestRepo;
+    @Autowired
+    private ILoginService loginService;
 
     private Stay stay;
     private Guest guest;
+    private User user;
+    private String authToken;
 
     @Before
     public void setUp() {
@@ -44,13 +47,25 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
         guest.setStays(ImmutableList.of(stay));
 
         guestRule.persist(ImmutableList.of(guest));
+
+        user = RandomUser.createRandomUserWithoutId();
+        userRule.persist(ImmutableList.of(user));
+
+        authToken = loginService.generateJwtToken(user.getLogin(), user.getPassword()).getToken();
     }
 
     @Test
     public void getStay_shall_return_stay() {
+        // given
+        HttpEntity<StayDto> entity = createHttpEntity(authToken);
 
-        //when
-        ResponseEntity<StayDto> response = restTemplate.getForEntity(getBaseUrl() + "/api/stay/" + stay.getId(), StayDto.class);
+        // when
+        ResponseEntity<StayDto> response = restTemplate.exchange(
+                "/api/stay/" + stay.getId(),
+                HttpMethod.GET,
+                entity,
+                StayDto.class
+        );
 
         //then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
@@ -69,7 +84,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
                         .build())
                 .build();
 
-        HttpEntity<StayDto> entity = createHttpEntity(stayDto);
+        HttpEntity<StayDto> entity = createHttpEntity(stayDto, authToken);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.PUT, entity, Void.class);
@@ -93,7 +108,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
                 .withStayDetails(RandomStayDetailsDto.createRandomStayDetailsDtoBuilderFromStay(stay).withHotel(stay.getHotel() + "Update").build())
                 .build();
 
-        HttpEntity<StayDto> entity = createHttpEntity(stayDto);
+        HttpEntity<StayDto> entity = createHttpEntity(stayDto, authToken);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.PUT, entity, Void.class);
@@ -115,7 +130,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
                 .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createGuestPersonalDetailsDtoFromGuest(guest))
                 .build();
 
-        HttpEntity<StayDto> entity = createHttpEntity(stayDto);
+        HttpEntity<StayDto> entity = createHttpEntity(stayDto, authToken);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange("/api/stay", HttpMethod.PUT, entity, Void.class);

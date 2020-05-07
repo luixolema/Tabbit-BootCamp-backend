@@ -5,6 +5,7 @@ import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.repository.IBoxManagementRepo;
 import com.tabit.dcm2.repository.IEquipmentRepo;
 import com.tabit.dcm2.repository.IGuestRepo;
+import com.tabit.dcm2.repository.IUserRepo;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class TestdataImporter {
     @Autowired
     private IEquipmentRepo equipmentRepo;
 
+    @Autowired
+    private IUserRepo userRepo;
+
     // equipment for Acceptance criteria
     private Equipment mask_XD_M_16;
     private Equipment mask_XD_M_17;
@@ -46,6 +50,16 @@ public class TestdataImporter {
     public void import_testdata_for_application() {
         saveGuests();
         saveBoxNumbers();
+        saveUsers();
+    }
+
+    private void saveUsers() {
+        User user = new User();
+        user.setName("test");
+        user.setLogin("login@gmail.com");
+        user.setPassword("password");
+
+        userRepo.saveAll(ImmutableList.of(user));
     }
 
     private void saveGuests() {

@@ -1,10 +1,11 @@
-drop table IF EXISTS `loan`;
-drop table IF EXISTS `equipment`;
-drop table IF EXISTS `equipment_type`;
-drop table IF EXISTS `stay`;
-drop table IF EXISTS `guest`;
-drop table IF EXISTS `id_gen`;
-drop table IF EXISTS `box_management`;
+DROP TABLE IF EXISTS `loan`;
+DROP TABLE IF EXISTS `equipment`;
+DROP TABLE IF EXISTS `equipment_type`;
+DROP TABLE IF EXISTS `stay`;
+DROP TABLE IF EXISTS `guest`;
+DROP TABLE IF EXISTS `id_gen`;
+DROP TABLE IF EXISTS `box_management`;
+DROP TABLE IF EXISTS `user`;
 
 
   create TABLE `guest` (
@@ -92,6 +93,15 @@ drop table IF EXISTS `box_management`;
     UNIQUE (box_number),
     PRIMARY KEY(`id`)
   );
+
+  CREATE TABLE `user`(
+      `id` bigint(20) NOT NULL,
+      `name` VARCHAR(200) NOT NULL,
+      `login` VARCHAR(200) NOT NULL,
+      `password` VARCHAR(200) NOT NULL,
+      UNIQUE (login),
+      PRIMARY KEY(`id`)
+    );
 
   create TABLE `id_gen`(
     `id_value` INTEGER NOT NULL,
