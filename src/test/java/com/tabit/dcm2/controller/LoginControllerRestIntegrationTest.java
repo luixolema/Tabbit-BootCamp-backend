@@ -22,14 +22,11 @@ public class LoginControllerRestIntegrationTest extends AbstractRestIntegrationT
     private ILoginService loginService;
 
     private User user;
-    private String authToken;
 
     @Before
     public void setUp() {
         user = RandomUser.createRandomUserWithoutId();
         userRule.persist(ImmutableList.of(user));
-
-        authToken = loginService.generateJwtToken(user.getLogin(), user.getPassword()).getToken();
     }
 
     @Test
@@ -48,5 +45,23 @@ public class LoginControllerRestIntegrationTest extends AbstractRestIntegrationT
         // then
         assertThat(response.getStatusCode()).isSameAs(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
+    }
+
+    @Test
+    public void loginUser_shall_throw_exception_when_not_found() {
+        // given
+        LoginDto loginDto = RandomLoginDto.createRandomLoginDto();
+        HttpEntity<LoginDto> entity = createHttpEntity(loginDto);
+
+        // when
+        ResponseEntity<JwtTokenResponse> response = restTemplate.exchange(
+                "/login",
+                HttpMethod.POST,
+                entity,
+                JwtTokenResponse.class);
+
+        // then
+        assertThat(response.getStatusCode()).isSameAs(HttpStatus.NOT_FOUND);
+        assertThat(response.getBody().getToken()).isNull();
     }
 }

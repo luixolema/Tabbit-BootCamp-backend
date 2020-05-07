@@ -8,7 +8,7 @@ public class RandomUser {
         User user = new User();
         user.setId(valueProvider.randomId());
         user.setName(valueProvider.randomString("name"));
-        user.setLogin(valueProvider.randomString("login"));
+        user.setLogin(valueProvider.randomEmail());
         user.setPassword(valueProvider.randomString("password"));
 
         return user;

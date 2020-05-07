@@ -20,6 +20,6 @@ public class LoginService implements ILoginService {
         return userRepo.findByLogin(login)
                 .filter(user -> user.getPassword().matches(password))
                 .map(user -> new JwtTokenResponse(jwtTokenService.generateToken(login)))
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Wrong user or password"));
     }
 }

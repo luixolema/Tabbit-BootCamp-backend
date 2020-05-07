@@ -8,7 +8,7 @@ public class RandomLoginDto {
         ValueProvider valueProvider = new ValueProvider();
 
         return new LoginDto.Builder()
-                .withLogin(valueProvider.randomString("login"))
+                .withLogin(valueProvider.randomEmail())
                 .withPassword(valueProvider.randomString("password"));
     }
 

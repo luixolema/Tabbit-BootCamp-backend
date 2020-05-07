@@ -1,6 +1,8 @@
 package com.tabit.dcm2.service.impl;
 
+import com.tabit.dcm2.commons.ApplicationProperties;
 import io.jsonwebtoken.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -9,11 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Optional;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -21,7 +21,10 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class JwtTokenServiceTest {
     private static final String SECRET = "mySecret";
+    private static final long EXPIRATION = 60000L;
 
+    @Mock
+    private ApplicationProperties applicationProperties;
     @Mock
     private JwtsFactory jwtsFactory;
     @Mock
@@ -37,6 +40,12 @@ public class JwtTokenServiceTest {
     @InjectMocks
     private JwtTokenService jwtTokenService;
 
+    @Before
+    public void setUp() {
+        when(applicationProperties.getExpiration()).thenReturn(EXPIRATION);
+        when(applicationProperties.getSecret()).thenReturn(SECRET);
+    }
+
     @Test
     public void generateToken_should_generate_token() {
         // given
@@ -47,7 +56,7 @@ public class JwtTokenServiceTest {
         when(jwtBuilder.setSubject(login)).thenReturn(jwtBuilder);
         when(jwtBuilder.setIssuedAt(dateArgumentCaptor.capture())).thenReturn(jwtBuilder);
         when(jwtBuilder.setExpiration(dateArgumentCaptor.capture())).thenReturn(jwtBuilder);
-        when(jwtBuilder.signWith(SignatureAlgorithm.HS512, "mySecret")).thenReturn(jwtBuilder);
+        when(jwtBuilder.signWith(SignatureAlgorithm.HS512, SECRET)).thenReturn(jwtBuilder);
         when(jwtBuilder.compact()).thenReturn(token);
 
         // when
@@ -55,6 +64,12 @@ public class JwtTokenServiceTest {
 
         // then
         assertThat(actualToken).isEqualTo(token);
+
+        List<Date> allValues = dateArgumentCaptor.getAllValues();
+        assertThat(allValues).hasSize(2);
+        Date createDate = allValues.get(0);
+        Date expiredDate = allValues.get(1);
+        assertThat(expiredDate.getTime() - createDate.getTime()).isEqualTo(EXPIRATION);
     }
 
     @Test
@@ -63,7 +78,10 @@ public class JwtTokenServiceTest {
         String token = "token";
         String username = "name";
 
-        setupMockJwtParser(token);
+        when(jwtsFactory.createParser()).thenReturn(jwtParser);
+        when(jwtParser.setSigningKey(SECRET)).thenReturn(jwtParser);
+        when(jwtParser.parseClaimsJws(token)).thenReturn(jws);
+        when(jws.getBody()).thenReturn(claims);
         when(claims.getSubject()).thenReturn(username);
 
         // when
@@ -71,44 +89,5 @@ public class JwtTokenServiceTest {
 
         // then
         assertThat(usernameFromToken).isEqualTo(username);
-    }
-
-    @Test
-    public void validateToken_should_return_true_if_not_expired() {
-        // given
-        String token = "token";
-        Date expiredDate = Date.from(LocalDateTime.now().plusMinutes(1).atZone(ZoneId.systemDefault()).toInstant());
-
-        setupMockJwtParser(token);
-        when(claims.getExpiration()).thenReturn(expiredDate);
-
-        // when
-        Optional<Boolean> usernameFromToken = jwtTokenService.validateToken(token);
-
-        // then
-        assertThat(usernameFromToken).contains(true);
-    }
-
-    @Test
-    public void validateToken_should_return_absent_if_expired() {
-        // given
-        String token = "token";
-        Date expiredDate = Date.from(LocalDateTime.now().minusMinutes(1).atZone(ZoneId.systemDefault()).toInstant());
-
-        setupMockJwtParser(token);
-        when(claims.getExpiration()).thenReturn(expiredDate);
-
-        // when
-        Optional<Boolean> usernameFromToken = jwtTokenService.validateToken(token);
-
-        // then
-        assertThat(usernameFromToken).isEmpty();
-    }
-
-    private void setupMockJwtParser(String token) {
-        when(jwtsFactory.createParser()).thenReturn(jwtParser);
-        when(jwtParser.setSigningKey(SECRET)).thenReturn(jwtParser);
-        when(jwtParser.parseClaimsJws(token)).thenReturn(jws);
-        when(jws.getBody()).thenReturn(claims);
     }
 }

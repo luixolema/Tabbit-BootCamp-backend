@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -27,7 +26,7 @@ public class LoginControllerTest {
         // given
         String token = "testToken";
         LoginDto loginDto = RandomLoginDto.createRandomLoginDto();
-        when(loginService.generateJwtToken(anyString(), anyString())).thenReturn(new JwtTokenResponse(token));
+        when(loginService.generateJwtToken(loginDto.getLogin(), loginDto.getPassword())).thenReturn(new JwtTokenResponse(token));
 
         // when
         JwtTokenResponse jwtTokenResponse = loginController.loginUser(loginDto);

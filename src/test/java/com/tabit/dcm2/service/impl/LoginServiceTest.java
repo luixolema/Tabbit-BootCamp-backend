@@ -14,7 +14,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -33,8 +32,8 @@ public class LoginServiceTest {
         // given
         String token = "testToken";
         User user = RandomUser.createRandomUser();
-        when(userRepo.findByLogin(anyString())).thenReturn(Optional.of(user));
-        when(jwtTokenService.generateToken(anyString())).thenReturn(token);
+        when(userRepo.findByLogin(user.getLogin())).thenReturn(Optional.of(user));
+        when(jwtTokenService.generateToken(user.getLogin())).thenReturn(token);
 
         // when
         JwtTokenResponse jwtTokenResponse = loginService.generateJwtToken(user.getLogin(), user.getPassword());
@@ -47,7 +46,7 @@ public class LoginServiceTest {
     public void generateJwtToken_shall_throw_exception() {
         // given
         User user = RandomUser.createRandomUser();
-        when(userRepo.findByLogin(anyString())).thenReturn(Optional.empty());
+        when(userRepo.findByLogin(user.getLogin())).thenReturn(Optional.empty());
 
         // when
         loginService.generateJwtToken(user.getLogin(), user.getPassword());

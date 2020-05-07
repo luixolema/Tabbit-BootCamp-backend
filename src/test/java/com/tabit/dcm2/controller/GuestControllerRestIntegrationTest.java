@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -239,7 +237,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
                 .build();
         printJson(guestPersonalDetailsDto);
 
-        HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(guestPersonalDetailsDto);
+        HttpEntity<GuestPersonalDetailsDto> httpEntity = createHttpEntity(guestPersonalDetailsDto, authToken);
 
         // when
         ResponseEntity<Void> response = restTemplate.exchange(

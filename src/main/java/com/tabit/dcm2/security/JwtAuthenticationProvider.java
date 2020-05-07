@@ -2,6 +2,7 @@ package com.tabit.dcm2.security;
 
 import com.tabit.dcm2.exception.JwtAuthenticationException;
 import com.tabit.dcm2.service.impl.JwtTokenService;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -15,11 +16,13 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) {
         String token = (String) authentication.getCredentials();
-        String username = jwtTokenService.getUsernameFromToken(token);
+        try {
+            String username = jwtTokenService.getUsernameFromToken(token);
 
-        return jwtTokenService.validateToken(token)
-                .map(aBoolean -> new JwtAuthenticatedProfile(username))
-                .orElseThrow(() -> new JwtAuthenticationException("JWT Token validation failed"));
+            return new JwtAuthenticatedProfile(username);
+        } catch (ExpiredJwtException e) {
+            throw new JwtAuthenticationException("Token expired", e);
+        }
     }
 
     @Override
