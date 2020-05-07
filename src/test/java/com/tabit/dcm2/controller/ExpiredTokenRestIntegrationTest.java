@@ -35,7 +35,7 @@ public class ExpiredTokenRestIntegrationTest extends AbstractRestIntegrationTest
     @Test
     public void expiredToken_shall_throw_Exception() {
         // given
-        HttpEntity<GuestOverviewDto> entity = createHttpEntity(authToken);
+        HttpEntity<?> entity = createHttpEntity(authToken);
 
         // when
         ResponseEntity<GuestOverviewDto> response = restTemplate.exchange(
