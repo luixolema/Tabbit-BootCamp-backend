@@ -24,9 +24,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StayServiceTest {
@@ -146,8 +144,8 @@ public class StayServiceTest {
         guest.setPostcode(stayDto.getGuestPersonalDetails().getPostcode());
         guest.setStreet(stayDto.getGuestPersonalDetails().getStreet());
         guest.setEmail(stayDto.getGuestPersonalDetails().getEmail());
-        guest.setPhone(stayDto.getGuestPersonalDetails().getPhone());
-        guest.setPassportId(stayDto.getGuestPersonalDetails().getPassportId());
+        guest.setPhone(stayDto.getGuestPersonalDetails().getPhone().get());
+        guest.setPassportId(stayDto.getGuestPersonalDetails().getPassportId().get());
 
         return guest;
     }

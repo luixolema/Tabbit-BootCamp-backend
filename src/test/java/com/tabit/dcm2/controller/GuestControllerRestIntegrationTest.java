@@ -259,7 +259,11 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     public void checkIn_shall_create_new_active_stay_and_update_guest_personeldetails_and_set_checked_in_flag_true() {
         // given
         CheckInDto checkInDto = RandomCheckInDto.createRandomCheckInDtoBuilder()
-                .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withId(guestCheckedInFalseWithoutStay.getId()).build())
+                .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder()
+                        .withPhone("phone")
+                        .withPassportId("passport")
+                        .withId(guestCheckedInFalseWithoutStay.getId())
+                        .build())
                 .build();
 
         HttpEntity<CheckInDto> entity = createHttpEntity(checkInDto, authToken);
@@ -274,24 +278,18 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         assertThat(response.getBody()).isNull();
 
         StayMappingAssertions.assertNewStayFromCheckInDto(guestInDb.getStays().get(0), checkInDto);
-        assertThat(checkInDto.getGuestPersonalDetails().getFirstName()).isEqualTo(guestInDb.getFirstName());
-        assertThat(checkInDto.getGuestPersonalDetails().getLastName()).isEqualTo(guestInDb.getLastName());
-        assertThat(checkInDto.getGuestPersonalDetails().getCity()).isEqualTo(guestInDb.getCity());
-        assertThat(checkInDto.getGuestPersonalDetails().getBirthDate()).isEqualTo(guestInDb.getBirthDate());
-        assertThat(checkInDto.getGuestPersonalDetails().getCountry()).isEqualTo(guestInDb.getCountry());
-        assertThat(checkInDto.getGuestPersonalDetails().getEmail()).isEqualTo(guestInDb.getEmail());
-        assertThat(checkInDto.getGuestPersonalDetails().getNationality()).isEqualTo(guestInDb.getNationality());
-        assertThat(checkInDto.getGuestPersonalDetails().getPassportId()).isEqualTo(guestInDb.getPassportId());
-        assertThat(checkInDto.getGuestPersonalDetails().getPhone()).isEqualTo(guestInDb.getPhone());
-        assertThat(checkInDto.getGuestPersonalDetails().getPostcode()).isEqualTo(guestInDb.getPostcode());
-        assertThat(checkInDto.getGuestPersonalDetails().getStreet()).isEqualTo(guestInDb.getStreet());
+        GuestMappingAssertions.assertPersonalDetails(guestInDb, checkInDto.getGuestPersonalDetails());
     }
 
     @Test
     public void checkIn_shall_return_a_conflict_response_if_boxnumber_is_already_used() {
         // given
         CheckInDto checkInDto = RandomCheckInDto.createRandomCheckInDtoBuilder()
-                .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder().withId(guestCheckedInFalseWithoutStay.getId()).build())
+                .withGuestPersonalDetails(RandomGuestPersonalDetailsDto.createRandomGuestPersonalDetailsDtoBuilder()
+                        .withPhone("phone")
+                        .withPassportId("passport")
+                        .withId(guestCheckedInFalseWithoutStay.getId())
+                        .build())
                 .withStayDetails(RandomStayDetailsForCheckInDto.createRandomStayDetailsForCheckInDtoBuilder().withBoxNumber(stayActual.getBoxNumber()).build())
                 .build();
 

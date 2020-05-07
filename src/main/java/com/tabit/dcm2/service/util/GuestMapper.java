@@ -13,8 +13,8 @@ public class GuestMapper {
         guestInDb.setEmail(guestPersonalDetailsDto.getEmail());
         guestInDb.setNationality(guestPersonalDetailsDto.getNationality());
         guestInDb.setCity(guestPersonalDetailsDto.getCity());
-        guestInDb.setPassportId(guestPersonalDetailsDto.getPassportId());
-        guestInDb.setPhone(guestPersonalDetailsDto.getPhone());
+        guestInDb.setPassportId(guestPersonalDetailsDto.getPassportId().orElse(null));
+        guestInDb.setPhone(guestPersonalDetailsDto.getPhone().orElse(null));
         guestInDb.setCountry(guestPersonalDetailsDto.getCountry());
         guestInDb.setPostcode(guestPersonalDetailsDto.getPostcode());
         guestInDb.setStreet(guestPersonalDetailsDto.getStreet());
