@@ -3,6 +3,7 @@ package com.tabit.dcm2.security;
 import com.tabit.dcm2.exception.JwtAuthenticationException;
 import com.tabit.dcm2.service.impl.JwtTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,8 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             return new JwtAuthenticatedProfile(username);
         } catch (ExpiredJwtException e) {
             throw new JwtAuthenticationException("Token expired", e);
+        } catch (JwtException e) {
+            throw new JwtAuthenticationException("Invalid token error", e);
         }
     }
 

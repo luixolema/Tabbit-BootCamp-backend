@@ -3,10 +3,8 @@ package com.tabit.dcm2.service.impl;
 import com.tabit.dcm2.commons.ApplicationProperties;
 import com.tabit.dcm2.service.IJwtTokenService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -47,15 +45,11 @@ public class JwtTokenService implements IJwtTokenService {
     }
 
     private Claims getAllClaimsFromToken(String token) {
-        try {
+        return jwtsFactory.createParser()
+                .setSigningKey(applicationProperties.getSecret())
+                .parseClaimsJws(token)
+                .getBody();
 
-            return jwtsFactory.createParser()
-                    .setSigningKey(applicationProperties.getSecret())
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (JwtException ex) {
-            throw new BadCredentialsException("Invalid token error");
-        }
     }
 
     private Date calculateExpirationDate(Date createdDate) {
