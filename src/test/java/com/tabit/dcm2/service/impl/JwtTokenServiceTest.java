@@ -10,6 +10,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.authentication.BadCredentialsException;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -89,5 +90,19 @@ public class JwtTokenServiceTest {
 
         // then
         assertThat(usernameFromToken).isEqualTo(username);
+    }
+
+
+    @Test(expected = BadCredentialsException.class)
+    public void getUsernameFromToken_should_throw_BadCredentialsException_with_invalid_token() {
+        // given
+        String token = "token";
+
+        when(jwtsFactory.createParser()).thenReturn(jwtParser);
+        when(jwtParser.setSigningKey(SECRET)).thenReturn(jwtParser);
+        when(jwtParser.parseClaimsJws(token)).thenThrow(new JwtException("test"));
+
+        //when
+        jwtTokenService.getUsernameFromToken(token);
     }
 }
