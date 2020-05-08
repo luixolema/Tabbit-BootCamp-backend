@@ -58,12 +58,13 @@ public class TestdataImporter {
     }
 
     private void saveUsers() {
-        User user = new User();
-        user.setName("test");
-        user.setLogin("login@gmail.com");
-        user.setPassword(passwordEncoder.encode("password"));
+        User user = RandomUser.createRandomUserWithPasswordWithoutId("password");
+        user.setLogin("user@gmail.com");
 
-        userRepo.saveAll(ImmutableList.of(user));
+        User user2 = RandomUser.createRandomUserWithPasswordWithoutId("password");
+        user2.setLogin("user2@gmail.com");
+
+        userRepo.saveAll(ImmutableList.of(user, user2));
     }
 
     private void saveGuests() {

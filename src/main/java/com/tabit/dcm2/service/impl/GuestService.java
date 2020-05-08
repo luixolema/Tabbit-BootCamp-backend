@@ -63,6 +63,8 @@ public class GuestService implements IGuestService {
 
     @Override
     public List<Guest> getAllGuests(GuestFilterType guestFilterType) {
+//        String user = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        System.out.println("user from JwtAuthenticationProfile: " + user);
         return guestFilterType == GuestFilterType.ALL ? guestRepo.findAll() : guestRepo.findByCheckedin(guestFilterType == GuestFilterType.CHECKED_IN);
     }
 
