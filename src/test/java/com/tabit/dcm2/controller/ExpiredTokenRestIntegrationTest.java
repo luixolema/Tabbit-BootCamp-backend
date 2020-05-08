@@ -23,13 +23,14 @@ public class ExpiredTokenRestIntegrationTest extends AbstractRestIntegrationTest
 
     private User user;
     private String authToken;
+    private String password = "password";
 
     @Before
     public void setUp() {
-        user = RandomUser.createRandomUserWithoutId();
+        user = RandomUser.createRandomUserWithPasswordWithoutId(password);
         userRule.persist(ImmutableList.of(user));
 
-        authToken = loginService.generateJwtToken(user.getLogin(), user.getPassword()).getToken();
+        authToken = loginService.generateJwtToken(user.getLogin(), password).getToken();
     }
 
     @Test

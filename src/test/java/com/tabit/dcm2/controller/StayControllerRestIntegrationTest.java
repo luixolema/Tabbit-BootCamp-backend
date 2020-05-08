@@ -37,6 +37,7 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
     private Guest guest;
     private User user;
     private String authToken;
+    private String password = "password";
 
     @Before
     public void setUp() {
@@ -48,10 +49,10 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
 
         guestRule.persist(ImmutableList.of(guest));
 
-        user = RandomUser.createRandomUserWithoutId();
+        user = RandomUser.createRandomUserWithPasswordWithoutId(password);
         userRule.persist(ImmutableList.of(user));
 
-        authToken = loginService.generateJwtToken(user.getLogin(), user.getPassword()).getToken();
+        authToken = loginService.generateJwtToken(user.getLogin(), password).getToken();
     }
 
     @Test

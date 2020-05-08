@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -33,6 +34,9 @@ public class TestdataImporter {
     @Autowired
     private IUserRepo userRepo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     // equipment for Acceptance criteria
     private Equipment mask_XD_M_16;
     private Equipment mask_XD_M_17;
@@ -54,13 +58,11 @@ public class TestdataImporter {
     }
 
     private void saveUsers() {
-        User user = RandomUser.createRandomUserWithoutId();
+        User user = RandomUser.createRandomUserWithPasswordWithoutId("password");
         user.setLogin("user@gmail.com");
-        user.setPassword("password");
 
-        User user2 = RandomUser.createRandomUserWithoutId();
+        User user2 = RandomUser.createRandomUserWithPasswordWithoutId("password");
         user2.setLogin("user2@gmail.com");
-        user2.setPassword("password");
 
         userRepo.saveAll(ImmutableList.of(user, user2));
     }

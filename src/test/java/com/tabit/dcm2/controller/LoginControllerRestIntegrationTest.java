@@ -14,6 +14,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,18 +22,24 @@ public class LoginControllerRestIntegrationTest extends AbstractRestIntegrationT
     @Autowired
     private ILoginService loginService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    private String password = "password";
     private User user;
 
     @Before
     public void setUp() {
-        user = RandomUser.createRandomUserWithoutId();
+        user = RandomUser.createRandomUserWithPasswordWithoutId(password);
         userRule.persist(ImmutableList.of(user));
     }
 
     @Test
     public void loginUser_shall_return_JwtTokenResponse_of_the_loggedIn_user() {
         // given
-        LoginDto loginDto = RandomLoginDto.createRandomLoginDtoFromUser(user);
+        LoginDto loginDto = RandomLoginDto.createRandomLoginDto();
+        User newUser = RandomUser.createRandomUserFromLoginDto(loginDto);
+        userRule.persist(ImmutableList.of(newUser));
         HttpEntity<LoginDto> entity = createHttpEntity(loginDto);
 
         // when

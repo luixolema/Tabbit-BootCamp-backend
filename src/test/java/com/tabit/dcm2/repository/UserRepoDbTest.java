@@ -16,7 +16,7 @@ public class UserRepoDbTest extends AbstractDbTest {
 
     @Test
     public void findByLogin_shall_return_user_by_login() {
-        User user = RandomUser.createRandomUserWithoutId();
+        User user = RandomUser.createRandomUserWithPasswordWithoutId("password");
         userRule.persist(ImmutableList.of(user));
 
         // when

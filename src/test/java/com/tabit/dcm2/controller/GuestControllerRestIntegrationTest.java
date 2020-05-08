@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -41,6 +43,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     private Stay stayActual;
     private BoxManagement boxManagement;
     private User user;
+    private String password = "password";
     private String authToken;
 
     @Before
@@ -70,10 +73,10 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
         guestRule.persist(ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2, guestCheckedInFalseWithoutStay));
 
-        user = RandomUser.createRandomUserWithoutId();
+        user = RandomUser.createRandomUserWithPasswordWithoutId(password);
         userRule.persist(ImmutableList.of(user));
 
-        authToken = loginService.generateJwtToken(user.getLogin(), user.getPassword()).getToken();
+        authToken = loginService.generateJwtToken(user.getLogin(), password).getToken();
     }
 
     @Test
