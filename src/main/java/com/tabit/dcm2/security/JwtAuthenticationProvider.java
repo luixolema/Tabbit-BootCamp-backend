@@ -1,7 +1,9 @@
 package com.tabit.dcm2.security;
 
+import com.tabit.dcm2.entity.User;
 import com.tabit.dcm2.exception.JwtAuthenticationException;
 import com.tabit.dcm2.service.impl.JwtTokenService;
+import com.tabit.dcm2.service.impl.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import org.slf4j.Logger;
@@ -18,13 +20,17 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private JwtTokenService jwtTokenService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public Authentication authenticate(Authentication authentication) {
         String token = (String) authentication.getCredentials();
         try {
             String username = jwtTokenService.getUsernameFromToken(token);
+            User loggedUser = userService.findByLogin(username);
 
-            return new JwtAuthenticatedProfile(username);
+            return new JwtAuthenticatedProfile(loggedUser);
         } catch (ExpiredJwtException e) {
             LOGGER.info("Token expired");
             throw new JwtAuthenticationException("Invalid token", e);
