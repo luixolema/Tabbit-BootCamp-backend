@@ -61,5 +61,6 @@ public class EquipmentRepoDbTest extends AbstractDbTest {
         assertThat(actualEquipment.getSerialNumber()).isEqualTo(expectedEquipment.getSerialNumber());
         assertThat(actualEquipment.getEquipmentType().getId()).isEqualTo(expectedEquipment.getEquipmentType().getId());
         assertThat(actualEquipment.getStatus()).isEqualTo(expectedEquipment.getStatus());
+        assertThat(actualEquipment.getDiveCenter().getId()).isEqualTo(expectedEquipment.getDiveCenter().getId());
     }
 }

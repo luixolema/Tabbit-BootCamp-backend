@@ -10,8 +10,7 @@ public class RandomDiveCenter {
         DiveCenter diveCenter = new DiveCenter();
         diveCenter.setId(valueProvider.randomId());
         diveCenter.setName(valueProvider.randomString("name"));
-        diveCenter.setLatitude(valueProvider.randomDouble());
-        diveCenter.setLongitude(valueProvider.randomDouble());
+        diveCenter.setLocation(valueProvider.randomString("location"));
 
         return diveCenter;
     }

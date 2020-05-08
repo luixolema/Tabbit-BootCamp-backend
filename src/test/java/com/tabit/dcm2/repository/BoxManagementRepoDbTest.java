@@ -99,6 +99,7 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
     private void assertBoxManagement(BoxManagement actualBoxManagement, BoxManagement expectedBoxManagement) {
         assertThat(actualBoxManagement.getId()).isEqualTo(expectedBoxManagement.getId());
         assertThat(actualBoxManagement.getBoxNumber()).isEqualTo(expectedBoxManagement.getBoxNumber());
+        assertThat(actualBoxManagement.getDiveCenter().getId()).isEqualTo(expectedBoxManagement.getDiveCenter().getId());
     }
 
 }

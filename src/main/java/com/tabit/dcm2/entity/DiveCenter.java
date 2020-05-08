@@ -18,11 +18,8 @@ public class DiveCenter implements IEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "latitude", nullable = false)
-    private Double latitude;
-
-    @Column(name = "longitude", nullable = false)
-    private Double longitude;
+    @Column(name = "location", nullable = false)
+    private String location;
 
     @Override
     public Long getId() {
@@ -41,19 +38,11 @@ public class DiveCenter implements IEntity {
         this.name = name;
     }
 
-    public Double getLatitude() {
-        return latitude;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

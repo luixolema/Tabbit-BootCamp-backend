@@ -11,10 +11,9 @@ DROP TABLE IF EXISTS `dive_center`;
   create TABLE `dive_center`(
       `id` bigint(20) NOT NULL,
       `name` VARCHAR(400) NOT NULL,
-      `latitude` DOUBLE NOT NULL,
-      `longitude` DOUBLE NOT NULL,
+      `location` VARCHAR(400) NOT NULL,
       PRIMARY KEY (`id`)
-    );
+   );
 
   create TABLE `guest` (
     `id` bigint(20) NOT NULL,

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("mysql")
+@ActiveProfiles("test")
 public class TestdataImporter {
 
     @Autowired
@@ -58,8 +58,7 @@ public class TestdataImporter {
     private void createDiveCenter() {
         diveCenter = new DiveCenter();
         diveCenter.setName("Makadi Bay");
-        diveCenter.setLatitude(26.9869265);
-        diveCenter.setLongitude(33.9068201);
+        diveCenter.setLocation("26.9869265, 33.9068201");
 
         diveCenterRepo.saveAll(ImmutableList.of(diveCenter));
     }
