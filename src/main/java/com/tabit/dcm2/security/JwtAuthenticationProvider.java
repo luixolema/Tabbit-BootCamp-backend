@@ -4,6 +4,8 @@ import com.tabit.dcm2.exception.JwtAuthenticationException;
 import com.tabit.dcm2.service.impl.JwtTokenService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
+    private static final Logger LOGGER = LoggerFactory.getLogger(JwtAuthenticationProvider.class);
+
     @Autowired
     private JwtTokenService jwtTokenService;
 
@@ -22,9 +26,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
             return new JwtAuthenticatedProfile(username);
         } catch (ExpiredJwtException e) {
-            throw new JwtAuthenticationException("Token expired", e);
+            LOGGER.info("Token expired");
+            throw new JwtAuthenticationException("Invalid token", e);
         } catch (JwtException e) {
-            throw new JwtAuthenticationException("Invalid token error", e);
+            LOGGER.warn("Invalid Token");
+            throw new JwtAuthenticationException("Invalid token", e);
         }
     }
 
