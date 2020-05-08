@@ -15,6 +15,10 @@ public class EquipmentType implements IEntity {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "IDGenerator")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "dive_center_id")
+    private DiveCenter diveCenter;
+
     @Column(name = "type", nullable = false)
     private String type;
 
@@ -34,6 +38,14 @@ public class EquipmentType implements IEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public DiveCenter getDiveCenter() {
+        return diveCenter;
+    }
+
+    public void setDiveCenter(DiveCenter diveCenter) {
+        this.diveCenter = diveCenter;
     }
 
     public String getType() {

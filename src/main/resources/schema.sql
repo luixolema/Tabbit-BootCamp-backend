@@ -6,10 +6,19 @@ DROP TABLE IF EXISTS `guest`;
 DROP TABLE IF EXISTS `id_gen`;
 DROP TABLE IF EXISTS `box_management`;
 DROP TABLE IF EXISTS `user`;
+DROP TABLE IF EXISTS `dive_center`;
 
+  create TABLE `dive_center`(
+      `id` bigint(20) NOT NULL,
+      `name` VARCHAR(400) NOT NULL,
+      `latitude` DOUBLE NOT NULL,
+      `longitude` DOUBLE NOT NULL,
+      PRIMARY KEY (`id`)
+    );
 
   create TABLE `guest` (
     `id` bigint(20) NOT NULL,
+    `dive_center_id` bigint(20) NOT NULL,
     `first_name` varchar(400) NOT NULL,
     `last_name` varchar(400) NOT NULL,
     `birth_date` DATE NOT NULL,
@@ -22,11 +31,13 @@ DROP TABLE IF EXISTS `user`;
     `phone` varchar(400),
     `passport_id` varchar(400),
     `checked_in` tinyint(1) NOT NULL DEFAULT '0',
+    FOREIGN KEY (`dive_center_id`) REFERENCES dive_center(`id`),
     PRIMARY KEY (`id`)
   );
 
   create TABLE `stay` (
       `id` bigint(20) NOT NULL,
+      `dive_center_id` bigint(20) NOT NULL,
       `guest_id` bigint(20) NOT NULL,
       `first_name` varchar(400) NOT NULL,
       `last_name` varchar(400) NOT NULL,
@@ -54,29 +65,35 @@ DROP TABLE IF EXISTS `user`;
       `active` tinyint(1) NOT NULL,
       `pre_booking` varchar(400),
       FOREIGN KEY (`guest_id`) REFERENCES guest(`id`),
+      FOREIGN KEY (`dive_center_id`) REFERENCES dive_center(`id`),
       PRIMARY KEY (`id`)
     );
 
   create TABLE `equipment_type` (
     `id` bigint(20) NOT NULL,
+    `dive_center_id` bigint(20) NOT NULL,
     `type` varchar(100) NOT NULL,
     `description` varchar(400) NOT NULL,
     `price` double precision NOT NULL,
     `active` tinyint(1) NOT NULL DEFAULT '1',
+    FOREIGN KEY (`dive_center_id`) REFERENCES dive_center(`id`),
     PRIMARY KEY (`id`)
   );
 
    create TABLE `equipment` (
      `id` bigint(20) NOT NULL,
+     `dive_center_id` bigint(20) NOT NULL,
      `eq_type_id` bigint(20) NOT NULL,
      `serial_number` varchar(100) NOT NULL,
      `status` varchar(100) NOT NULL,
      FOREIGN KEY (`eq_type_id`) REFERENCES equipment_type(`id`),
+     FOREIGN KEY (`dive_center_id`) REFERENCES dive_center(`id`),
      PRIMARY KEY (`id`)
    );
 
    create TABLE `loan` (
      `id` bigint(20) NOT NULL,
+     `dive_center_id` bigint(20) NOT NULL,
      `stay_id` bigint(20) NOT NULL,
      `equipment_id` bigint(20) NOT NULL,
      `date_out` DATE NOT NULL,
@@ -84,29 +101,35 @@ DROP TABLE IF EXISTS `user`;
      `price` double precision NOT NULL,
      FOREIGN KEY (`stay_id`) REFERENCES stay(`id`),
      FOREIGN KEY (`equipment_id`) REFERENCES equipment(`id`),
+     FOREIGN KEY (`dive_center_id`) REFERENCES dive_center(`id`),
      PRIMARY KEY (`id`)
    );
 
   create TABLE `box_management`(
     `id` bigint(20) NOT NULL,
+    `dive_center_id` bigint(20) NOT NULL,
     `box_number` VARCHAR(400) NOT NULL,
-    UNIQUE (box_number),
-    PRIMARY KEY(`id`)
+    UNIQUE (box_number,dive_center_id),
+    FOREIGN KEY (`dive_center_id`) REFERENCES dive_center(`id`),
+    PRIMARY KEY (`id`)
   );
 
   create TABLE `user`(
       `id` bigint(20) NOT NULL,
+      `dive_center_id` bigint(20) NOT NULL,
       `name` VARCHAR(200) NOT NULL,
       `login` VARCHAR(200) NOT NULL,
       `password` VARCHAR(200) NOT NULL,
       UNIQUE (login),
-      PRIMARY KEY(`id`)
+      FOREIGN KEY (`dive_center_id`) REFERENCES dive_center(`id`),
+      PRIMARY KEY (`id`)
     );
+
 
   create TABLE `id_gen`(
     `id_value` INTEGER NOT NULL,
     `id_name` VARCHAR(24) NOT NULL,
-    PRIMARY KEY(`id_name`)
+    PRIMARY KEY (`id_name`)
   );
 
 

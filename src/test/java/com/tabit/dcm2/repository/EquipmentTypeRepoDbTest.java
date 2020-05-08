@@ -1,7 +1,9 @@
 package com.tabit.dcm2.repository;
 
 import com.google.common.collect.ImmutableList;
+import com.tabit.dcm2.entity.DiveCenter;
 import com.tabit.dcm2.entity.EquipmentType;
+import com.tabit.dcm2.entity.RandomDiveCenter;
 import com.tabit.dcm2.entity.RandomEquipmentType;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,11 +19,15 @@ public class EquipmentTypeRepoDbTest extends AbstractDbTest {
 
     private EquipmentType equipmentType;
     private EquipmentType equipmentType2;
+    private DiveCenter diveCenter;
 
     @Before
     public void setUp() {
         // given
-        equipmentType = RandomEquipmentType.createEquipmentTypeWithoutId();
+        diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter));
+
+        equipmentType = RandomEquipmentType.createRandomEquipmentTypeWithoutIdGivenDiveCenter(diveCenter);
 
         equipmentTypeRule.persist(ImmutableList.of(equipmentType));
     }
@@ -39,7 +45,7 @@ public class EquipmentTypeRepoDbTest extends AbstractDbTest {
     @Test
     public void save_shall_save_the_equipment_type() {
         //given
-        equipmentType2 = RandomEquipmentType.createEquipmentTypeWithoutId();
+        equipmentType2 = RandomEquipmentType.createRandomEquipmentTypeWithoutIdGivenDiveCenter(diveCenter);
 
         //when
         equipmentTypeRepo.save(equipmentType2);

@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface IBoxManagementRepo extends JpaRepository<BoxManagement, Long> {
     Optional<BoxManagement> findByBoxNumber(String boxNumber);
+
+    Optional<BoxManagement> findByBoxNumberAndDiveCenterId(String boxNumber, Long diveCenterId);
 }

@@ -1,9 +1,7 @@
 package com.tabit.dcm2.repository;
 
 import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.Equipment;
-import com.tabit.dcm2.entity.EquipmentType;
-import com.tabit.dcm2.entity.RandomEquipment;
+import com.tabit.dcm2.entity.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +17,15 @@ public class EquipmentRepoDbTest extends AbstractDbTest {
     private Equipment equipment;
     private Equipment equipment2;
     private EquipmentType equipmentType;
+    private DiveCenter diveCenter;
 
     @Before
     public void setUp() {
         // given
-        equipment = RandomEquipment.createRandomEquipmentWithoutId();
+        diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter));
+
+        equipment = RandomEquipment.createRandomEquipmentWithoutIdGivenDiveCenter(diveCenter);
         equipmentType = equipment.getEquipmentType();
 
         equipmentRule.persist(ImmutableList.of(equipment));
@@ -42,7 +44,7 @@ public class EquipmentRepoDbTest extends AbstractDbTest {
     @Test
     public void save_shall_save_the_equipment() {
         //given
-        equipment2 = RandomEquipment.createRandomEquipmentWithoutId();
+        equipment2 = RandomEquipment.createRandomEquipmentWithoutIdGivenDiveCenter(diveCenter);
 
         //when
         equipmentRepo.save(equipment2);

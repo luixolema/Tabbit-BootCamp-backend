@@ -4,22 +4,41 @@ import com.tabit.dcm2.testutils.ValueProvider;
 
 public class RandomEquipmentType {
 
-    public static EquipmentType createEquipmentTypeWithoutId() {
-        EquipmentType equipmentType = createEquipmentType();
+    public static EquipmentType createRandomEquipmentTypeWithoutId() {
+        EquipmentType equipmentType = createRandomEquipmentType();
         equipmentType.setId(null);
         return equipmentType;
     }
 
-    public static EquipmentType createEquipmentType() {
+    public static EquipmentType createRandomEquipmentType() {
         ValueProvider valueProvider = new ValueProvider();
 
         EquipmentType equipmentType = new EquipmentType();
         equipmentType.setId(valueProvider.randomId());
+        equipmentType.setDiveCenter(RandomDiveCenter.createRandomDiveCenter());
         equipmentType.setType(valueProvider.randomString("type_"));
         equipmentType.setDescription(valueProvider.randomString("description_"));
         equipmentType.setActive(valueProvider.randomBoolean());
-        equipmentType.setPrice(valueProvider.randomDouple());
+        equipmentType.setPrice(valueProvider.randomDouble());
 
         return equipmentType;
+    }
+
+    public static EquipmentType createRandomEquipmentTypeWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
+
+        EquipmentType equipmentType = createRandomEquipmentType();
+        equipmentType.setDiveCenter(diveCenter);
+        equipmentType.setId(null);
+
+        return equipmentType;
+    }
+
+    public static EquipmentType createRandomEquipmentTypeGivenDiveCenter(DiveCenter diveCenter) {
+
+        EquipmentType equipmentType = createRandomEquipmentType();
+        equipmentType.setDiveCenter(diveCenter);
+
+        return equipmentType;
+
     }
 }

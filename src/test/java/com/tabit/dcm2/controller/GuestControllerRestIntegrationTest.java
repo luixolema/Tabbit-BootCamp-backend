@@ -21,7 +21,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.*;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_ACTUAL_STAY_AND_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_NO_SUMMARY;
+import static com.tabit.dcm2.testutils.GuestMappingAssertions.GuestDetailType.WITH_PERSONAL_AND_NO_ACTUAL_STAY_AND_OLD_SUMMARY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationTest {
@@ -56,15 +58,15 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
         boxManagement.setBoxNumber(stayActual.getBoxNumber());
         boxManagementRule.persist(ImmutableList.of(boxManagement));
 
-        guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedInTrue = RandomGuest.createRandomGuestWithoutId();
         guestCheckedInTrue.setCheckedin(true);
         guestCheckedInTrue.setStays(ImmutableList.of(stayActual, stayOld));
 
-        guestCheckedInFalse = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedInFalse = RandomGuest.createRandomGuestWithoutId();
         guestCheckedInFalse.setCheckedin(false);
-        guestCheckedInFalse2 = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedInFalse2 = RandomGuest.createRandomGuestWithoutId();
         guestCheckedInFalse2.setCheckedin(false);
-        guestCheckedInFalseWithoutStay = RandomGuest.createRandomGuestWitoutId();
+        guestCheckedInFalseWithoutStay = RandomGuest.createRandomGuestWithoutId();
         guestCheckedInFalseWithoutStay.setCheckedin(false);
         guestCheckedInFalseWithoutStay.setStays(new ArrayList<>());
 

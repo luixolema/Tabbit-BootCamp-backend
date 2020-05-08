@@ -15,6 +15,9 @@ public class BoxManagement implements IEntity {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "IDGenerator")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "dive_center_id")
+    private DiveCenter diveCenter;
 
     @Column(name = "box_number", nullable = false)
     private String boxNumber;
@@ -26,6 +29,14 @@ public class BoxManagement implements IEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public DiveCenter getDiveCenter() {
+        return diveCenter;
+    }
+
+    public void setDiveCenter(DiveCenter diveCenter) {
+        this.diveCenter = diveCenter;
     }
 
     public String getBoxNumber() {

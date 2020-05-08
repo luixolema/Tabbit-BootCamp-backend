@@ -7,6 +7,7 @@ public class RandomUser {
         ValueProvider valueProvider = new ValueProvider();
         User user = new User();
         user.setId(valueProvider.randomId());
+        user.setDiveCenter(RandomDiveCenter.createRandomDiveCenter());
         user.setName(valueProvider.randomString("name"));
         user.setLogin(valueProvider.randomEmail());
         user.setPassword(valueProvider.randomString("password"));
@@ -18,6 +19,19 @@ public class RandomUser {
         User user = createRandomUser();
         user.setId(null);
 
+        return user;
+    }
+
+    public static User createRandomUserGivenDiveCenter(DiveCenter diveCenter) {
+        User user = createRandomUser();
+        user.setDiveCenter(diveCenter);
+        return user;
+    }
+
+    public static User createRandomUserWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
+        User user = createRandomUser();
+        user.setDiveCenter(diveCenter);
+        user.setId(null);
         return user;
     }
 }

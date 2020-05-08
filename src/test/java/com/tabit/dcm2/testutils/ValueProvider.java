@@ -37,7 +37,7 @@ public class ValueProvider {
         return random.nextInt(max + 1 - min) + min;
     }
 
-    public Double randomDouple() {
+    public Double randomDouble() {
         return random.nextDouble();
     }
 

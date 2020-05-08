@@ -1,6 +1,8 @@
 package com.tabit.dcm2.repository;
 
 import com.google.common.collect.ImmutableList;
+import com.tabit.dcm2.entity.DiveCenter;
+import com.tabit.dcm2.entity.RandomDiveCenter;
 import com.tabit.dcm2.entity.RandomUser;
 import com.tabit.dcm2.entity.User;
 import org.junit.Test;
@@ -16,7 +18,10 @@ public class UserRepoDbTest extends AbstractDbTest {
 
     @Test
     public void findByLogin_shall_return_user_by_login() {
-        User user = RandomUser.createRandomUserWithoutId();
+        DiveCenter diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter));
+
+        User user = RandomUser.createRandomUserWithoutIdGivenDiveCenter(diveCenter);
         userRule.persist(ImmutableList.of(user));
 
         // when
@@ -32,5 +37,6 @@ public class UserRepoDbTest extends AbstractDbTest {
         assertThat(actualUser.getName()).isEqualTo(expectedUser.getName());
         assertThat(actualUser.getLogin()).isEqualTo(expectedUser.getLogin());
         assertThat(actualUser.getPassword()).isEqualTo(expectedUser.getPassword());
+        assertThat(actualUser.getDiveCenter().getId()).isEqualTo(expectedUser.getDiveCenter().getId());
     }
 }

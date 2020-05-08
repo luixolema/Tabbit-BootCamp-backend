@@ -29,9 +29,10 @@ public abstract class AbstractDbTest {
     protected EquipmentRule equipmentRule = new EquipmentRule();
     protected BoxManagementRule boxManagementRule = new BoxManagementRule();
     protected UserRule userRule = new UserRule();
+    protected DiveCenterRule diveCenterRule = new DiveCenterRule();
 
     @Rule
-    public RuleChain ruleChain = RuleChain.outerRule(loanRule).around(equipmentRule).around(equipmentTypeRule).around(stayRule).around(guestRule);
+    public RuleChain ruleChain = RuleChain.outerRule(loanRule).around(equipmentRule).around(equipmentTypeRule).around(stayRule).around(guestRule).around(diveCenterRule);
 
     @Rule
     public RuleChain ruleChain2 = RuleChain.outerRule(boxManagementRule);
@@ -51,5 +52,6 @@ public abstract class AbstractDbTest {
         equipmentRule.setEntityManager(entityManager);
         equipmentTypeRule.setEntityManager(entityManager);
         userRule.setEntityManager(entityManager);
+        diveCenterRule.setEntityManager(entityManager);
     }
 }
