@@ -1,10 +1,7 @@
 package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
-import com.tabit.dcm2.entity.BoxManagement;
-import com.tabit.dcm2.entity.RandomBoxManagement;
-import com.tabit.dcm2.entity.RandomUser;
-import com.tabit.dcm2.entity.User;
+import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.service.ILoginService;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,13 +26,15 @@ public class BoxManagementControllerRestIntegrationTest extends AbstractRestInte
 
     @Before
     public void setUp() {
-
         //given
-        reservedBoxManager = RandomBoxManagement.createRandomBoxManagement();
+        DiveCenter diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter));
 
+        reservedBoxManager = RandomBoxManagement.createRandomBoxManagementWithoutIdGivenDiveCenter(diveCenter);
         boxManagementRule.persist(ImmutableList.of(reservedBoxManager));
 
         user = RandomUser.createRandomUserWithPasswordWithoutId(password);
+        user.setDiveCenter(diveCenter);
         userRule.persist(ImmutableList.of(user));
 
         authToken = loginService.generateJwtToken(user.getLogin(), password).getToken();

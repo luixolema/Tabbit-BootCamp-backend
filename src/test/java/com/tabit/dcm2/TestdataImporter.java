@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("mysql")
+@ActiveProfiles("test")
 public class TestdataImporter {
 
     @Autowired

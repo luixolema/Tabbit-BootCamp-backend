@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class LoginServiceTest {
+public class AuthenticationServiceTest {
     @Mock
     private IUserRepo userRepo;
 
@@ -30,7 +30,7 @@ public class LoginServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private LoginService loginService;
+    private AuthenticationService authenticationService;
 
     private String password = "password";
 
@@ -44,7 +44,7 @@ public class LoginServiceTest {
         when(jwtTokenService.generateToken(user.getLogin())).thenReturn(token);
 
         // when
-        JwtTokenResponse jwtTokenResponse = loginService.generateJwtToken(user.getLogin(), password);
+        JwtTokenResponse jwtTokenResponse = authenticationService.generateJwtToken(user.getLogin(), password);
 
         // then
         verify(passwordEncoder).matches(password, user.getPassword());
@@ -58,6 +58,6 @@ public class LoginServiceTest {
         when(userRepo.findByLogin(user.getLogin())).thenReturn(Optional.empty());
 
         // when
-        loginService.generateJwtToken(user.getLogin(), user.getPassword());
+        authenticationService.generateJwtToken(user.getLogin(), user.getPassword());
     }
 }

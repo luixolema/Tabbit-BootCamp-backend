@@ -49,31 +49,36 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     @Before
     public void setUp() {
         // given
-        stayOld = RandomStay.createRandomStayWithoutId();
+        DiveCenter diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter));
+
+        stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayOld.setArriveDate(LocalDate.now().minusYears(5));
-        stayActual = RandomStay.createRandomStayWithoutId();
+        stayOld.setActive(false);
+        stayActual = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayActual.setArriveDate(LocalDate.now().minusDays(10));
         stayActual.setActive(true);
 
-        boxManagement = RandomBoxManagement.createRandomBoxManagement();
+        boxManagement = RandomBoxManagement.createRandomBoxManagementWithoutIdGivenDiveCenter(diveCenter);
         boxManagement.setBoxNumber(stayActual.getBoxNumber());
         boxManagementRule.persist(ImmutableList.of(boxManagement));
 
-        guestCheckedInTrue = RandomGuest.createRandomGuestWithoutId();
+        guestCheckedInTrue = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guestCheckedInTrue.setCheckedin(true);
         guestCheckedInTrue.setStays(ImmutableList.of(stayActual, stayOld));
 
-        guestCheckedInFalse = RandomGuest.createRandomGuestWithoutId();
+        guestCheckedInFalse = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guestCheckedInFalse.setCheckedin(false);
-        guestCheckedInFalse2 = RandomGuest.createRandomGuestWithoutId();
+        guestCheckedInFalse2 = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guestCheckedInFalse2.setCheckedin(false);
-        guestCheckedInFalseWithoutStay = RandomGuest.createRandomGuestWithoutId();
+        guestCheckedInFalseWithoutStay = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guestCheckedInFalseWithoutStay.setCheckedin(false);
         guestCheckedInFalseWithoutStay.setStays(new ArrayList<>());
 
         guestRule.persist(ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2, guestCheckedInFalseWithoutStay));
 
         user = RandomUser.createRandomUserWithPasswordWithoutId(password);
+        user.setDiveCenter(diveCenter);
         userRule.persist(ImmutableList.of(user));
 
         authToken = loginService.generateJwtToken(user.getLogin(), password).getToken();

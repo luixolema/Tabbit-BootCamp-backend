@@ -41,15 +41,19 @@ public class StayControllerRestIntegrationTest extends AbstractRestIntegrationTe
 
     @Before
     public void setUp() {
-
         //given
-        stay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
+        DiveCenter diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter));
+
+        stay = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
+        stay.setActive(true);
         guest = createGuestFromStayWithoutId(stay);
         guest.setStays(ImmutableList.of(stay));
 
         guestRule.persist(ImmutableList.of(guest));
 
         user = RandomUser.createRandomUserWithPasswordWithoutId(password);
+        user.setDiveCenter(diveCenter);
         userRule.persist(ImmutableList.of(user));
 
         authToken = loginService.generateJwtToken(user.getLogin(), password).getToken();
