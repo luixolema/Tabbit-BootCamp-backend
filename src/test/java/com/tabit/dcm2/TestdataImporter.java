@@ -68,10 +68,12 @@ public class TestdataImporter {
     }
 
     private void saveUsers() {
-        User user = RandomUser.createRandomUserGivenDiveCenter(diveCenter);
+        User user = RandomUser.createRandomUserWithPassword("password");
+        user.setDiveCenter(diveCenter);
         user.setLogin("user@gmail.com");
 
-        User user2 = RandomUser.createRandomUserGivenDiveCenter(diveCenter);
+        User user2 = RandomUser.createRandomUserWithPassword("password");
+        user2.setDiveCenter(diveCenter);
         user2.setLogin("user2@gmail.com");
 
         userRepo.saveAll(ImmutableList.of(user, user2));
