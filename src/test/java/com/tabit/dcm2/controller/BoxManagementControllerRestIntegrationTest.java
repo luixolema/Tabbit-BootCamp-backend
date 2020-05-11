@@ -24,6 +24,7 @@ public class BoxManagementControllerRestIntegrationTest extends AbstractRestInte
 
     private BoxManagement reservedBoxManager;
     private User user;
+    private String password = "password";
     private String authToken;
 
     @Before
@@ -34,10 +35,10 @@ public class BoxManagementControllerRestIntegrationTest extends AbstractRestInte
 
         boxManagementRule.persist(ImmutableList.of(reservedBoxManager));
 
-        user = RandomUser.createRandomUserWithoutId();
+        user = RandomUser.createRandomUserWithPasswordWithoutId(password);
         userRule.persist(ImmutableList.of(user));
 
-        authToken = loginService.generateJwtToken(user.getLogin(), user.getPassword()).getToken();
+        authToken = loginService.generateJwtToken(user.getLogin(), password).getToken();
     }
 
     @Test

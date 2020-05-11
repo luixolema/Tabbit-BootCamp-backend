@@ -1,5 +1,6 @@
 package com.tabit.dcm2.security;
 
+import com.tabit.dcm2.entity.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -8,10 +9,10 @@ import java.util.Collection;
 
 public class JwtAuthenticatedProfile implements Authentication {
     private static final long serialVersionUID = 1L;
-    private final String login;
+    private final User user;
 
-    public JwtAuthenticatedProfile(String login) {
-        this.login = login;
+    public JwtAuthenticatedProfile(User user) {
+        this.user = user;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class JwtAuthenticatedProfile implements Authentication {
 
     @Override
     public Object getPrincipal() {
-        return login;
+        return user;
     }
 
     @Override
@@ -46,6 +47,6 @@ public class JwtAuthenticatedProfile implements Authentication {
 
     @Override
     public String getName() {
-        return login;
+        return user.getLogin();
     }
 }

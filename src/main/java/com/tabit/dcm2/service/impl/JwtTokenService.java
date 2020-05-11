@@ -49,6 +49,7 @@ public class JwtTokenService implements IJwtTokenService {
                 .setSigningKey(applicationProperties.getSecret())
                 .parseClaimsJws(token)
                 .getBody();
+
     }
 
     private Date calculateExpirationDate(Date createdDate) {

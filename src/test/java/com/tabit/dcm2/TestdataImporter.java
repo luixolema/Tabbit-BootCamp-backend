@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("mysql")
 public class TestdataImporter {
 
     @Autowired
@@ -32,6 +33,9 @@ public class TestdataImporter {
 
     @Autowired
     private IDiveCenterRepo diveCenterRepo;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     // equipment for Acceptance criteria
     private Equipment mask_XD_M_16;
@@ -64,13 +68,13 @@ public class TestdataImporter {
     }
 
     private void saveUsers() {
-        User user = new User();
-        user.setName("test");
-        user.setLogin("login@gmail.com");
-        user.setPassword("password");
-        user.setDiveCenter(diveCenter);
+        User user = RandomUser.createRandomUserGivenDiveCenter(diveCenter);
+        user.setLogin("user@gmail.com");
 
-        userRepo.saveAll(ImmutableList.of(user));
+        User user2 = RandomUser.createRandomUserGivenDiveCenter(diveCenter);
+        user2.setLogin("user2@gmail.com");
+
+        userRepo.saveAll(ImmutableList.of(user, user2));
     }
 
     private void saveGuests() {

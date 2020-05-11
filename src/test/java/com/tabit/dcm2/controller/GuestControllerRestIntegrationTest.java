@@ -43,6 +43,7 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
     private Stay stayActual;
     private BoxManagement boxManagement;
     private User user;
+    private String password = "password";
     private String authToken;
 
     @Before
@@ -72,10 +73,10 @@ public class GuestControllerRestIntegrationTest extends AbstractRestIntegrationT
 
         guestRule.persist(ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2, guestCheckedInFalseWithoutStay));
 
-        user = RandomUser.createRandomUserWithoutId();
+        user = RandomUser.createRandomUserWithPasswordWithoutId(password);
         userRule.persist(ImmutableList.of(user));
 
-        authToken = loginService.generateJwtToken(user.getLogin(), user.getPassword()).getToken();
+        authToken = loginService.generateJwtToken(user.getLogin(), password).getToken();
     }
 
     @Test
