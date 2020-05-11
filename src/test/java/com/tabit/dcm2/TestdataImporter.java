@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -34,9 +33,6 @@ public class TestdataImporter {
     @Autowired
     private IDiveCenterRepo diveCenterRepo;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     // equipment for Acceptance criteria
     private Equipment mask_XD_M_16;
     private Equipment mask_XD_M_17;
@@ -49,7 +45,7 @@ public class TestdataImporter {
      * to import some testdata to the application just set ActiveProfile to mysql.
      * but dont commit it!
      * <p>
-     * start the application first, the import the testdata
+     * start the application first, then import the testdata
      */
     @Test
     public void import_testdata_for_application() {
@@ -63,8 +59,10 @@ public class TestdataImporter {
         diveCenter = new DiveCenter();
         diveCenter.setName("Makadi Bay");
         diveCenter.setLocation("26.9869265, 33.9068201");
-
         diveCenterRepo.saveAll(ImmutableList.of(diveCenter));
+
+        createDiveCenterAWithUsers();
+        createDiveCenterOmegaWithUsers();
     }
 
     private void saveUsers() {
@@ -97,6 +95,42 @@ public class TestdataImporter {
         Guest guest9 = createGuestMelGibson();
 
         guestRepo.saveAll(ImmutableList.of(guestWithGoodLoans1, guestWithGoodLoans2, guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
+    }
+
+    private void createDiveCenterAWithUsers() {
+        DiveCenter diveCenter = new DiveCenter();
+        diveCenter.setName("A");
+        diveCenter.setLocation("27.7777777, 38.8888888");
+        diveCenterRepo.save(diveCenter);
+
+        User userX = RandomUser.createRandomUserWithPassword("password");
+        userX.setName("X");
+        userX.setDiveCenter(diveCenter);
+        userX.setLogin("emailX@gmail.com");
+
+        User userY = RandomUser.createRandomUserWithPassword("password");
+        userY.setName("Y");
+        userY.setDiveCenter(diveCenter);
+        userY.setLogin("emailY@gmail.com");
+        userRepo.saveAll(ImmutableList.of(userX, userY));
+    }
+
+    private void createDiveCenterOmegaWithUsers() {
+        DiveCenter diveCenter = new DiveCenter();
+        diveCenter.setName("Omega");
+        diveCenter.setLocation("21.1111111, 33.3333333");
+        diveCenterRepo.save(diveCenter);
+
+        User userAlpha = RandomUser.createRandomUserWithPassword("password");
+        userAlpha.setName("Alpha");
+        userAlpha.setDiveCenter(diveCenter);
+        userAlpha.setLogin("emailAlpha@gmail.com");
+
+        User userBeta = RandomUser.createRandomUserWithPassword("password");
+        userBeta.setName("Beta");
+        userBeta.setDiveCenter(diveCenter);
+        userBeta.setLogin("emailBeta@gmail.com");
+        userRepo.saveAll(ImmutableList.of(userAlpha, userBeta));
     }
 
     private Guest createGuestAlexander1() {
