@@ -33,7 +33,7 @@ public class JwtAuthenticationProviderTest {
         String login = "login";
         String token = "testToken";
         JwtAuthentication jwtAuthentication = new JwtAuthentication(token);
-        User randomUser = RandomUser.createRandomUserWithPassword("test");
+        User randomUser = RandomUser.createRandomUser();
         when(jwtTokenService.getUsernameFromToken(token)).thenReturn(login);
         when(userService.findByLogin(login)).thenReturn(randomUser);
 

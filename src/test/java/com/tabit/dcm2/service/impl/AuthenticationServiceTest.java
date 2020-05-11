@@ -38,7 +38,7 @@ public class AuthenticationServiceTest {
     public void generateJwtToken_shall_return_valid_JwtTokenResponse() {
         // given
         String token = "testToken";
-        User user = RandomUser.createRandomUserWithPassword(password);
+        User user = RandomUser.createRandomUser();
         when(userRepo.findByLogin(user.getLogin())).thenReturn(Optional.of(user));
         when(passwordEncoder.matches(password, user.getPassword())).thenReturn(true);
         when(jwtTokenService.generateToken(user.getLogin())).thenReturn(token);
@@ -52,12 +52,22 @@ public class AuthenticationServiceTest {
     }
 
     @Test(expected = ResourceNotFoundException.class)
-    public void generateJwtToken_shall_throw_exception() {
+    public void generateJwtToken_shall_throw_exception_when_no_user_found() {
         // given
-        User user = RandomUser.createRandomUserWithPassword(password);
+        User user = RandomUser.createRandomUser();
         when(userRepo.findByLogin(user.getLogin())).thenReturn(Optional.empty());
 
         // when
         authenticationService.generateJwtToken(user.getLogin(), user.getPassword());
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void generateJwtToken_shall_throw_exception_password_doesnt_match() {
+        // given
+        User user = RandomUser.createRandomUser();
+        when(userRepo.findByLogin(user.getLogin())).thenReturn(Optional.of(user));
+
+        // when
+        authenticationService.generateJwtToken(user.getLogin(), "another password");
     }
 }
