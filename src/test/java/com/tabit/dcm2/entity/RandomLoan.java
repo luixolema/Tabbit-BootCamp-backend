@@ -6,13 +6,6 @@ import java.time.LocalDate;
 
 public class RandomLoan {
 
-    public static Loan createRandomLoanWithoutId() {
-        Loan loan = createRandomLoan();
-        loan.setId(null);
-        loan.setEquipment(RandomEquipment.createRandomEquipmentWithoutId());
-        return loan;
-    }
-
     public static Loan createRandomLoan() {
         ValueProvider valueProvider = new ValueProvider();
         LocalDate today = LocalDate.now();
@@ -22,12 +15,39 @@ public class RandomLoan {
 
         Loan loan = new Loan();
         loan.setId(valueProvider.randomId());
+        loan.setDiveCenter(RandomDiveCenter.createRandomDiveCenter());
         loan.setEquipment(RandomEquipment.createRandomEquipment());
         loan.setDateOut(dateOut);
         if (valueProvider.randomBoolean()) {
             loan.setDateReturn(dateReturn);
         }
-        loan.setPrice(valueProvider.randomDouple());
+        loan.setPrice(valueProvider.randomDouble());
         return loan;
     }
+
+    public static Loan createRandomLoanWithoutId() {
+        Loan loan = createRandomLoan();
+        loan.setId(null);
+        loan.setEquipment(RandomEquipment.createRandomEquipmentWithoutId());
+        return loan;
+    }
+
+    public static Loan createRandomLoanGivenDiveCenter(DiveCenter diveCenter) {
+        Loan loan = createRandomLoan();
+        loan.setDiveCenter(diveCenter);
+        loan.setEquipment(RandomEquipment.createRandomEquipmentGivenDiveCenter(diveCenter));
+
+        return loan;
+    }
+
+    public static Loan createRandomLoanWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
+        Loan loan = createRandomLoan();
+        loan.setDiveCenter(diveCenter);
+        loan.setEquipment(RandomEquipment.createRandomEquipmentWithoutIdGivenDiveCenter(diveCenter));
+        loan.setId(null);
+
+        return loan;
+
+    }
+
 }

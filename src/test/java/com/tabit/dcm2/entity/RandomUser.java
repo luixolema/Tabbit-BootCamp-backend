@@ -12,9 +12,24 @@ public class RandomUser {
 
         User user = new User();
         user.setId(valueProvider.randomId());
+        user.setDiveCenter(RandomDiveCenter.createRandomDiveCenter());
         user.setName(valueProvider.randomString("name"));
         user.setLogin(valueProvider.randomEmail());
         user.setPassword(passwordEncoder.encode(password));
+
+        return user;
+    }
+
+    public static User createRandomUse() {
+        ValueProvider valueProvider = new ValueProvider();
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+        User user = new User();
+        user.setId(valueProvider.randomId());
+        user.setDiveCenter(RandomDiveCenter.createRandomDiveCenter());
+        user.setName(valueProvider.randomString("name"));
+        user.setLogin(valueProvider.randomEmail());
+        user.setPassword(passwordEncoder.encode(valueProvider.randomString("password")));
 
         return user;
     }
@@ -33,6 +48,19 @@ public class RandomUser {
         user.setLogin(loginDto.getLogin());
         user.setPassword(passwordEncoder.encode(loginDto.getPassword()));
 
+        return user;
+    }
+
+    public static User createRandomUserGivenDiveCenter(DiveCenter diveCenter) {
+        User user = createRandomUse();
+        user.setDiveCenter(diveCenter);
+        return user;
+    }
+
+    public static User createRandomUserWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
+        User user = createRandomUse();
+        user.setDiveCenter(diveCenter);
+        user.setId(null);
         return user;
     }
 }

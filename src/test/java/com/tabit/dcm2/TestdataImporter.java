@@ -2,10 +2,7 @@ package com.tabit.dcm2;
 
 import com.google.common.collect.ImmutableList;
 import com.tabit.dcm2.entity.*;
-import com.tabit.dcm2.repository.IBoxManagementRepo;
-import com.tabit.dcm2.repository.IEquipmentRepo;
-import com.tabit.dcm2.repository.IGuestRepo;
-import com.tabit.dcm2.repository.IUserRepo;
+import com.tabit.dcm2.repository.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +32,9 @@ public class TestdataImporter {
     private IUserRepo userRepo;
 
     @Autowired
+    private IDiveCenterRepo diveCenterRepo;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     // equipment for Acceptance criteria
@@ -43,6 +43,7 @@ public class TestdataImporter {
     private Equipment mask_XD_M_15;
     private Equipment fins_XD_F_12;
     private Equipment suite_XS_G_13;
+    private DiveCenter diveCenter;
 
     /**
      * to import some testdata to the application just set ActiveProfile to mysql.
@@ -52,16 +53,25 @@ public class TestdataImporter {
      */
     @Test
     public void import_testdata_for_application() {
+        createDiveCenter();
         saveGuests();
         saveBoxNumbers();
         saveUsers();
     }
 
+    private void createDiveCenter() {
+        diveCenter = new DiveCenter();
+        diveCenter.setName("Makadi Bay");
+        diveCenter.setLocation("26.9869265, 33.9068201");
+
+        diveCenterRepo.saveAll(ImmutableList.of(diveCenter));
+    }
+
     private void saveUsers() {
-        User user = RandomUser.createRandomUserWithPasswordWithoutId("password");
+        User user = RandomUser.createRandomUserGivenDiveCenter(diveCenter);
         user.setLogin("user@gmail.com");
 
-        User user2 = RandomUser.createRandomUserWithPasswordWithoutId("password");
+        User user2 = RandomUser.createRandomUserGivenDiveCenter(diveCenter);
         user2.setLogin("user2@gmail.com");
 
         userRepo.saveAll(ImmutableList.of(user, user2));
@@ -91,7 +101,7 @@ public class TestdataImporter {
         LocalDate guestBirthDate = LocalDate.now().minusYears(59);
         String firstName = "Alexander";
 
-        Stay stayOld = RandomStay.createRandomStayWithoutId();
+        Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayOld.setArriveDate(LocalDate.now().minusYears(7));
         stayOld.setLeaveDate(LocalDate.now().minusYears(6));
         stayOld.setCheckInDate(stayOld.getArriveDate().plusDays(1));
@@ -103,18 +113,21 @@ public class TestdataImporter {
         stayOld.setActive(false);
 
         Loan loanOld1 = new Loan();
+        loanOld1.setDiveCenter(diveCenter);
         loanOld1.setEquipment(suite_XS_G_13);
         loanOld1.setDateOut(stayOld.getCheckInDate().plusDays(1));
         loanOld1.setDateReturn(stayOld.getCheckInDate().plusDays(4));
         loanOld1.setPrice(5.25d);
 
         Loan loanOld2 = new Loan();
+        loanOld2.setDiveCenter(diveCenter);
         loanOld2.setEquipment(mask_XD_M_15);
         loanOld2.setDateOut(stayOld.getCheckInDate().plusDays(3));
         loanOld2.setDateReturn(stayOld.getCheckInDate().plusDays(6));
         loanOld2.setPrice(3.55d);
 
         Loan loanOld3 = new Loan();
+        loanOld3.setDiveCenter(diveCenter);
         loanOld3.setEquipment(fins_XD_F_12);
         loanOld3.setDateOut(stayOld.getCheckInDate().plusDays(2));
         loanOld3.setDateReturn(stayOld.getCheckInDate().plusDays(7));
@@ -122,7 +135,7 @@ public class TestdataImporter {
 
         stayOld.setLoans(ImmutableList.of(loanOld1, loanOld2, loanOld3));
 
-        Stay stayActual = RandomStay.createRandomStayWithoutId();
+        Stay stayActual = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayActual.setArriveDate(LocalDate.now().minusDays(3));
         stayActual.setLeaveDate(LocalDate.now().plusDays(3));
         stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
@@ -135,24 +148,27 @@ public class TestdataImporter {
         stayActual.setActive(true);
 
         Loan loan1 = new Loan();
+        loan1.setDiveCenter(diveCenter);
         loan1.setEquipment(mask_XD_M_16);
         loan1.setDateOut(stayActual.getCheckInDate());
         loan1.setDateReturn(stayActual.getCheckInDate().plusDays(1));
         loan1.setPrice(5.25d);
 
         Loan loan2 = new Loan();
+        loan2.setDiveCenter(diveCenter);
         loan2.setEquipment(mask_XD_M_17);
         loan2.setDateOut(stayActual.getCheckInDate().plusDays(1));
         loan2.setPrice(3.55d);
 
         Loan loan3 = new Loan();
+        loan3.setDiveCenter(diveCenter);
         loan3.setEquipment(fins_XD_F_12);
         loan3.setDateOut(stayActual.getCheckInDate());
         loan3.setPrice(7.50d);
 
         stayActual.setLoans(ImmutableList.of(loan1, loan2, loan3));
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName(firstName);
         guest.setLastName("Velonias Criteria 1");
@@ -166,7 +182,7 @@ public class TestdataImporter {
         LocalDate guestBirthDate = LocalDate.now().minusYears(59);
         String firstName = "Alexander";
 
-        Stay stayOld = RandomStay.createRandomStayWithoutId();
+        Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayOld.setArriveDate(LocalDate.now().minusYears(7));
         stayOld.setLeaveDate(LocalDate.now().minusYears(6));
         stayOld.setCheckInDate(stayOld.getArriveDate().plusDays(1));
@@ -178,18 +194,21 @@ public class TestdataImporter {
         stayOld.setActive(false);
 
         Loan loanOld1 = new Loan();
+        loanOld1.setDiveCenter(diveCenter);
         loanOld1.setEquipment(suite_XS_G_13);
         loanOld1.setDateOut(stayOld.getCheckInDate());
         loanOld1.setDateReturn(stayOld.getCheckOutDate());
         loanOld1.setPrice(5.25d);
 
         Loan loanOld2 = new Loan();
+        loanOld2.setDiveCenter(diveCenter);
         loanOld2.setEquipment(mask_XD_M_15);
         loanOld2.setDateOut(stayOld.getCheckInDate());
         loanOld2.setDateReturn(stayOld.getCheckOutDate());
         loanOld2.setPrice(3.55d);
 
         Loan loanOld3 = new Loan();
+        loanOld3.setDiveCenter(diveCenter);
         loanOld3.setEquipment(fins_XD_F_12);
         loanOld3.setDateOut(stayOld.getCheckInDate());
         loanOld3.setDateReturn(stayOld.getCheckOutDate());
@@ -197,7 +216,7 @@ public class TestdataImporter {
 
         stayOld.setLoans(ImmutableList.of(loanOld1, loanOld2, loanOld3));
 
-        Stay stayActual = RandomStay.createRandomStayWithoutId();
+        Stay stayActual = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayActual.setArriveDate(LocalDate.now().minusDays(3));
         stayActual.setLeaveDate(LocalDate.now().plusDays(3));
         stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
@@ -210,18 +229,20 @@ public class TestdataImporter {
         stayActual.setActive(true);
 
         Loan loan1 = new Loan();
+        loan1.setDiveCenter(diveCenter);
         loan1.setEquipment(mask_XD_M_16);
         loan1.setDateOut(stayActual.getCheckInDate());
         loan1.setPrice(5.25d);
 
         Loan loan2 = new Loan();
+        loan2.setDiveCenter(diveCenter);
         loan2.setEquipment(fins_XD_F_12);
         loan2.setDateOut(stayActual.getCheckInDate());
         loan2.setPrice(3.55d);
 
         stayActual.setLoans(ImmutableList.of(loan1, loan2));
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName(firstName);
         guest.setLastName("Velonias Criteria 2");
@@ -235,7 +256,7 @@ public class TestdataImporter {
         LocalDate guestBirthDate = LocalDate.now().minusYears(59);
         String firstName = "Antonio";
 
-        Stay stayVeryOld = RandomStay.createRandomStayWithoutId();
+        Stay stayVeryOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayVeryOld.setArriveDate(LocalDate.now().minusYears(15));
         stayVeryOld.setLeaveDate(LocalDate.now().minusYears(14));
         stayVeryOld.setCheckInDate(stayVeryOld.getArriveDate().plusDays(1));
@@ -246,7 +267,7 @@ public class TestdataImporter {
         stayVeryOld.setBoxNumber("123456");
         stayVeryOld.setActive(false);
 
-        Stay stayOld = RandomStay.createRandomStayWithoutId();
+        Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayOld.setArriveDate(LocalDate.now().minusYears(7));
         stayOld.setLeaveDate(LocalDate.now().minusYears(6));
         stayOld.setCheckInDate(stayOld.getArriveDate().plusDays(1));
@@ -257,7 +278,7 @@ public class TestdataImporter {
         stayOld.setBoxNumber("12");
         stayOld.setActive(false);
 
-        Stay stayActual = RandomStay.createRandomStayWithoutId();
+        Stay stayActual = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayActual.setArriveDate(LocalDate.now().minusDays(3));
         stayActual.setLeaveDate(LocalDate.now().plusDays(3));
         stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
@@ -269,7 +290,7 @@ public class TestdataImporter {
         stayActual.setPreBooking("Antonio Banderas made a pre-booking and save 19 Euro. Smart man.");
         stayActual.setActive(true);
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName(firstName);
         guest.setLastName("Banderas With Many Stays And Different Names");
@@ -283,7 +304,7 @@ public class TestdataImporter {
         String firstName = "Anthony";
         LocalDate guestBirthDate = LocalDate.now().minusYears(45);
 
-        Stay stayVeryOld = RandomStay.createRandomStayWithoutId();
+        Stay stayVeryOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayVeryOld.setArriveDate(LocalDate.now().minusYears(10));
         stayVeryOld.setLeaveDate(LocalDate.now().minusYears(9));
         stayVeryOld.setCheckInDate(stayVeryOld.getArriveDate().plusDays(1));
@@ -294,7 +315,7 @@ public class TestdataImporter {
         stayVeryOld.setBoxNumber("6789");
         stayVeryOld.setActive(false);
 
-        Stay stayOld = RandomStay.createRandomStayWithoutId();
+        Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayOld.setArriveDate(LocalDate.now().minusYears(5));
         stayOld.setLeaveDate(LocalDate.now().minusYears(4));
         stayOld.setCheckInDate(stayOld.getArriveDate().plusDays(1));
@@ -306,7 +327,7 @@ public class TestdataImporter {
         stayOld.setPreBooking("Anthony Hopkins made a pre-booking and save 28 Euro. Smart man.");
         stayOld.setActive(false);
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName(firstName);
         guest.setLastName("Hopkins With Stays And Different Names");
@@ -319,7 +340,7 @@ public class TestdataImporter {
     private Guest createGuestMonicaBellucci() {
         LocalDate guestBirthDate = LocalDate.now().minusYears(54);
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName("Monica");
         guest.setLastName("Bellucci No Stays");
@@ -331,7 +352,7 @@ public class TestdataImporter {
     private Guest createGuestKeanuReeves() {
         LocalDate guestBirthDate = LocalDate.now().minusYears(55);
 
-        Stay stayActual = RandomStay.createRandomStayWithoutId();
+        Stay stayActual = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayActual.setArriveDate(LocalDate.now().minusDays(8));
         stayActual.setLeaveDate(LocalDate.now().plusDays(8));
         stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
@@ -342,7 +363,7 @@ public class TestdataImporter {
         stayActual.setBoxNumber("666");
         stayActual.setActive(true);
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName("Keanu");
         guest.setLastName("Reeves");
@@ -354,7 +375,7 @@ public class TestdataImporter {
     private Guest createGuestAgentSmith() {
         LocalDate guestBirthDate = LocalDate.now().minusYears(42);
 
-        Stay stayActual = RandomStay.createRandomStayWithoutId();
+        Stay stayActual = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayActual.setArriveDate(LocalDate.now().minusDays(10));
         stayActual.setLeaveDate(LocalDate.now().plusDays(10));
         stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
@@ -365,7 +386,7 @@ public class TestdataImporter {
         stayActual.setBoxNumber("98765");
         stayActual.setActive(true);
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName("Agent");
         guest.setLastName("Smith Shows Name Always From Stay");
@@ -378,7 +399,7 @@ public class TestdataImporter {
     private Guest createGuestHarrisonFord() {
         LocalDate guestBirthDate = LocalDate.now().minusYears(77);
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName("Harrison");
         guest.setLastName("Ford No Stay");
@@ -390,7 +411,7 @@ public class TestdataImporter {
     private Guest createGuestSeanConnery() {
         LocalDate guestBirthDate = LocalDate.now().minusYears(51);
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName("Sean");
         guest.setLastName("Connery No Stay");
@@ -402,7 +423,7 @@ public class TestdataImporter {
     private Guest createGuestClintEastwood() {
         LocalDate guestBirthDate = LocalDate.now().minusYears(89);
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName("Clint");
         guest.setLastName("Eastwood No Stay");
@@ -414,7 +435,7 @@ public class TestdataImporter {
     private Guest createGuestMelGibson() {
         LocalDate guestBirthDate = LocalDate.now().minusYears(52);
 
-        Stay stayOld = RandomStay.createRandomStayWithoutId();
+        Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayOld.setArriveDate(LocalDate.now().minusYears(6));
         stayOld.setLeaveDate(LocalDate.now().minusYears(4));
         stayOld.setCheckInDate(stayOld.getArriveDate().plusDays(1));
@@ -425,7 +446,7 @@ public class TestdataImporter {
         stayOld.setBoxNumber("ZXY");
         stayOld.setActive(false);
 
-        Stay stayActual = RandomStay.createRandomStayWithoutId();
+        Stay stayActual = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stayActual.setArriveDate(LocalDate.now().minusDays(15));
         stayActual.setLeaveDate(LocalDate.now().plusDays(15));
         stayActual.setCheckInDate(stayActual.getArriveDate().plusDays(1));
@@ -437,7 +458,7 @@ public class TestdataImporter {
         stayActual.setActive(true);
         stayActual.setPreBooking("Mel Gibson made a pre-booking and save 20 Euro. Smart man.");
 
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
+        Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
         guest.setBirthDate(guestBirthDate);
         guest.setFirstName("Mel");
         guest.setLastName("Gibson Same Names");
@@ -447,51 +468,57 @@ public class TestdataImporter {
     }
 
     private void setupEquipment() {
-        EquipmentType mask = RandomEquipmentType.createEquipmentTypeWithoutId();
+        EquipmentType mask = RandomEquipmentType.createRandomEquipmentTypeWithoutIdGivenDiveCenter(diveCenter);
         mask.setType("Mask");
-        EquipmentType fins = RandomEquipmentType.createEquipmentTypeWithoutId();
+        EquipmentType fins = RandomEquipmentType.createRandomEquipmentTypeWithoutIdGivenDiveCenter(diveCenter);
         fins.setType("Fins");
-        EquipmentType suite = RandomEquipmentType.createEquipmentTypeWithoutId();
+        EquipmentType suite = RandomEquipmentType.createRandomEquipmentTypeWithoutIdGivenDiveCenter(diveCenter);
         suite.setType("Suite");
 
-        mask_XD_M_16 = RandomEquipment.createRandomEquipmentWithoutId();
+        mask_XD_M_16 = RandomEquipment.createRandomEquipmentWithoutIdGivenDiveCenter(diveCenter);
         mask_XD_M_16.setEquipmentType(mask);
         mask_XD_M_16.setSerialNumber("XD_M_16");
 
-        mask_XD_M_17 = RandomEquipment.createRandomEquipmentWithoutId();
+        mask_XD_M_17 = RandomEquipment.createRandomEquipmentWithoutIdGivenDiveCenter(diveCenter);
         mask_XD_M_17.setEquipmentType(mask);
         mask_XD_M_17.setSerialNumber("XD_M_17");
 
-        mask_XD_M_15 = RandomEquipment.createRandomEquipmentWithoutId();
+        mask_XD_M_15 = RandomEquipment.createRandomEquipmentWithoutIdGivenDiveCenter(diveCenter);
         mask_XD_M_15.setEquipmentType(mask);
         mask_XD_M_15.setSerialNumber("XD_M_15");
 
-        fins_XD_F_12 = RandomEquipment.createRandomEquipmentWithoutId();
+        fins_XD_F_12 = RandomEquipment.createRandomEquipmentWithoutIdGivenDiveCenter(diveCenter);
         fins_XD_F_12.setEquipmentType(fins);
         fins_XD_F_12.setSerialNumber("XD_F_12");
 
-        suite_XS_G_13 = RandomEquipment.createRandomEquipmentWithoutId();
+        suite_XS_G_13 = RandomEquipment.createRandomEquipmentWithoutIdGivenDiveCenter(diveCenter);
         suite_XS_G_13.setEquipmentType(suite);
         suite_XS_G_13.setSerialNumber("XS_G_13");
     }
 
     private void saveBoxNumbers() {
         BoxManagement boxManagement1 = new BoxManagement();
+        boxManagement1.setDiveCenter(diveCenter);
         boxManagement1.setBoxNumber("123AB");
 
         BoxManagement boxManagement2 = new BoxManagement();
+        boxManagement2.setDiveCenter(diveCenter);
         boxManagement2.setBoxNumber("666");
 
         BoxManagement boxManagement3 = new BoxManagement();
+        boxManagement3.setDiveCenter(diveCenter);
         boxManagement3.setBoxNumber("98765");
 
         BoxManagement boxManagement4 = new BoxManagement();
+        boxManagement4.setDiveCenter(diveCenter);
         boxManagement4.setBoxNumber("4567");
 
         BoxManagement boxManagement5 = new BoxManagement();
+        boxManagement5.setDiveCenter(diveCenter);
         boxManagement5.setBoxNumber("888");
 
         BoxManagement boxManagement6 = new BoxManagement();
+        boxManagement6.setDiveCenter(diveCenter);
         boxManagement6.setBoxNumber("999");
 
         boxManagementRepo.saveAll(ImmutableList.of(boxManagement1, boxManagement2, boxManagement3, boxManagement4, boxManagement5, boxManagement6));

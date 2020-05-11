@@ -1,6 +1,8 @@
 package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
+import com.tabit.dcm2.entity.DiveCenter;
+import com.tabit.dcm2.entity.RandomDiveCenter;
 import com.tabit.dcm2.entity.RandomUser;
 import com.tabit.dcm2.entity.User;
 import com.tabit.dcm2.security.JwtTokenResponse;
@@ -27,10 +29,15 @@ public class LoginControllerRestIntegrationTest extends AbstractRestIntegrationT
 
     private String password = "password";
     private User user;
+    private DiveCenter diveCenter;
 
     @Before
     public void setUp() {
+        diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter));
+
         user = RandomUser.createRandomUserWithPasswordWithoutId(password);
+        user.setDiveCenter(diveCenter);
         userRule.persist(ImmutableList.of(user));
     }
 
@@ -39,6 +46,7 @@ public class LoginControllerRestIntegrationTest extends AbstractRestIntegrationT
         // given
         LoginDto loginDto = RandomLoginDto.createRandomLoginDto();
         User newUser = RandomUser.createRandomUserFromLoginDto(loginDto);
+        newUser.setDiveCenter(diveCenter);
         userRule.persist(ImmutableList.of(newUser));
         HttpEntity<LoginDto> entity = createHttpEntity(loginDto);
 

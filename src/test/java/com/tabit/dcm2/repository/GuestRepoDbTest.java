@@ -2,10 +2,8 @@ package com.tabit.dcm2.repository;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.RandomStay;
-import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.entity.*;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,25 +17,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GuestRepoDbTest extends AbstractDbTest {
     @Autowired
     private IGuestRepo guestRepo;
+    private DiveCenter diveCenter1;
+    private DiveCenter diveCenter2;
+
+
+    @Before
+    public void setUp() {
+        //given
+        diveCenter1 = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenter2 = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter1, diveCenter2));
+    }
 
     @Test
     public void findByCheckedIn_shall_return_the_guests() {
         // given
-        Stay stayOld = RandomStay.createRandomStayWithoutId();
+
+        Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter1);
         stayOld.setCheckInDate(LocalDate.now().minusYears(5));
         stayOld.setArriveDate(LocalDate.now().minusYears(5));
-        Stay stayNew = RandomStay.createRandomStayWithoutId();
+        Stay stayNew = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter1);
         stayNew.setCheckInDate(LocalDate.now().minusDays(10));
         stayNew.setArriveDate(LocalDate.now().minusDays(10));
 
-        Guest guestCheckedInTrue = RandomGuest.createRandomGuestWitoutId();
+        Guest guestCheckedInTrue = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
         guestCheckedInTrue.setCheckedin(true);
         guestCheckedInTrue.setStays(ImmutableList.of(stayOld, stayNew));
 
-        Guest guestCheckedInFalse = RandomGuest.createRandomGuestWitoutId();
+        Guest guestCheckedInFalse = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
         guestCheckedInFalse.setCheckedin(false);
 
-        Guest guestCheckedInFalse2 = RandomGuest.createRandomGuestWitoutId();
+        Guest guestCheckedInFalse2 = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
         guestCheckedInFalse2.setCheckedin(false);
 
         guestRule.persist(ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2));
@@ -54,6 +64,88 @@ public class GuestRepoDbTest extends AbstractDbTest {
 
         // then
         assertThat(actualGuestsCheckedInFalse).hasSize(2);
+    }
+
+    @Test
+    public void findByCheckedinAndDiveCenterId_shall_return_the_guests_of_divecenter_by_checkin() {
+        // given
+
+        Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter1);
+        stayOld.setCheckInDate(LocalDate.now().minusYears(5));
+        stayOld.setArriveDate(LocalDate.now().minusYears(5));
+        Stay stayNew = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter1);
+        stayNew.setCheckInDate(LocalDate.now().minusDays(10));
+        stayNew.setArriveDate(LocalDate.now().minusDays(10));
+
+        Guest guestCheckedInTrue = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
+        guestCheckedInTrue.setCheckedin(true);
+        guestCheckedInTrue.setStays(ImmutableList.of(stayOld, stayNew));
+
+        Guest guestCheckedInFalse = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
+        guestCheckedInFalse.setCheckedin(false);
+
+        Guest guestCheckedInFalse2 = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
+        guestCheckedInFalse2.setCheckedin(false);
+
+        guestRule.persist(ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2));
+
+        // when
+        List<Guest> guestsCheckedInTrue = guestRepo.findByCheckedinAndDiveCenterId(true, diveCenter1.getId());
+
+        // then
+        Guest actualGuestCheckedInTrue = Iterables.getOnlyElement(guestsCheckedInTrue);
+        assertGuest(actualGuestCheckedInTrue, guestCheckedInTrue, ImmutableList.of(stayNew.getId(), stayOld.getId()));
+
+        // when
+        List<Guest> actualGuestsCheckedInFalse = guestRepo.findByCheckedinAndDiveCenterId(false, diveCenter1.getId());
+
+        // then
+        assertThat(actualGuestsCheckedInFalse).hasSize(2);
+
+        // when
+        List<Guest> checkedInGuestsFromDivingCenter2 = guestRepo.findByCheckedinAndDiveCenterId(true, diveCenter2.getId());
+
+        // then
+        assertThat(checkedInGuestsFromDivingCenter2).hasSize(0);
+
+        // when
+        List<Guest> notCheckedInGuestsFromDivingCenter2 = guestRepo.findByCheckedinAndDiveCenterId(false, diveCenter2.getId());
+
+        // then
+        assertThat(notCheckedInGuestsFromDivingCenter2).hasSize(0);
+    }
+
+    @Test
+    public void findByDiveCenterId_shall_return_the_guests_given_divecenter() {
+
+        Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter1);
+        stayOld.setCheckInDate(LocalDate.now().minusYears(5));
+        stayOld.setArriveDate(LocalDate.now().minusYears(5));
+        Stay stayNew = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter1);
+        stayNew.setCheckInDate(LocalDate.now().minusDays(10));
+        stayNew.setArriveDate(LocalDate.now().minusDays(10));
+
+        //given
+        Guest guest1DivingCenter1 = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
+        guest1DivingCenter1.setStays(ImmutableList.of(stayOld, stayNew));
+        Guest guest2DivingCenter1 = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
+        guestRule.persist(ImmutableList.of(guest1DivingCenter1, guest2DivingCenter1));
+
+        // when
+        List<Guest> guestsDivecenter1 = guestRepo.findByDiveCenterId(diveCenter1.getId());
+
+        // then
+        assertGuest(guestsDivecenter1.get(0), guest1DivingCenter1, ImmutableList.of(stayNew.getId(), stayOld.getId()));
+
+        assertThat(guestsDivecenter1).hasSize(2);
+
+        // when
+        List<Guest> guestsDivecenter2 = guestRepo.findByDiveCenterId(diveCenter2.getId());
+
+        // then
+        assertThat(guestsDivecenter2).hasSize(0);
+
+
     }
 
     private void assertGuest(Guest actualGuest, Guest expectedGuest, List<Long> sortedStayIds) {
@@ -77,7 +169,7 @@ public class GuestRepoDbTest extends AbstractDbTest {
     @Test
     public void findById_shall_return_the_guest() {
         // given
-        Guest randomGuest = RandomGuest.createRandomGuestWitoutId();
+        Guest randomGuest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
         guestRule.persist(ImmutableList.of(randomGuest));
 
         //when
@@ -91,7 +183,7 @@ public class GuestRepoDbTest extends AbstractDbTest {
     @Test
     public void save_shall_update_the_guest() {
         // given
-        Guest randomGuest = RandomGuest.createRandomGuestWitoutId();
+        Guest randomGuest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
         guestRule.persist(ImmutableList.of(randomGuest));
 
         // when
@@ -108,7 +200,7 @@ public class GuestRepoDbTest extends AbstractDbTest {
     @Test
     public void save_shall_create_the_guest() {
         // given
-        Guest randomGuest = RandomGuest.createRandomGuestWitoutId();
+        Guest randomGuest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
 
         //when
         guestRepo.save(randomGuest);

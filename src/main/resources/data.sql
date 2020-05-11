@@ -5,3 +5,4 @@ INSERT INTO ID_GEN VALUES (0,'eq_type_id');
 INSERT INTO ID_GEN VALUES (0,'eq_id');
 INSERT INTO ID_GEN VALUES (0,'loan_id');
 INSERT INTO ID_GEN VALUES (0,'user_id');
+INSERT INTO ID_GEN VALUES (0,'dive_center_id');

@@ -16,9 +16,13 @@ public class BoxManagementService implements IBoxManagementService {
     @Autowired
     private IBoxManagementRepo boxManagementRepo;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
     @Override
     public Boolean isBoxFree(String boxNumber) {
-        Optional<BoxManagement> boxManagement = boxManagementRepo.findByBoxNumber(boxNumber);
+        Long diveCenterId = authenticationService.getLoggedInUser().getDiveCenter().getId();
+        Optional<BoxManagement> boxManagement = boxManagementRepo.findByBoxNumberAndDiveCenterId(boxNumber, diveCenterId);
         return !boxManagement.isPresent();
     }
 
@@ -26,6 +30,7 @@ public class BoxManagementService implements IBoxManagementService {
     public void reserveBox(String boxNumber) {
         BoxManagement boxManagement = new BoxManagement();
         boxManagement.setBoxNumber(boxNumber);
+        boxManagement.setDiveCenter(authenticationService.getLoggedInUser().getDiveCenter());
 
         try {
             boxManagementRepo.save(boxManagement);

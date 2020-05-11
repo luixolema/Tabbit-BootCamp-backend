@@ -1,6 +1,8 @@
 package com.tabit.dcm2.controller;
 
 import com.google.common.collect.ImmutableList;
+import com.tabit.dcm2.entity.DiveCenter;
+import com.tabit.dcm2.entity.RandomDiveCenter;
 import com.tabit.dcm2.entity.RandomUser;
 import com.tabit.dcm2.entity.User;
 import com.tabit.dcm2.service.ILoginService;
@@ -27,7 +29,11 @@ public class ExpiredTokenRestIntegrationTest extends AbstractRestIntegrationTest
 
     @Before
     public void setUp() {
+        DiveCenter diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter));
+
         user = RandomUser.createRandomUserWithPasswordWithoutId(password);
+        user.setDiveCenter(diveCenter);
         userRule.persist(ImmutableList.of(user));
 
         authToken = loginService.generateJwtToken(user.getLogin(), password).getToken();

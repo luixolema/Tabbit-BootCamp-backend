@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,18 +21,30 @@ public class StayRepoDbTest extends AbstractDbTest {
     private Stay activeStay;
     private Stay activeStay2;
     private Stay notActiveStay;
+    private DiveCenter diveCenter;
 
     @Before
     public void setUp() {
         // given
-        Guest guestForStay = RandomGuest.createRandomGuestWitoutId();
-        activeStay = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
-        guestForStay.setStays(ImmutableList.of(activeStay));
-        activeStay.addLoans(ImmutableList.of(RandomLoan.createRandomLoanWithoutId(), RandomLoan.createRandomLoanWithoutId()));
+        diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
+        diveCenterRule.persist(ImmutableList.of(diveCenter));
 
-        Guest guestForStay2 = RandomGuest.createRandomGuestWitoutId();
-        activeStay2 = RandomStay.createRandomStayWithoutIdGivenActiveState(true);
-        notActiveStay = RandomStay.createRandomStayWithoutIdGivenActiveState(false);
+        // given
+        Guest guestForStay = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
+        activeStay = RandomStay.createRandomStayWithoutIdGivenActiveStateAndDiveCenter(true, diveCenter);
+        guestForStay.setStays(ImmutableList.of(activeStay));
+        activeStay.setLoans(
+                ImmutableList.of(
+                        RandomLoan.createRandomLoanWithoutIdGivenDiveCenter(diveCenter),
+                        RandomLoan.createRandomLoanWithoutIdGivenDiveCenter(diveCenter)
+                )
+        );
+
+        Guest guestForStay2 = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
+        activeStay2 = RandomStay.createRandomStayWithoutIdGivenActiveStateAndDiveCenter(true, diveCenter);
+        activeStay2.setDiveCenter(diveCenter);
+        notActiveStay = RandomStay.createRandomStayWithoutIdGivenActiveStateAndDiveCenter(false, diveCenter);
+        notActiveStay.setDiveCenter(diveCenter);
         guestForStay2.setStays(ImmutableList.of(activeStay2, notActiveStay));
 
         guestRule.persist(ImmutableList.of(guestForStay, guestForStay2));
@@ -68,10 +81,15 @@ public class StayRepoDbTest extends AbstractDbTest {
     @Test
     public void save_shall_create_the_stay() {
         // given
-        Guest guest = RandomGuest.createRandomGuestWitoutId();
-        guestRule.persist(ImmutableList.of(guest));
         Stay stay = RandomStay.createRandomStayWithoutId();
+        stay.setLoans(new ArrayList<>());
+        stay.setDiveCenter(diveCenter);
+
+        Guest guest = RandomGuest.createRandomGuestWithoutId();
+        guest.setDiveCenter(diveCenter);
         guest.setStays(ImmutableList.of(stay));
+
+        guestRule.persist(ImmutableList.of(guest));
 
         // when
         stayRepo.save(stay);
@@ -83,18 +101,9 @@ public class StayRepoDbTest extends AbstractDbTest {
         assertStay(actualStay.get(), stay);
     }
 
-    @Test
-    public void getBoxNumbers_shall_return_list_of_empty_box_numbers() {
-
-        //when
-        List<String> boxNumbers = stayRepo.getActiveBoxNumbers();
-
-        //then
-        assertThat(boxNumbers).containsOnly(activeStay.getBoxNumber(), activeStay2.getBoxNumber());
-    }
-
     private void assertStay(Stay actualStay, Stay expectedStay) {
         assertThat(actualStay.getId()).isEqualTo(expectedStay.getId());
+        assertThat(actualStay.getDiveCenter().getId()).isEqualTo(expectedStay.getDiveCenter().getId());
         assertThat(actualStay.getFirstName()).isEqualTo(expectedStay.getFirstName());
         assertThat(actualStay.getLastName()).isEqualTo(expectedStay.getLastName());
         assertThat(actualStay.getBirthDate()).isEqualTo(expectedStay.getBirthDate());
@@ -142,6 +151,7 @@ public class StayRepoDbTest extends AbstractDbTest {
 
     private void assertLoan(Loan actualLoan, Loan expectedLoan) {
         assertThat(actualLoan.getId()).isEqualTo(expectedLoan.getId());
+        assertThat(actualLoan.getDiveCenter().getId()).isEqualTo(expectedLoan.getDiveCenter().getId());
         assertThat(actualLoan.getDateOut()).isEqualTo(expectedLoan.getDateOut());
         assertThat(actualLoan.getDateReturn()).isEqualTo(expectedLoan.getDateReturn());
         assertThat(actualLoan.getPrice()).isEqualTo(expectedLoan.getPrice());

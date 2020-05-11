@@ -60,12 +60,13 @@ public class GuestService implements IGuestService {
     private IBoxManagementService boxManagementService;
     @Autowired
     private IStayRepo stayRepo;
+    @Autowired
+    private AuthenticationService authenticationService;
 
     @Override
     public List<Guest> getAllGuests(GuestFilterType guestFilterType) {
-//        String user = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        System.out.println("user from JwtAuthenticationProfile: " + user);
-        return guestFilterType == GuestFilterType.ALL ? guestRepo.findAll() : guestRepo.findByCheckedin(guestFilterType == GuestFilterType.CHECKED_IN);
+        Long diveCenterId = authenticationService.getLoggedInUser().getDiveCenter().getId();
+        return guestFilterType == GuestFilterType.ALL ? guestRepo.findByDiveCenterId(diveCenterId) : guestRepo.findByCheckedinAndDiveCenterId(guestFilterType == GuestFilterType.CHECKED_IN, diveCenterId);
     }
 
     @Override
@@ -92,6 +93,7 @@ public class GuestService implements IGuestService {
 
         guestMapper.mapPersonalDetailsFromDto(guest, checkInDto.getGuestPersonalDetails());
         Stay newStay = MAP_CHECKIN_DTO_TO_STAY.apply(checkInDto);
+        newStay.setDiveCenter(authenticationService.getLoggedInUser().getDiveCenter());
         guest.addStays(ImmutableList.of(newStay));
         guest.setCheckedin(true);
 
@@ -103,6 +105,7 @@ public class GuestService implements IGuestService {
     public Guest create(GuestCreationDto guestCreationDto) {
         Guest guest = new Guest();
         guestMapper.mapPersonalDetailsFromDto(guest, guestCreationDto);
+        guest.setDiveCenter(authenticationService.getLoggedInUser().getDiveCenter());
         return guestRepo.save(guest);
     }
 }

@@ -2,9 +2,7 @@ package com.tabit.dcm2.service.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.tabit.dcm2.entity.Guest;
-import com.tabit.dcm2.entity.RandomGuest;
-import com.tabit.dcm2.entity.Stay;
+import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.exception.GuestIllegalStateException;
 import com.tabit.dcm2.repository.IGuestRepo;
 import com.tabit.dcm2.repository.IStayRepo;
@@ -13,6 +11,7 @@ import com.tabit.dcm2.service.IBoxManagementService;
 import com.tabit.dcm2.service.dto.*;
 import com.tabit.dcm2.service.util.GuestMapper;
 import com.tabit.dcm2.testutils.StayMappingAssertions;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -39,6 +38,8 @@ public class GuestServiceTest {
     private IBoxManagementService boxManagementService;
     @Mock
     private IStayRepo stayRepo;
+    @Mock
+    private AuthenticationService authenticationService;
     @Captor
     private ArgumentCaptor<Stay> stayArgumentCaptor;
     @Captor
@@ -46,12 +47,21 @@ public class GuestServiceTest {
     @InjectMocks
     private GuestService guestService;
 
+    private DiveCenter diveCenter;
+
+    @Before
+    public void setUp() {
+        User user = RandomUser.createRandomUse();
+        diveCenter = user.getDiveCenter();
+        when(authenticationService.getLoggedInUser()).thenReturn(user);
+    }
+
     @Test
     public void getGuests_shall_return_all_guests() {
         // given
-        Guest randomGuest1 = RandomGuest.createRandomGuest();
-        Guest randomGuest2 = RandomGuest.createRandomGuest();
-        when(guestRepo.findAll()).thenReturn(ImmutableList.of(randomGuest1, randomGuest2));
+        Guest randomGuest1 = RandomGuest.createRandomGuestGivenDiveCenter(diveCenter);
+        Guest randomGuest2 = RandomGuest.createRandomGuestGivenDiveCenter(diveCenter);
+        when(guestRepo.findByDiveCenterId(diveCenter.getId())).thenReturn(ImmutableList.of(randomGuest1, randomGuest2));
 
         // when
         List<Guest> guests = guestService.getAllGuests(GuestFilterType.ALL);
@@ -63,8 +73,8 @@ public class GuestServiceTest {
     @Test
     public void getGuests_shall_return_checkedin_guests() {
         // given
-        Guest randomGuest = RandomGuest.createRandomGuest();
-        when(guestRepo.findByCheckedin(true)).thenReturn(ImmutableList.of(randomGuest));
+        Guest randomGuest = RandomGuest.createRandomGuestGivenDiveCenter(diveCenter);
+        when(guestRepo.findByCheckedinAndDiveCenterId(true, diveCenter.getId())).thenReturn(ImmutableList.of(randomGuest));
 
         // when
         List<Guest> guests = guestService.getAllGuests(GuestFilterType.CHECKED_IN);
@@ -76,8 +86,8 @@ public class GuestServiceTest {
     @Test
     public void getGuests_shall_return_not_checkedin_guests() {
         // given
-        Guest randomGuest = RandomGuest.createRandomGuest();
-        when(guestRepo.findByCheckedin(false)).thenReturn(ImmutableList.of(randomGuest));
+        Guest randomGuest = RandomGuest.createRandomGuestGivenDiveCenter(diveCenter);
+        when(guestRepo.findByCheckedinAndDiveCenterId(false, diveCenter.getId())).thenReturn(ImmutableList.of(randomGuest));
 
         // when
         List<Guest> guests = guestService.getAllGuests(GuestFilterType.NOT_CHECKED_IN);
@@ -138,6 +148,7 @@ public class GuestServiceTest {
         Stay newStay = stayArgumentCaptor.getValue();
         StayMappingAssertions.assertNewStayFromCheckInDto(newStay, randomCheckInDto);
         assertThat(notCheckedInGuest.getStays()).containsExactly(oldStay, newStay);
+        assertThat(newStay.getDiveCenter().getId()).isEqualTo(diveCenter.getId());
 
         verify(boxManagementService).reserveBox(randomCheckInDto.getStayDetails().getBoxNumber());
     }
@@ -169,5 +180,6 @@ public class GuestServiceTest {
         assertThat(actualGuest.getId()).isNull();
 
         verify(guestRepo).save(actualGuest);
+        assertThat(actualGuest.getDiveCenter().getId()).isEqualTo(diveCenter.getId());
     }
 }

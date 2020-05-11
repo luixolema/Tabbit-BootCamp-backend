@@ -30,6 +30,7 @@ public class RandomStay {
 
         Stay stay = new Stay();
         stay.setId(valueProvider.randomId());
+        stay.setDiveCenter(RandomDiveCenter.createRandomDiveCenter());
         stay.setFirstName(valueProvider.randomString("firstname"));
         stay.setLastName(valueProvider.randomString("lastname"));
         stay.setActive(valueProvider.randomBoolean());
@@ -60,5 +61,35 @@ public class RandomStay {
         stay.setLoans(ImmutableList.of(RandomLoan.createRandomLoan()));
 
         return stay;
+    }
+
+    public static Stay createRandomStayWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
+        Stay stay = createRandomStay();
+        stay.setDiveCenter(diveCenter);
+        stay.setLoans(ImmutableList.of(RandomLoan.createRandomLoanWithoutIdGivenDiveCenter(diveCenter)));
+        stay.setId(null);
+
+        return stay;
+
+    }
+
+    public static Stay createRandomStayWithoutIdGivenActiveStateAndDiveCenter(boolean active, DiveCenter diveCenter) {
+        Stay stay = createRandomStay();
+        stay.setDiveCenter(diveCenter);
+        stay.setActive(active);
+        stay.setLoans(ImmutableList.of(RandomLoan.createRandomLoanWithoutIdGivenDiveCenter(diveCenter)));
+        stay.setId(null);
+
+        return stay;
+
+    }
+
+    public static Stay createRandomStayGivenDiveCenter(DiveCenter diveCenter) {
+        Stay stay = createRandomStay();
+        stay.setDiveCenter(diveCenter);
+        stay.setLoans(ImmutableList.of(RandomLoan.createRandomLoanGivenDiveCenter(diveCenter)));
+
+        return stay;
+
     }
 }

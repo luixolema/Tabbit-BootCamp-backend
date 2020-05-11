@@ -1,7 +1,6 @@
 package com.tabit.dcm2.service.impl;
 
-import com.tabit.dcm2.entity.BoxManagement;
-import com.tabit.dcm2.entity.RandomBoxManagement;
+import com.tabit.dcm2.entity.*;
 import com.tabit.dcm2.exception.BoxReservationException;
 import com.tabit.dcm2.repository.IBoxManagementRepo;
 import org.junit.Before;
@@ -27,6 +26,8 @@ public class BoxManagementServiceTest {
 
     @Mock
     private IBoxManagementRepo boxManagementRepo;
+    @Mock
+    private AuthenticationService authenticationService;
     @Captor
     private ArgumentCaptor<BoxManagement> boxManagementArgumentCaptor;
     @InjectMocks
@@ -34,16 +35,21 @@ public class BoxManagementServiceTest {
 
     private BoxManagement boxManagement;
 
+    private DiveCenter diveCenter;
+
     @Before
     public void setUp() {
         // given
         boxManagement = RandomBoxManagement.createRandomBoxManagement();
+        User user = RandomUser.createRandomUse();
+        diveCenter = user.getDiveCenter();
+        when(authenticationService.getLoggedInUser()).thenReturn(user);
     }
 
     @Test
     public void isBoxFree_shall_return_the_right_value() {
         // given
-        when(boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber())).thenReturn(Optional.of(boxManagement)).thenReturn(Optional.empty());
+        when(boxManagementRepo.findByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter.getId())).thenReturn(Optional.of(boxManagement)).thenReturn(Optional.empty());
 
         // when
         boolean isBoxFree = boxManagementService.isBoxFree(boxManagement.getBoxNumber());

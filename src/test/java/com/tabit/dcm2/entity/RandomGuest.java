@@ -10,6 +10,7 @@ public class RandomGuest {
 
         Guest guest = new Guest();
         guest.setId(valueProvider.randomId());
+        guest.setDiveCenter(RandomDiveCenter.createRandomDiveCenter());
         guest.setFirstName(valueProvider.randomString("firstname"));
         guest.setLastName(valueProvider.randomString("lastname"));
         guest.setBirthDate(valueProvider.randomLocalDate());
@@ -27,7 +28,7 @@ public class RandomGuest {
         return guest;
     }
 
-    public static Guest createRandomGuestWitoutId() {
+    public static Guest createRandomGuestWithoutId() {
         Guest guest = createRandomGuest();
         guest.setId(null);
         guest.setStays(ImmutableList.of(RandomStay.createRandomStayWithoutId()));
@@ -35,8 +36,27 @@ public class RandomGuest {
         return guest;
     }
 
+    public static Guest createRandomGuestGivenDiveCenter(DiveCenter diveCenter) {
+        Guest guest = createRandomGuest();
+        guest.setDiveCenter(diveCenter);
+        guest.setStays(ImmutableList.of(RandomStay.createRandomStayGivenDiveCenter(diveCenter)));
+
+        return guest;
+
+    }
+
+    public static Guest createRandomGuestWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
+        Guest guest = createRandomGuest();
+        guest.setDiveCenter(diveCenter);
+        guest.setStays(ImmutableList.of(RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter)));
+        guest.setId(null);
+
+        return guest;
+    }
+
     public static Guest createGuestFromStayWithoutId(Stay stay) {
         Guest guest = new Guest();
+        guest.setDiveCenter(stay.getDiveCenter());
         guest.setFirstName(stay.getFirstName());
         guest.setLastName(stay.getLastName());
         guest.setBirthDate(stay.getBirthDate());

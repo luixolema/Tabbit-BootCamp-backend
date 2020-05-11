@@ -17,6 +17,10 @@ public class Loan implements IEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "dive_center_id")
+    private DiveCenter diveCenter;
+
+    @ManyToOne
     @JoinColumn(name = "stay_id")
     private Stay stay;
 
@@ -40,6 +44,14 @@ public class Loan implements IEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public DiveCenter getDiveCenter() {
+        return diveCenter;
+    }
+
+    public void setDiveCenter(DiveCenter diveCenter) {
+        this.diveCenter = diveCenter;
     }
 
     public Stay getStay() {

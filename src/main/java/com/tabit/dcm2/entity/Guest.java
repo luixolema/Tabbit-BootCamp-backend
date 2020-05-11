@@ -18,6 +18,10 @@ public class Guest implements IEntity {
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "IDGenerator")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "dive_center_id")
+    private DiveCenter diveCenter;
+
     @OneToMany(mappedBy = "guest", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @OrderBy("arrive_date DESC")
     List<Stay> stays = new ArrayList<>();
@@ -65,6 +69,14 @@ public class Guest implements IEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public DiveCenter getDiveCenter() {
+        return diveCenter;
+    }
+
+    public void setDiveCenter(DiveCenter diveCenter) {
+        this.diveCenter = diveCenter;
     }
 
     public String getFirstName() {
