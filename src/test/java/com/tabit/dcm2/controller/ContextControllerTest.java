@@ -1,7 +1,5 @@
 package com.tabit.dcm2.controller;
 
-import com.tabit.dcm2.entity.DiveCenter;
-import com.tabit.dcm2.entity.RandomDiveCenter;
 import com.tabit.dcm2.entity.RandomUser;
 import com.tabit.dcm2.entity.User;
 import com.tabit.dcm2.service.dto.ContextInfoDto;
@@ -27,15 +25,13 @@ public class ContextControllerTest {
     @Test
     public void getContextInfo_shall_return_ContextInfoDto() {
         // given
-        DiveCenter diveCenter = RandomDiveCenter.createRandomDiveCenter();
-        User user = RandomUser.createRandomUserGivenDiveCenter(diveCenter);
-
+        User user = RandomUser.createRandomUser();
         when(authenticationService.getLoggedInUser()).thenReturn(user);
 
         // when
         ContextInfoDto contextInfoDto = contextController.getContextInfo();
 
         // then
-        ContextInfoDtoAssertions.assertDto(contextInfoDto, user.getName(), diveCenter.getName());
+        ContextInfoDtoAssertions.assertDto(contextInfoDto, user.getName(), user.getDiveCenter().getName());
     }
 }
