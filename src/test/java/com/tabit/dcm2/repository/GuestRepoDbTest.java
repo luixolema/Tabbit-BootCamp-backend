@@ -30,43 +30,6 @@ public class GuestRepoDbTest extends AbstractDbTest {
     }
 
     @Test
-    public void findByCheckedIn_shall_return_the_guests() {
-        // given
-
-        Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter1);
-        stayOld.setCheckInDate(LocalDate.now().minusYears(5));
-        stayOld.setArriveDate(LocalDate.now().minusYears(5));
-        Stay stayNew = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter1);
-        stayNew.setCheckInDate(LocalDate.now().minusDays(10));
-        stayNew.setArriveDate(LocalDate.now().minusDays(10));
-
-        Guest guestCheckedInTrue = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
-        guestCheckedInTrue.setCheckedin(true);
-        guestCheckedInTrue.setStays(ImmutableList.of(stayOld, stayNew));
-
-        Guest guestCheckedInFalse = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
-        guestCheckedInFalse.setCheckedin(false);
-
-        Guest guestCheckedInFalse2 = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter1);
-        guestCheckedInFalse2.setCheckedin(false);
-
-        guestRule.persist(ImmutableList.of(guestCheckedInTrue, guestCheckedInFalse, guestCheckedInFalse2));
-
-        // when
-        List<Guest> guestsCheckedInTrue = guestRepo.findByCheckedin(true);
-
-        // then
-        Guest actualGuestCheckedInTrue = Iterables.getOnlyElement(guestsCheckedInTrue);
-        assertGuest(actualGuestCheckedInTrue, guestCheckedInTrue, ImmutableList.of(stayNew.getId(), stayOld.getId()));
-
-        // when
-        List<Guest> actualGuestsCheckedInFalse = guestRepo.findByCheckedin(false);
-
-        // then
-        assertThat(actualGuestsCheckedInFalse).hasSize(2);
-    }
-
-    @Test
     public void findByCheckedinAndDiveCenterId_shall_return_the_guests_of_divecenter_by_checkin() {
         // given
 

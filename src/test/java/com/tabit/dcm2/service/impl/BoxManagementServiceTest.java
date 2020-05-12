@@ -17,7 +17,9 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BoxManagementServiceTest {
@@ -47,7 +49,7 @@ public class BoxManagementServiceTest {
     @Test
     public void isBoxFree_shall_return_the_right_value() {
         // given
-        when(boxManagementRepo.findByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter.getId())).thenReturn(Optional.of(boxManagement)).thenReturn(Optional.empty());
+        when(boxManagementRepo.findOneByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter.getId())).thenReturn(Optional.of(boxManagement)).thenReturn(Optional.empty());
 
         // when
         boolean isBoxFree = boxManagementService.isBoxFree(boxManagement.getBoxNumber());
@@ -85,7 +87,7 @@ public class BoxManagementServiceTest {
     @Test
     public void releaseBox_shall_delete_box() {
         // given
-        when(boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber())).thenReturn(Optional.of(boxManagement));
+        when(boxManagementRepo.findOneByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter.getId())).thenReturn(Optional.of(boxManagement));
 
         // when
         boxManagementService.releaseBox(boxManagement.getBoxNumber());
@@ -97,7 +99,7 @@ public class BoxManagementServiceTest {
     @Test
     public void releaseBox_shall_not_delete_non_existing_box() {
         // given
-        when(boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber())).thenReturn(Optional.empty());
+        when(boxManagementRepo.findOneByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter.getId())).thenReturn(Optional.empty());
 
         // when
         boxManagementService.releaseBox(boxManagement.getBoxNumber());
