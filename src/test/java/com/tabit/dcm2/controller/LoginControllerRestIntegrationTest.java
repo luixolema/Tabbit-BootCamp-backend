@@ -35,10 +35,6 @@ public class LoginControllerRestIntegrationTest extends AbstractRestIntegrationT
     public void setUp() {
         diveCenter = RandomDiveCenter.createRandomDiveCenterWithoutId();
         diveCenterRule.persist(ImmutableList.of(diveCenter));
-
-        user = RandomUser.createRandomUserWithPasswordWithoutId(password);
-        user.setDiveCenter(diveCenter);
-        userRule.persist(ImmutableList.of(user));
     }
 
     @Test

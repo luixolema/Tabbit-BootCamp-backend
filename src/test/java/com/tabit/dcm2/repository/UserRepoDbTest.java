@@ -37,6 +37,7 @@ public class UserRepoDbTest extends AbstractDbTest {
         assertThat(actualUser.getName()).isEqualTo(expectedUser.getName());
         assertThat(actualUser.getLogin()).isEqualTo(expectedUser.getLogin());
         assertThat(actualUser.getPassword()).isEqualTo(expectedUser.getPassword());
+
         assertThat(actualUser.getDiveCenter().getId()).isEqualTo(expectedUser.getDiveCenter().getId());
     }
 }
