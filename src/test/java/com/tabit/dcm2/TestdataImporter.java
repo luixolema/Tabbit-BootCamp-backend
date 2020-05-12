@@ -12,6 +12,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,7 +42,10 @@ public class TestdataImporter {
     private Equipment mask_XD_M_15;
     private Equipment fins_XD_F_12;
     private Equipment suite_XS_G_13;
-    private DiveCenter diveCenter;
+    private DiveCenter MakadiBayDiveCenter;
+    private DiveCenter AdiveCenter;
+    private DiveCenter OmegaDiveCenter;
+
 
     /**
      * to import some testdata to the application just set ActiveProfile to mysql.
@@ -49,91 +55,109 @@ public class TestdataImporter {
      */
     @Test
     public void import_testdata_for_application() {
-        createDiveCenter();
-        saveGuests();
-        saveBoxNumbers();
-        saveUsers();
+        createDiveCenters();
     }
 
-    private void createDiveCenter() {
-        diveCenter = new DiveCenter();
-        diveCenter.setName("Makadi Bay");
-        diveCenter.setLocation("26.9869265, 33.9068201");
-        diveCenterRepo.saveAll(ImmutableList.of(diveCenter));
+    private void createDiveCenters() {
+        createMakadiBayDiveCenterWithUsers();
+        makadiBaySaveGuests();
 
         createDiveCenterAWithUsers();
+        ADiveCenterSaveGuests();
+
         createDiveCenterOmegaWithUsers();
+        OmegaDiveCenterSaveGuests();
     }
 
-    private void saveUsers() {
+    private void createMakadiBayDiveCenterWithUsers() {
+        MakadiBayDiveCenter = new DiveCenter();
+        MakadiBayDiveCenter.setName("Makadi Bay");
+        MakadiBayDiveCenter.setLocation("26.9869265, 33.9068201");
+        diveCenterRepo.saveAll(ImmutableList.of(MakadiBayDiveCenter));
+
         User user = RandomUser.createRandomUserWithPassword("password");
-        user.setDiveCenter(diveCenter);
+        user.setDiveCenter(MakadiBayDiveCenter);
         user.setLogin("user@gmail.com");
 
         User user2 = RandomUser.createRandomUserWithPassword("password");
-        user2.setDiveCenter(diveCenter);
+        user2.setDiveCenter(MakadiBayDiveCenter);
         user2.setLogin("user2@gmail.com");
 
         userRepo.saveAll(ImmutableList.of(user, user2));
     }
 
-    private void saveGuests() {
+    private void makadiBaySaveGuests() {
 
-        setupEquipment();
+        setupEquipment(MakadiBayDiveCenter);
 
-        Guest guestWithGoodLoans1 = createGuestAlexander1();
-        Guest guestWithGoodLoans2 = createGuestAlexander2();
+        Guest guestWithGoodLoans1 = createGuestAlexander1(MakadiBayDiveCenter);
+        Guest guestWithGoodLoans2 = createGuestAlexander2(MakadiBayDiveCenter);
 
-        Guest guest = createGuestAntonioBanderas();
-        Guest guest2 = createGuestAntonyHopkins();
-        Guest guest3 = createGuestMonicaBellucci();
-        Guest guest4 = createGuestKeanuReeves();
-        Guest guest5 = createGuestAgentSmith();
-        Guest guest6 = createGuestHarrisonFord();
-        Guest guest7 = createGuestSeanConnery();
-        Guest guest8 = createGuestClintEastwood();
-        Guest guest9 = createGuestMelGibson();
+        guestRepo.saveAll(ImmutableList.of(guestWithGoodLoans1, guestWithGoodLoans2));
+    }
 
-        guestRepo.saveAll(ImmutableList.of(guestWithGoodLoans1, guestWithGoodLoans2, guest, guest2, guest3, guest4, guest5, guest6, guest7, guest8, guest9));
+    private void ADiveCenterSaveGuests() {
+
+        setupEquipment(AdiveCenter);
+
+        Guest guest5 = createGuestAgentSmith(AdiveCenter);
+        Guest guest6 = createGuestHarrisonFord(AdiveCenter);
+        Guest guest7 = createGuestSeanConnery(AdiveCenter);
+        Guest guest8 = createGuestClintEastwood(AdiveCenter);
+        Guest guest9 = createGuestMelGibson(AdiveCenter);
+
+        guestRepo.saveAll(ImmutableList.of(guest5, guest6, guest7, guest8, guest9));
+    }
+
+    private void OmegaDiveCenterSaveGuests() {
+
+        setupEquipment(OmegaDiveCenter);
+
+        Guest guest = createGuestAntonioBanderas(OmegaDiveCenter);
+        Guest guest2 = createGuestAntonyHopkins(OmegaDiveCenter);
+        Guest guest3 = createGuestMonicaBellucci(OmegaDiveCenter);
+        Guest guest4 = createGuestKeanuReeves(OmegaDiveCenter);
+
+        guestRepo.saveAll(ImmutableList.of(guest, guest2, guest3, guest4));
     }
 
     private void createDiveCenterAWithUsers() {
-        DiveCenter diveCenter = new DiveCenter();
-        diveCenter.setName("A");
-        diveCenter.setLocation("27.7777777, 38.8888888");
-        diveCenterRepo.save(diveCenter);
+        AdiveCenter = new DiveCenter();
+        AdiveCenter.setName("A");
+        AdiveCenter.setLocation("27.7777777, 38.8888888");
+        diveCenterRepo.save(AdiveCenter);
 
         User userX = RandomUser.createRandomUserWithPassword("password");
         userX.setName("X");
-        userX.setDiveCenter(diveCenter);
+        userX.setDiveCenter(AdiveCenter);
         userX.setLogin("emailX@gmail.com");
 
         User userY = RandomUser.createRandomUserWithPassword("password");
         userY.setName("Y");
-        userY.setDiveCenter(diveCenter);
+        userY.setDiveCenter(AdiveCenter);
         userY.setLogin("emailY@gmail.com");
         userRepo.saveAll(ImmutableList.of(userX, userY));
     }
 
     private void createDiveCenterOmegaWithUsers() {
-        DiveCenter diveCenter = new DiveCenter();
-        diveCenter.setName("Omega");
-        diveCenter.setLocation("21.1111111, 33.3333333");
-        diveCenterRepo.save(diveCenter);
+        OmegaDiveCenter = new DiveCenter();
+        OmegaDiveCenter.setName("Omega");
+        OmegaDiveCenter.setLocation("21.1111111, 33.3333333");
+        diveCenterRepo.save(OmegaDiveCenter);
 
         User userAlpha = RandomUser.createRandomUserWithPassword("password");
         userAlpha.setName("Alpha");
-        userAlpha.setDiveCenter(diveCenter);
+        userAlpha.setDiveCenter(OmegaDiveCenter);
         userAlpha.setLogin("emailAlpha@gmail.com");
 
         User userBeta = RandomUser.createRandomUserWithPassword("password");
         userBeta.setName("Beta");
-        userBeta.setDiveCenter(diveCenter);
+        userBeta.setDiveCenter(OmegaDiveCenter);
         userBeta.setLogin("emailBeta@gmail.com");
         userRepo.saveAll(ImmutableList.of(userAlpha, userBeta));
     }
 
-    private Guest createGuestAlexander1() {
+    private Guest createGuestAlexander1(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(59);
         String firstName = "Alexander";
 
@@ -211,10 +235,12 @@ public class TestdataImporter {
         guest.setCheckedin(true);
         guest.setStays(ImmutableList.of(stayOld, stayActual));
 
+        saveBoxNumbers(diveCenter, Arrays.asList("888", "12"));
+
         return guest;
     }
 
-    private Guest createGuestAlexander2() {
+    private Guest createGuestAlexander2(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(59);
         String firstName = "Alexander";
 
@@ -285,10 +311,12 @@ public class TestdataImporter {
         guest.setCheckedin(true);
         guest.setStays(ImmutableList.of(stayOld, stayActual));
 
+        saveBoxNumbers(diveCenter, Arrays.asList("dsfsdfds", "999"));
+
         return guest;
     }
 
-    private Guest createGuestAntonioBanderas() {
+    private Guest createGuestAntonioBanderas(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(59);
         String firstName = "Antonio";
 
@@ -333,10 +361,12 @@ public class TestdataImporter {
         guest.setCheckedin(true);
         guest.setStays(ImmutableList.of(stayVeryOld, stayOld, stayActual));
 
+        saveBoxNumbers(diveCenter, Arrays.asList("123456", "12", "123AB"));
+
         return guest;
     }
 
-    private Guest createGuestAntonyHopkins() {
+    private Guest createGuestAntonyHopkins(DiveCenter diveCenter) {
         String firstName = "Anthony";
         LocalDate guestBirthDate = LocalDate.now().minusYears(45);
 
@@ -370,10 +400,12 @@ public class TestdataImporter {
         guest.setCheckedin(false);
         guest.setStays(ImmutableList.of(stayVeryOld, stayOld));
 
+        saveBoxNumbers(diveCenter, Arrays.asList("6789", "ABCD"));
+
         return guest;
     }
 
-    private Guest createGuestMonicaBellucci() {
+    private Guest createGuestMonicaBellucci(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(54);
 
         Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
@@ -385,7 +417,7 @@ public class TestdataImporter {
         return guest;
     }
 
-    private Guest createGuestKeanuReeves() {
+    private Guest createGuestKeanuReeves(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(55);
 
         Stay stayActual = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
@@ -405,10 +437,13 @@ public class TestdataImporter {
         guest.setLastName("Reeves");
         guest.setCheckedin(true);
         guest.setStays(ImmutableList.of(stayActual));
+
+        saveBoxNumbers(diveCenter, Collections.singletonList("666"));
+
         return guest;
     }
 
-    private Guest createGuestAgentSmith() {
+    private Guest createGuestAgentSmith(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(42);
 
         Stay stayActual = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
@@ -429,10 +464,12 @@ public class TestdataImporter {
         guest.setCheckedin(true);
         guest.setStays(ImmutableList.of(stayActual));
 
+        saveBoxNumbers(diveCenter, Collections.singletonList("98765"));
+
         return guest;
     }
 
-    private Guest createGuestHarrisonFord() {
+    private Guest createGuestHarrisonFord(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(77);
 
         Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
@@ -444,7 +481,7 @@ public class TestdataImporter {
         return guest;
     }
 
-    private Guest createGuestSeanConnery() {
+    private Guest createGuestSeanConnery(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(51);
 
         Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
@@ -456,7 +493,7 @@ public class TestdataImporter {
         return guest;
     }
 
-    private Guest createGuestClintEastwood() {
+    private Guest createGuestClintEastwood(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(89);
 
         Guest guest = RandomGuest.createRandomGuestWithoutIdGivenDiveCenter(diveCenter);
@@ -468,7 +505,7 @@ public class TestdataImporter {
         return guest;
     }
 
-    private Guest createGuestMelGibson() {
+    private Guest createGuestMelGibson(DiveCenter diveCenter) {
         LocalDate guestBirthDate = LocalDate.now().minusYears(52);
 
         Stay stayOld = RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter);
@@ -500,10 +537,14 @@ public class TestdataImporter {
         guest.setLastName("Gibson Same Names");
         guest.setCheckedin(true);
         guest.setStays(ImmutableList.of(stayOld, stayActual));
+
+
+        saveBoxNumbers(diveCenter, Arrays.asList("ZXY", "4567"));
+
         return guest;
     }
 
-    private void setupEquipment() {
+    private void setupEquipment(DiveCenter diveCenter) {
         EquipmentType mask = RandomEquipmentType.createRandomEquipmentTypeWithoutIdGivenDiveCenter(diveCenter);
         mask.setType("Mask");
         EquipmentType fins = RandomEquipmentType.createRandomEquipmentTypeWithoutIdGivenDiveCenter(diveCenter);
@@ -532,31 +573,17 @@ public class TestdataImporter {
         suite_XS_G_13.setSerialNumber("XS_G_13");
     }
 
-    private void saveBoxNumbers() {
-        BoxManagement boxManagement1 = new BoxManagement();
-        boxManagement1.setDiveCenter(diveCenter);
-        boxManagement1.setBoxNumber("123AB");
+    private void saveBoxNumbers(DiveCenter diveCenter, List<String> boxesNumbers) {
 
-        BoxManagement boxManagement2 = new BoxManagement();
-        boxManagement2.setDiveCenter(diveCenter);
-        boxManagement2.setBoxNumber("666");
+        boxesNumbers.forEach(boxNumber -> {
+            BoxManagement boxManagement = new BoxManagement();
+            boxManagement.setDiveCenter(diveCenter);
+            boxManagement.setBoxNumber(boxNumber);
 
-        BoxManagement boxManagement3 = new BoxManagement();
-        boxManagement3.setDiveCenter(diveCenter);
-        boxManagement3.setBoxNumber("98765");
-
-        BoxManagement boxManagement4 = new BoxManagement();
-        boxManagement4.setDiveCenter(diveCenter);
-        boxManagement4.setBoxNumber("4567");
-
-        BoxManagement boxManagement5 = new BoxManagement();
-        boxManagement5.setDiveCenter(diveCenter);
-        boxManagement5.setBoxNumber("888");
-
-        BoxManagement boxManagement6 = new BoxManagement();
-        boxManagement6.setDiveCenter(diveCenter);
-        boxManagement6.setBoxNumber("999");
-
-        boxManagementRepo.saveAll(ImmutableList.of(boxManagement1, boxManagement2, boxManagement3, boxManagement4, boxManagement5, boxManagement6));
+            boxManagementRepo.save(boxManagement);
+        });
     }
 }
+
+
+
