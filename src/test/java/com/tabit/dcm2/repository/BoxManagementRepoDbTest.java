@@ -36,37 +36,27 @@ public class BoxManagementRepoDbTest extends AbstractDbTest {
     @Test
     public void delete_shall_remove_the_box_management() {
         // given
-        Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
+        Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findOneByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter1.getId());
 
         //when
         boxManagementRepo.delete(expectedBoxManagement.get());
 
         //then
-        expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
+        expectedBoxManagement = boxManagementRepo.findOneByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter1.getId());
         assertThat(expectedBoxManagement).isEmpty();
-    }
-
-    @Test
-    public void findByBoxNumber_shall_return_the_box_management() {
-        //when
-        Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findByBoxNumber(boxManagement.getBoxNumber());
-
-        //then
-        assertThat(expectedBoxManagement.isPresent()).isTrue();
-        assertBoxManagement(boxManagement, expectedBoxManagement.get());
     }
 
     @Test
     public void findByBoxNumberAndDiveCenterId_shall_return_the_box_management_if_divecenter_has_it() {
         //when
-        Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter1.getId());
+        Optional<BoxManagement> expectedBoxManagement = boxManagementRepo.findOneByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter1.getId());
 
         //then
         assertThat(expectedBoxManagement.isPresent()).isTrue();
         assertBoxManagement(boxManagement, expectedBoxManagement.get());
 
         //when
-        expectedBoxManagement = boxManagementRepo.findByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter2.getId());
+        expectedBoxManagement = boxManagementRepo.findOneByBoxNumberAndDiveCenterId(boxManagement.getBoxNumber(), diveCenter2.getId());
 
         //then
         assertThat(expectedBoxManagement.isPresent()).isFalse();

@@ -22,7 +22,7 @@ public class BoxManagementService implements IBoxManagementService {
     @Override
     public Boolean isBoxFree(String boxNumber) {
         Long diveCenterId = authenticationService.getLoggedInUser().getDiveCenter().getId();
-        Optional<BoxManagement> boxManagement = boxManagementRepo.findByBoxNumberAndDiveCenterId(boxNumber, diveCenterId);
+        Optional<BoxManagement> boxManagement = boxManagementRepo.findOneByBoxNumberAndDiveCenterId(boxNumber, diveCenterId);
         return !boxManagement.isPresent();
     }
 
@@ -41,7 +41,8 @@ public class BoxManagementService implements IBoxManagementService {
 
     @Override
     public void releaseBox(String boxNumber) {
-        Optional<BoxManagement> boxManagement = boxManagementRepo.findByBoxNumber(boxNumber);
+        Long diveCenterId = authenticationService.getLoggedInUser().getDiveCenter().getId();
+        Optional<BoxManagement> boxManagement = boxManagementRepo.findOneByBoxNumberAndDiveCenterId(boxNumber, diveCenterId);
         boxManagement.ifPresent(management -> boxManagementRepo.delete(management));
     }
 }
