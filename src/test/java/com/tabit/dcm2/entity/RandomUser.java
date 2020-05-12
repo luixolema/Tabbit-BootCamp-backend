@@ -58,8 +58,8 @@ public class RandomUser {
     }
 
     public static User createRandomUserWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
-        User user = createRandomUserWithoutId();
-        user.setDiveCenter(diveCenter);
+        User user = createRandomUserGivenDiveCenter(diveCenter);
+        user.setId(null);
         return user;
     }
 }

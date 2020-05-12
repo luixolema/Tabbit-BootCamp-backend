@@ -41,8 +41,7 @@ public class RandomLoan {
     }
 
     public static Loan createRandomLoanWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
-        Loan loan = createRandomLoan();
-        loan.setDiveCenter(diveCenter);
+        Loan loan = createRandomLoanGivenDiveCenter(diveCenter);
         loan.setEquipment(RandomEquipment.createRandomEquipmentWithoutIdGivenDiveCenter(diveCenter));
         loan.setId(null);
 

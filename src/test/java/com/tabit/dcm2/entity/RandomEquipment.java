@@ -25,8 +25,7 @@ public class RandomEquipment {
     }
 
     public static Equipment createRandomEquipmentWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
-        Equipment equipment = createRandomEquipment();
-        equipment.setDiveCenter(diveCenter);
+        Equipment equipment = createRandomEquipmentGivenDiveCenter(diveCenter);
         equipment.setEquipmentType(RandomEquipmentType.createRandomEquipmentTypeWithoutIdGivenDiveCenter(diveCenter));
         equipment.setId(null);
         return equipment;

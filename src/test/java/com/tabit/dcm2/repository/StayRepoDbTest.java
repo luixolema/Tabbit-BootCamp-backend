@@ -103,7 +103,6 @@ public class StayRepoDbTest extends AbstractDbTest {
 
     private void assertStay(Stay actualStay, Stay expectedStay) {
         assertThat(actualStay.getId()).isEqualTo(expectedStay.getId());
-        assertThat(actualStay.getDiveCenter().getId()).isEqualTo(expectedStay.getDiveCenter().getId());
         assertThat(actualStay.getFirstName()).isEqualTo(expectedStay.getFirstName());
         assertThat(actualStay.getLastName()).isEqualTo(expectedStay.getLastName());
         assertThat(actualStay.getBirthDate()).isEqualTo(expectedStay.getBirthDate());
@@ -134,6 +133,8 @@ public class StayRepoDbTest extends AbstractDbTest {
         assertLoans(actualStay.getLoans(), expectedSortLoansByDateOut);
 
         assertThat(actualStay.getGuest().getId()).isEqualTo(expectedStay.getGuest().getId());
+
+        assertThat(actualStay.getDiveCenter().getId()).isEqualTo(expectedStay.getDiveCenter().getId());
     }
 
     private List<Loan> sortLoansByDateOut(Stay stay) {

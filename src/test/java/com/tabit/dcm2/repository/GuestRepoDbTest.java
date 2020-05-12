@@ -144,8 +144,6 @@ public class GuestRepoDbTest extends AbstractDbTest {
 
         // then
         assertThat(guestsDivecenter2).hasSize(0);
-
-
     }
 
     private void assertGuest(Guest actualGuest, Guest expectedGuest, List<Long> sortedStayIds) {
@@ -164,6 +162,8 @@ public class GuestRepoDbTest extends AbstractDbTest {
         assertThat(actualGuest.getStays()).hasSize(expectedGuest.getStays().size());
         List<Long> actualStayIds = actualGuest.getStays().stream().map(Stay::getId).collect(Collectors.toList());
         assertThat(actualStayIds).containsExactlyElementsOf(sortedStayIds);
+
+        assertThat(actualGuest.getDiveCenter().getId()).isEqualTo(expectedGuest.getDiveCenter().getId());
     }
 
     @Test

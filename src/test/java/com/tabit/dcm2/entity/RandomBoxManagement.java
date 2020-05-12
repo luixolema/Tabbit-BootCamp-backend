@@ -20,25 +20,19 @@ public class RandomBoxManagement {
         boxManagement.setId(null);
 
         return boxManagement;
-
     }
-
 
     public static BoxManagement createRandomBoxManagementGivenDiveCenter(DiveCenter diveCenter) {
         BoxManagement boxManagement = createRandomBoxManagement();
         boxManagement.setDiveCenter(diveCenter);
 
         return boxManagement;
-
     }
 
-
     public static BoxManagement createRandomBoxManagementWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
-        BoxManagement boxManagement = createRandomBoxManagement();
-        boxManagement.setDiveCenter(diveCenter);
+        BoxManagement boxManagement = createRandomBoxManagementGivenDiveCenter(diveCenter);
         boxManagement.setId(null);
 
         return boxManagement;
-
     }
 }

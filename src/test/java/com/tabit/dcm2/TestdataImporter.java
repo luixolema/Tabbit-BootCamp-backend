@@ -66,11 +66,11 @@ public class TestdataImporter {
     }
 
     private void saveUsers() {
-        User user = RandomUser.createRandomUserWithPassword("password");
+        User user = RandomUser.createRandomUserWithPasswordWithoutId("password");
         user.setDiveCenter(diveCenter);
         user.setLogin("user@gmail.com");
 
-        User user2 = RandomUser.createRandomUserWithPassword("password");
+        User user2 = RandomUser.createRandomUserWithPasswordWithoutId("password");
         user2.setDiveCenter(diveCenter);
         user2.setLogin("user2@gmail.com");
 
