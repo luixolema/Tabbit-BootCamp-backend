@@ -64,8 +64,7 @@ public class RandomStay {
     }
 
     public static Stay createRandomStayWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
-        Stay stay = createRandomStay();
-        stay.setDiveCenter(diveCenter);
+        Stay stay = createRandomStayGivenDiveCenter(diveCenter);
         stay.setLoans(ImmutableList.of(RandomLoan.createRandomLoanWithoutIdGivenDiveCenter(diveCenter)));
         stay.setId(null);
 
@@ -74,11 +73,8 @@ public class RandomStay {
     }
 
     public static Stay createRandomStayWithoutIdGivenActiveStateAndDiveCenter(boolean active, DiveCenter diveCenter) {
-        Stay stay = createRandomStay();
-        stay.setDiveCenter(diveCenter);
+        Stay stay = createRandomStayWithoutIdGivenDiveCenter(diveCenter);
         stay.setActive(active);
-        stay.setLoans(ImmutableList.of(RandomLoan.createRandomLoanWithoutIdGivenDiveCenter(diveCenter)));
-        stay.setId(null);
 
         return stay;
 

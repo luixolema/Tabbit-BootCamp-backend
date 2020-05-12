@@ -18,7 +18,7 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("mysql")
 public class TestdataImporter {
 
     @Autowired
@@ -75,11 +75,11 @@ public class TestdataImporter {
         MakadiBayDiveCenter.setLocation("26.9869265, 33.9068201");
         diveCenterRepo.saveAll(ImmutableList.of(MakadiBayDiveCenter));
 
-        User user = RandomUser.createRandomUserWithPassword("password");
+        User user = RandomUser.createRandomUserWithPasswordWithoutId("password");
         user.setDiveCenter(MakadiBayDiveCenter);
         user.setLogin("user@gmail.com");
 
-        User user2 = RandomUser.createRandomUserWithPassword("password");
+        User user2 = RandomUser.createRandomUserWithPasswordWithoutId("password");
         user2.setDiveCenter(MakadiBayDiveCenter);
         user2.setLogin("user2@gmail.com");
 

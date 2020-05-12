@@ -46,8 +46,7 @@ public class RandomGuest {
     }
 
     public static Guest createRandomGuestWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
-        Guest guest = createRandomGuest();
-        guest.setDiveCenter(diveCenter);
+        Guest guest = createRandomGuestGivenDiveCenter(diveCenter);
         guest.setStays(ImmutableList.of(RandomStay.createRandomStayWithoutIdGivenDiveCenter(diveCenter)));
         guest.setId(null);
 

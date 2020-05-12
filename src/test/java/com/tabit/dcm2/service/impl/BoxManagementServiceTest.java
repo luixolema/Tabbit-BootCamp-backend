@@ -41,7 +41,7 @@ public class BoxManagementServiceTest {
     public void setUp() {
         // given
         boxManagement = RandomBoxManagement.createRandomBoxManagement();
-        User user = RandomUser.createRandomUse();
+        User user = RandomUser.createRandomUser();
         diveCenter = user.getDiveCenter();
         when(authenticationService.getLoggedInUser()).thenReturn(user);
     }

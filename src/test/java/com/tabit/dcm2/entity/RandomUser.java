@@ -6,30 +6,32 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RandomUser {
-    public static User createRandomUserWithPassword(String password) {
+
+    public static User createRandomUser() {
         ValueProvider valueProvider = new ValueProvider();
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
         User user = new User();
         user.setId(valueProvider.randomId());
         user.setDiveCenter(RandomDiveCenter.createRandomDiveCenter());
         user.setName(valueProvider.randomString("name"));
         user.setLogin(valueProvider.randomEmail());
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(valueProvider.randomString("password"));
 
         return user;
     }
 
-    public static User createRandomUse() {
-        ValueProvider valueProvider = new ValueProvider();
+    public static User createRandomUserWithoutId() {
+        User user = createRandomUser();
+        user.setId(null);
+
+        return user;
+    }
+
+    public static User createRandomUserWithPassword(String password) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-        User user = new User();
-        user.setId(valueProvider.randomId());
-        user.setDiveCenter(RandomDiveCenter.createRandomDiveCenter());
-        user.setName(valueProvider.randomString("name"));
-        user.setLogin(valueProvider.randomEmail());
-        user.setPassword(passwordEncoder.encode(valueProvider.randomString("password")));
+        User user = createRandomUser();
+        user.setPassword(passwordEncoder.encode(password));
 
         return user;
     }
@@ -42,24 +44,21 @@ public class RandomUser {
     }
 
     public static User createRandomUserFromLoginDto(LoginDto loginDto) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        User user = createRandomUserWithPasswordWithoutId(loginDto.getPassword());
-
+        User user = createRandomUserWithPassword(loginDto.getPassword());
         user.setLogin(loginDto.getLogin());
-        user.setPassword(passwordEncoder.encode(loginDto.getPassword()));
+        user.setId(null);
 
         return user;
     }
 
     public static User createRandomUserGivenDiveCenter(DiveCenter diveCenter) {
-        User user = createRandomUse();
+        User user = createRandomUser();
         user.setDiveCenter(diveCenter);
         return user;
     }
 
     public static User createRandomUserWithoutIdGivenDiveCenter(DiveCenter diveCenter) {
-        User user = createRandomUse();
-        user.setDiveCenter(diveCenter);
+        User user = createRandomUserGivenDiveCenter(diveCenter);
         user.setId(null);
         return user;
     }

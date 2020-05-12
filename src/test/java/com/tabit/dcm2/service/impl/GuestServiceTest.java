@@ -51,7 +51,7 @@ public class GuestServiceTest {
 
     @Before
     public void setUp() {
-        User user = RandomUser.createRandomUse();
+        User user = RandomUser.createRandomUser();
         diveCenter = user.getDiveCenter();
         when(authenticationService.getLoggedInUser()).thenReturn(user);
     }
