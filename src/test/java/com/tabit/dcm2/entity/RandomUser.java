@@ -2,7 +2,7 @@ package com.tabit.dcm2.entity;
 
 import com.tabit.dcm2.service.dto.LoginDto;
 import com.tabit.dcm2.testutils.ValueProvider;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.MessageDigestPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class RandomUser {
@@ -28,7 +28,7 @@ public class RandomUser {
     }
 
     public static User createRandomUserWithPassword(String password) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        PasswordEncoder passwordEncoder = new MessageDigestPasswordEncoder("SHA-256");
 
         User user = createRandomUser();
         user.setPassword(passwordEncoder.encode(password));
